@@ -1,0 +1,61 @@
+---
+const timeline = [
+  {
+    date: "2025 — Hoy",
+    role: "Desarrollador Frontend",
+    company: "Municipalidad de Río Cuarto",
+    desc: "Portal Municipal, EMOS y sistemas internos. Next.js, SCSS, Docker. Foco en accesibilidad y experiencia del vecino.",
+  },
+  {
+    date: "2023 — 2025",
+    role: "Formación + Proyectos Freelance",
+    company: "ITEC · Río Cuarto",
+    desc: "Carrera en desarrollo en el ITEC mientras tomaba proyectos reales: Estudio Jurídico Sánchez, sistemas POS y webs institucionales.",
+  },
+  {
+    date: "Desde 2021",
+    role: "Primeros proyectos propios",
+    company: "Formación autodidacta",
+    desc: "HTML, CSS, JS y React. Construcción del stack desde cero y primeros clientes reales.",
+  },
+];
+---
+
+<section class="section" id="experiencia">
+  <div class="container">
+    <div class="sec__head fu">
+      <div class="sec__eyebrow">experiencia</div>
+      <div class="sec__title">Trayectoria laboral.</div>
+    </div>
+
+    <div class="experience__wrap">
+      <div class="timeline fu">
+        {timeline.map(({ date, role, company, desc }) => (
+          <div class="timeline__item">
+            <div class="timeline__dot"></div>
+            <div class="timeline__date">{date}</div>
+            <div class="timeline__role">{role}</div>
+            <div class="timeline__company">{company}</div>
+            <div class="timeline__desc">{desc}</div>
+          </div>
+        ))}
+      </div>
+
+      <div class="fu d1">
+        <div class="cv-box">
+          <div class="cv-box__icon">📄</div>
+          <div class="cv-box__title">Curriculum Vitae</div>
+          <p class="cv-box__sub">Experiencia, formación y proyectos detallados en PDF.</p>
+          <a href="#" class="cv-box__btn" id="cvBtn">Descargar CV</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById("cvBtn")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    (window as any).showToast?.("Actualizá el href con tu PDF");
+  });
+</script>

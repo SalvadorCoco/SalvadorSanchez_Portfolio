@@ -1,0 +1,262 @@
+.proj-page {
+  padding-top: $header-h;
+
+  // ── Breadcrumb ───────────────────────────────────
+  &__breadcrumb {
+    padding: 1rem 0;
+    border-bottom: 1px solid $border;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: $text-2;
+    transition: color 0.2s;
+
+    &:hover { color: $mint; }
+  }
+
+  // ── Hero ────────────────────────────────────────
+  &__hero {
+    padding: clamp(2.5rem, 5vw, 4rem) 0 2.5rem;
+  }
+
+  &__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &__year {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: $text-3;
+    letter-spacing: 0.08em;
+  }
+
+  &__title {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin-bottom: 0.5rem;
+    color: $text;
+  }
+
+  &__client {
+    font-size: 1rem;
+    color: $text-2;
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+  }
+
+  &__lead {
+    font-size: 1.1rem;
+    color: $text-2;
+    line-height: 1.8;
+    max-width: 620px;
+    margin-bottom: 2rem;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  // ── Cover ───────────────────────────────────────
+  &__cover-wrap {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  &__cover {
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    border: 1px solid $border;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  }
+
+  &__cover-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  // ── Content ─────────────────────────────────────
+  &__content {
+    padding-bottom: clamp(4rem, 8vw, 6rem);
+  }
+
+  &__body {
+    max-width: 780px;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  &__section {
+    &-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: $text;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    &--result {
+      @include card-base;
+      padding: 2rem;
+      background: $bg-2;
+      border-color: rgba(37, 99, 235, 0.15);
+    }
+  }
+
+  &__text {
+    font-size: 1rem;
+    color: $text-2;
+    line-height: 1.85;
+  }
+
+  // ── Problem / Solution split ─────────────────────
+  &__split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @include media-breakpoint-down(sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__split-item {
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    background: $bg-2;
+
+    &--solution { background: $mint-dim; }
+  }
+
+  &__split-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: $mint-dark;
+    margin-bottom: 0.6rem;
+  }
+
+  // ── Screenshots ──────────────────────────────────
+  &__screenshots {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__screenshot {
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    border: 1px solid $border;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  // ── Result highlight ─────────────────────────────
+  &__result-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: $mint;
+    margin-bottom: 0.6rem;
+  }
+
+  &__result-text {
+    font-size: 1.05rem;
+    color: $text;
+    font-weight: 500;
+    line-height: 1.75;
+  }
+
+  // ── Prev / Next nav ──────────────────────────────
+  &__nav {
+    border-top: 1px solid $border;
+    padding: 2.5rem 0;
+  }
+
+  &__nav-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 1rem 1.25rem;
+    border-radius: $border-radius;
+    border: 1px solid $border;
+    transition: all 0.2s;
+    max-width: 280px;
+
+    &--next {
+      text-align: right;
+      margin-left: auto;
+    }
+
+    &:hover {
+      border-color: rgba(37, 99, 235, 0.3);
+      background: $mint-dim;
+    }
+  }
+
+  &__nav-dir {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: $mint;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  &__nav-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $text;
+  }
+}
+
+// Arrow on card title
+.proj-card__arrow {
+  display: inline-block;
+  margin-left: 6px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.2s $ease-out;
+  color: $mint;
+}
+
+.proj-card:hover .proj-card__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.plink--see-more {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: $text-3;
+  padding: 7px 0;
+  transition: color 0.2s;
+}
+
+.proj-card:hover .plink--see-more {
+  color: $mint;
+}

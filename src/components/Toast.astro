@@ -1,0 +1,18 @@
+---
+---
+
+<div class="toast-custom" id="toast">
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+  function showToast(msg: string) {
+    const t = document.getElementById("toast")!;
+    document.getElementById("toastMsg")!.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3200);
+  }
+
+  // Expose globally for other components
+  (window as any).showToast = showToast;
+</script>

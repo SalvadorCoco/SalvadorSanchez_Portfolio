@@ -1,0 +1,67 @@
+---
+import projects from "../data/projects";
+---
+
+<section class="section" id="proyectos">
+  <div class="container">
+    <div class="sec__head fu">
+      <div class="sec__eyebrow">proyectos</div>
+      <div class="sec__title">Trabajo real para<br />clientes reales.</div>
+    </div>
+
+    <div class="proj-grid">
+      {projects.map(({ slug, num, title, desc, problem, solution, tags, links, private: isPrivate, full }, i) => (
+        <a
+          href={`/proyectos/${slug}`}
+          class={`proj-card fu${full ? " proj-grid__full" : ""}${i > 0 ? ` d${Math.min(i, 3)}` : ""}`}
+        >
+          <div class="proj-card__num">{num} · proyecto</div>
+          <div class="proj-card__title">
+            {title}
+            <span class="proj-card__arrow">→</span>
+          </div>
+          <div class="proj-card__desc">{desc}</div>
+
+          {full ? (
+            <div class="proj-card__detail-grid">
+              <div class="proj-detail">
+                <div class="proj-detail__label">Problema</div>
+                <div class="proj-detail__text">{problem}</div>
+              </div>
+              <div class="proj-detail">
+                <div class="proj-detail__label">Solución</div>
+                <div class="proj-detail__text">{solution}</div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div class="proj-detail">
+                <div class="proj-detail__label">Problema</div>
+                <div class="proj-detail__text">{problem}</div>
+              </div>
+              <div class="proj-detail">
+                <div class="proj-detail__label">Solución</div>
+                <div class="proj-detail__text">{solution}</div>
+              </div>
+            </>
+          )}
+
+          <div class="proj-tags">
+            {tags.map(tag => <span class="tag">{tag}</span>)}
+          </div>
+
+          <div class="proj-links">
+            {isPrivate ? (
+              <span class="plink plink--priv">🔒 Repositorio privado</span>
+            ) : (
+              links.slice(0, 1).map(({ label }) => (
+                <span class="plink plink--live">{label}</span>
+              ))
+            )}
+            <span class="plink plink--see-more">Ver caso completo →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

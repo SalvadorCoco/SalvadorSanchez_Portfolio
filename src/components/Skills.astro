@@ -1,0 +1,47 @@
+---
+const skills = [
+  { name: "React",      where: [{ text: "Postas", highlight: true }, { text: "Proyectos propios" }] },
+  { name: "Next.js",    where: [{ text: "Portal Municipal", highlight: true }, { text: "EMOS", highlight: true }] },
+  { name: "SCSS",       where: [{ text: "Todos los proyectos" }] },
+  { name: "JavaScript", where: [{ text: "Todos los proyectos" }] },
+  { name: "Bootstrap",  where: [{ text: "Layouts · Prototipos" }] },
+  { name: "Astro",      where: [{ text: "Sitios estáticos" }] },
+];
+
+const methods = ["UI/UX Design", "Responsive", "Accesibilidad", "Performance", "Git", "Figma", "Docker"];
+---
+
+<section class="section section--alt" id="skills">
+  <div class="container">
+    <div class="skills__wrap">
+      <div>
+        <div class="sec__head fu">
+          <div class="sec__eyebrow">stack técnico</div>
+          <div class="sec__title">Las herramientas que uso.</div>
+        </div>
+        <p class="skills__desc fu d1">
+          No colecciono tecnologías — domino las que tienen sentido para cada proyecto.
+        </p>
+        <div class="skills__methods fu d2">
+          {methods.map(m => <span class="meth-tag">{m}</span>)}
+        </div>
+      </div>
+
+      <div class="skills__grid fu d1">
+        {skills.map(({ name, where }) => (
+          <div class="sk-card">
+            <div class="sk-card__name">{name}</div>
+            <div class="sk-card__where">
+              {where.map(({ text, highlight }, i) => (
+                <>
+                  {highlight ? <span>{text}</span> : text}
+                  {i < where.length - 1 && " · "}
+                </>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

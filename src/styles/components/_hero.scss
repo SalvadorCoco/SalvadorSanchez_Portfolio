@@ -1,0 +1,98 @@
+.hero {
+  min-height: 100vh;
+  padding-top: $header-h;
+  display: flex;
+  align-items: center;
+
+  &__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+
+    @include media-breakpoint-down(md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 14px;
+    background: $mint-light;
+    border-radius: $border-radius-pill;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $mint-dark;
+    margin-bottom: 1.75rem;
+  }
+
+  &__badge-dot {
+    width: 6px;
+    height: 6px;
+    background: $mint;
+    border-radius: 50%;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  &__title {
+    font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin-bottom: 1.5rem;
+    color: $text;
+
+    .hl { color: $mint; }
+  }
+
+  &__desc {
+    font-size: 1.05rem;
+    color: $text-2;
+    line-height: 1.8;
+    max-width: 440px;
+    margin-bottom: 2.5rem;
+    font-weight: 400;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  &__btn-primary  { @include btn-primary; }
+  &__btn-secondary { @include btn-secondary; }
+}
+
+.info-card {
+  @include card-base;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid $border;
+
+    &:last-child { border-bottom: none; padding-bottom: 0; }
+    &:first-child { padding-top: 0; }
+  }
+
+  &__label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: $text-2;
+  }
+
+  &__value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $text;
+
+    &--available { color: $mint; }
+  }
+}

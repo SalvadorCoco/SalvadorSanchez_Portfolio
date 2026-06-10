@@ -1,0 +1,45 @@
+---
+const stats = [
+  { label: "Nombre",      value: "Salvador Sanchez" },
+  { label: "Rol",         value: "Frontend Developer" },
+  { label: "Ubicación",   value: "Río Cuarto, AR" },
+  { label: "Experiencia", value: "3+ años" },
+  { label: "Proyectos",   value: "10+ entregados" },
+  { label: "Disponible",  value: "Sí ✓", available: true },
+];
+---
+
+<section class="hero section" id="inicio">
+  <div class="container">
+    <div class="hero__inner">
+      <div>
+        <div class="hero__badge fu">
+          <div class="hero__badge-dot"></div>
+          Disponible para proyectos
+        </div>
+        <h1 class="hero__title fu d1">
+          Interfaces <span class="hl">fáciles</span><br />de usar y<br />de querer.
+        </h1>
+        <p class="hero__desc fu d2">
+          Hola, soy Salvador. Construyo webs con React y Next.js pensando
+          siempre en quien las va a usar — funcionales, claras y con buen diseño.
+        </p>
+        <div class="hero__actions fu d3">
+          <a href="#proyectos" class="hero__btn-primary">Ver proyectos →</a>
+          <a href="#contacto" class="hero__btn-secondary">Hablemos</a>
+        </div>
+      </div>
+
+      <div class="info-card fu d2">
+        {stats.map(({ label, value, available }) => (
+          <div class="info-card__row">
+            <span class="info-card__label">{label}</span>
+            <span class={`info-card__value${available ? " info-card__value--available" : ""}`}>
+              {value}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

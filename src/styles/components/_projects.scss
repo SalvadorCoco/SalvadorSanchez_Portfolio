@@ -1,0 +1,129 @@
+.proj {
+  &-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    @include media-breakpoint-down(md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &-grid__full {
+    grid-column: span 2;
+
+    @include media-breakpoint-down(md) {
+      grid-column: span 1;
+    }
+  }
+
+  &-card {
+    @include card-base;
+    padding: 2rem;
+    transition: all 0.25s $ease-out;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07);
+      border-color: rgba(37, 99, 235, 0.25);
+    }
+
+    &__num {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: $mint;
+      margin-bottom: 0.6rem;
+    }
+
+    &__title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    &__desc {
+      font-size: 0.875rem;
+      color: $text-2;
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+
+    &__detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &-detail {
+    padding: 0.9rem 1rem;
+    background: $bg-2;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+
+    &__label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: $mint-dark;
+      margin-bottom: 3px;
+    }
+
+    &__text {
+      font-size: 0.82rem;
+      color: $text-2;
+      line-height: 1.65;
+    }
+  }
+
+  &-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 1rem 0;
+  }
+
+  &-links {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.tag {
+  padding: 3px 10px;
+  background: $mint-dim;
+  border-radius: $border-radius-pill;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: $mint-dark;
+}
+
+.plink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border-radius: $border-radius-pill;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: all 0.2s;
+
+  &--live {
+    background: $mint;
+    color: #fff;
+    &:hover { background: $mint-dark; color: #fff; }
+  }
+
+  &--gh {
+    border: 1.5px solid $border;
+    color: $text-2;
+    &:hover { border-color: $mint; color: $mint; }
+  }
+
+  &--priv { color: $text-3; }
+}

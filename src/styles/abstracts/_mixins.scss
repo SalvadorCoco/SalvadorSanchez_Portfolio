@@ -1,0 +1,59 @@
+@mixin fade-up($delay: 0s) {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease $delay, transform 0.6s ease $delay;
+
+  &.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@mixin card-base {
+  background: $card;
+  border: 1px solid $border;
+  border-radius: $border-radius-lg;
+}
+
+@mixin btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 26px;
+  background: $mint;
+  color: #fff;
+  border-radius: $border-radius-pill;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  transition: all 0.25s $ease-out;
+
+  &:hover {
+    background: $mint-dark;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.25);
+    text-decoration: none;
+  }
+}
+
+@mixin btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 26px;
+  background: transparent;
+  color: $text-2;
+  border: 1.5px solid $border;
+  border-radius: $border-radius-pill;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $mint;
+    color: $mint;
+    background: $mint-dim;
+    text-decoration: none;
+  }
+}

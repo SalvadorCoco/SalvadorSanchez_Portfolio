@@ -1,0 +1,45 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Projects from "../components/Projects.astro";
+import Skills from "../components/Skills.astro";
+import Experience from "../components/Experience.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+import Toast from "../components/Toast.astro";
+import "../styles/main.scss";
+---
+
+<Layout>
+  <Header />
+  <main>
+    <Hero />
+    <Projects />
+    <Skills />
+    <Experience />
+    <Contact />
+  </main>
+  <Footer />
+  <Toast />
+</Layout>
+
+<script>
+  const obs = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((x) => {
+        if (x.isIntersecting) {
+          x.target.classList.add("v");
+          obs.unobserve(x.target);
+        }
+      }),
+    { threshold: 0.1, rootMargin: "0px 0px -30px 0px" },
+  );
+
+  document.querySelectorAll(".fu").forEach((el) => obs.observe(el));
+
+  // Hero elements animate in immediately on load
+  document
+    .querySelectorAll(".hero .fu")
+    .forEach((el, i) => setTimeout(() => el.classList.add("v"), 80 + i * 120));
+</script>

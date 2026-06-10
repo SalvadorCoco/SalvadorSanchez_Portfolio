@@ -1,0 +1,88 @@
+---
+const links = [
+  { href: "mailto:salvadorcocosanchez@gmail.com", icon: "✉️", label: "Email", sub: "salvadorcocosanchez@gmail.com" },
+  { href: "https://www.linkedin.com/in/salvador-sanchez-b08209297/", icon: "💼", label: "LinkedIn", sub: "linkedin.com/in/salvador-sanchez-b08209297", external: true },
+  { href: "https://github.com/SalvadorCoco", icon: "🐙", label: "GitHub", sub: "github.com/SalvadorCoco", external: true },
+  { href: "https://wa.me/5493584120469", icon: "💬", label: "WhatsApp", sub: "+54 9 358 412-0469", external: true },
+];
+---
+
+<section class="section section--alt" id="contacto">
+  <div class="container">
+    <div class="sec__head fu">
+      <div class="sec__eyebrow">contacto</div>
+      <div class="sec__title">¿Hablamos sobre<br />tu proyecto?</div>
+    </div>
+
+    <div class="contact__wrap">
+      <div>
+        <p class="contact__intro">
+          Trabajo con quienes valoran la calidad y el detalle. Si tu proyecto
+          necesita una interfaz que funcione bien, escribime.
+        </p>
+        <div class="contact__links fu d1">
+          {links.map(({ href, icon, label, sub, external }) => (
+            <a
+              href={href}
+              class="clink"
+              {...(external ? { target: "_blank", rel: "noopener" } : {})}
+            >
+              <div class="clink__icon">{icon}</div>
+              <div class="clink__text">
+                <strong>{label}</strong>
+                <span>{sub}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <form class="contact-form fu d2" id="contactForm" novalidate>
+        <div class="contact-form__row">
+          <div class="contact-form__group">
+            <label class="contact-form__label" for="n">Nombre</label>
+            <input class="contact-form__input" id="n" type="text" placeholder="Tu nombre" />
+          </div>
+          <div class="contact-form__group">
+            <label class="contact-form__label" for="e">Email</label>
+            <input class="contact-form__input" id="e" type="email" placeholder="tu@email.com" />
+          </div>
+        </div>
+        <div class="contact-form__group">
+          <label class="contact-form__label" for="a">Asunto</label>
+          <input class="contact-form__input" id="a" type="text" placeholder="¿En qué puedo ayudarte?" />
+        </div>
+        <div class="contact-form__group">
+          <label class="contact-form__label" for="m">Mensaje</label>
+          <textarea class="contact-form__textarea" id="m" placeholder="Contame sobre tu proyecto..."></textarea>
+        </div>
+        <button type="submit" class="contact-form__submit">Enviar mensaje</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById("contactForm")?.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const n  = (document.getElementById("n") as HTMLInputElement).value.trim();
+    const em = (document.getElementById("e") as HTMLInputElement).value.trim();
+    const m  = (document.getElementById("m") as HTMLTextAreaElement).value.trim();
+
+    if (!n || !em || !m) {
+      (window as any).showToast?.("Completá todos los campos");
+      return;
+    }
+
+    const btn = this.querySelector(".contact-form__submit") as HTMLButtonElement;
+    btn.textContent = "Enviando...";
+    btn.disabled = true;
+
+    setTimeout(() => {
+      (this as HTMLFormElement).reset();
+      btn.disabled = false;
+      btn.textContent = "Enviar mensaje";
+      (window as any).showToast?.("✓ ¡Mensaje enviado! Te respondo pronto.");
+    }, 1200);
+  });
+</script>

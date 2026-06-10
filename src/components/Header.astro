@@ -1,0 +1,25 @@
+---
+const links = [
+  { href: "#proyectos", label: "Proyectos" },
+  { href: "#skills", label: "Skills" },
+  { href: "#experiencia", label: "Experiencia" },
+  { href: "#contacto", label: "Contacto" },
+];
+---
+
+<header class="header">
+  <a href="#inicio" class="header__logo">
+    <div class="header__logo-mark">SS</div>
+    Salvador Sanchez
+  </a>
+
+  <nav>
+    <ul class="header__nav">
+      {links.map(({ href, label }) => (
+        <li><a href={href}>{label}</a></li>
+      ))}
+    </ul>
+  </nav>
+
+  <a href="#contacto" class="header__cta">Contratame</a>
+</header>

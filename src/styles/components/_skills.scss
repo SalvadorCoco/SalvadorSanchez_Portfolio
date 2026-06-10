@@ -1,0 +1,79 @@
+.skills {
+  &__wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 5rem;
+    align-items: start;
+
+    @include media-breakpoint-down(md) {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+
+  &__desc {
+    font-size: 0.95rem;
+    color: $text-2;
+    line-height: 1.8;
+    max-width: 320px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    @include media-breakpoint-down(sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 2rem;
+  }
+}
+
+.sk-card {
+  @include card-base;
+  padding: 1.25rem 1.5rem;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: rgba(37, 99, 235, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  }
+
+  &__name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  &__where {
+    font-size: 0.72rem;
+    color: $text-2;
+
+    span { color: $mint; font-weight: 600; }
+  }
+}
+
+.meth-tag {
+  padding: 6px 14px;
+  background: $card;
+  border: 1px solid $border;
+  border-radius: $border-radius-pill;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: $text-2;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $mint;
+    color: $mint;
+    background: $mint-dim;
+  }
+}

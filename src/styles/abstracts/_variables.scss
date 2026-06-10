@@ -1,0 +1,25 @@
+// Bootstrap overrides — must come BEFORE bootstrap import
+$primary:           #2563eb;
+$primary-dark:      #1e40af;
+$primary-light:     #dbeafe;
+$font-family-sans-serif: "Plus Jakarta Sans", sans-serif;
+$border-radius:     10px;
+$border-radius-lg:  18px;
+$border-radius-pill: 100px;
+
+// Custom tokens
+$bg:          #f8fafc;
+$bg-2:        #eff6ff;
+$bg-3:        #dbeafe;
+$card:        #ffffff;
+$border:      rgba(0, 0, 0, 0.07);
+$mint:        #2563eb;
+$mint-dark:   #1e40af;
+$mint-light:  #dbeafe;
+$mint-dim:    rgba(37, 99, 235, 0.08);
+$text:        #0f172a;
+$text-2:      #64748b;
+$text-3:      #94a3b8;
+
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+$header-h: 64px;
