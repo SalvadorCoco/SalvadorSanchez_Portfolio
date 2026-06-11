@@ -10,15 +10,14 @@ const links = [
 <section class="section section--alt" id="contacto">
   <div class="container">
     <div class="sec__head fu">
-      <div class="sec__eyebrow">contacto</div>
-      <div class="sec__title">¿Hablamos sobre<br />tu proyecto?</div>
+      <div class="sec__eyebrow" data-i18n="ct_eyebrow">contacto</div>
+      <div class="sec__title" data-i18n-html="ct_title">¿Hablamos sobre<br />tu proyecto?</div>
     </div>
 
     <div class="contact__wrap">
       <div>
-        <p class="contact__intro">
-          Trabajo con quienes valoran la calidad y el detalle. Si tu proyecto
-          necesita una interfaz que funcione bien, escribime.
+        <p class="contact__intro" data-i18n="ct_intro">
+          Trabajo con quien valora que las cosas funcionen bien. Si tu proyecto necesita una interfaz que cualquier persona use sin ayuda, escribíme.
         </p>
         <div class="contact__links fu d1">
           {links.map(({ href, icon, label, sub, external }) => (
@@ -40,23 +39,23 @@ const links = [
       <form class="contact-form fu d2" id="contactForm" novalidate>
         <div class="contact-form__row">
           <div class="contact-form__group">
-            <label class="contact-form__label" for="n">Nombre</label>
-            <input class="contact-form__input" id="n" type="text" placeholder="Tu nombre" />
+            <label class="contact-form__label" for="n" data-i18n="ct_label_name">Nombre</label>
+            <input class="contact-form__input" id="n" type="text" placeholder="Tu nombre" data-i18n-ph="ct_ph_name" />
           </div>
           <div class="contact-form__group">
-            <label class="contact-form__label" for="e">Email</label>
-            <input class="contact-form__input" id="e" type="email" placeholder="tu@email.com" />
+            <label class="contact-form__label" for="e" data-i18n="ct_label_email">Email</label>
+            <input class="contact-form__input" id="e" type="email" placeholder="tu@email.com" data-i18n-ph="ct_ph_email" />
           </div>
         </div>
         <div class="contact-form__group">
-          <label class="contact-form__label" for="a">Asunto</label>
-          <input class="contact-form__input" id="a" type="text" placeholder="¿En qué puedo ayudarte?" />
+          <label class="contact-form__label" for="a" data-i18n="ct_label_subject">Asunto</label>
+          <input class="contact-form__input" id="a" type="text" placeholder="¿En qué puedo ayudarte?" data-i18n-ph="ct_ph_subject" />
         </div>
         <div class="contact-form__group">
-          <label class="contact-form__label" for="m">Mensaje</label>
-          <textarea class="contact-form__textarea" id="m" placeholder="Contame sobre tu proyecto..."></textarea>
+          <label class="contact-form__label" for="m" data-i18n="ct_label_message">Mensaje</label>
+          <textarea class="contact-form__textarea" id="m" placeholder="Contáme sobre tu proyecto..." data-i18n-ph="ct_ph_message"></textarea>
         </div>
-        <button type="submit" class="contact-form__submit">Enviar mensaje</button>
+        <button type="submit" class="contact-form__submit" data-i18n="ct_submit">Enviar mensaje</button>
       </form>
     </div>
   </div>
@@ -68,21 +67,23 @@ const links = [
     const n  = (document.getElementById("n") as HTMLInputElement).value.trim();
     const em = (document.getElementById("e") as HTMLInputElement).value.trim();
     const m  = (document.getElementById("m") as HTMLTextAreaElement).value.trim();
+    const lang = document.documentElement.getAttribute('data-lang') || 'es';
+    const t = (window as any).__T?.[lang];
 
     if (!n || !em || !m) {
-      (window as any).showToast?.("Completá todos los campos");
+      (window as any).showToast?.(t?.ct_error || "Completá todos los campos");
       return;
     }
 
     const btn = this.querySelector(".contact-form__submit") as HTMLButtonElement;
-    btn.textContent = "Enviando...";
+    btn.textContent = t?.ct_sending || "Enviando...";
     btn.disabled = true;
 
     setTimeout(() => {
       (this as HTMLFormElement).reset();
       btn.disabled = false;
-      btn.textContent = "Enviar mensaje";
-      (window as any).showToast?.("✓ ¡Mensaje enviado! Te respondo pronto.");
+      btn.textContent = t?.ct_submit || "Enviar mensaje";
+      (window as any).showToast?.(t?.ct_success || "✓ ¡Mensaje enviado!");
     }, 1200);
   });
 </script>

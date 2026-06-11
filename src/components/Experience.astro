@@ -1,22 +1,22 @@
 ---
 const timeline = [
   {
-    date: "2025 — Hoy",
-    role: "Desarrollador Frontend",
-    company: "Municipalidad de Río Cuarto",
-    desc: "Portal Municipal, EMOS y sistemas internos. Next.js, SCSS, Docker. Foco en accesibilidad y experiencia del vecino.",
+    dateKey: "exp_date_1",  date: "2025 — Hoy",
+    roleKey: "exp_role_1",  role: "Desarrollador Frontend",
+    companyKey: "exp_company_1", company: "Municipalidad de Río Cuarto",
+    descKey: "exp_desc_1",  desc: "Portal Municipal, EMOS y sistemas internos. Next.js, SCSS, Docker. Foco en accesibilidad y experiencia del vecino.",
   },
   {
-    date: "2023 — 2025",
-    role: "Formación + Proyectos Freelance",
-    company: "ITEC · Río Cuarto",
-    desc: "Carrera en desarrollo en el ITEC mientras tomaba proyectos reales: Estudio Jurídico Sánchez, sistemas POS y webs institucionales.",
+    dateKey: "exp_date_2",  date: "2023 — 2025",
+    roleKey: "exp_role_2",  role: "Formación + Proyectos Freelance",
+    companyKey: "exp_company_2", company: "ITEC · Río Cuarto",
+    descKey: "exp_desc_2",  desc: "Carrera en desarrollo en el ITEC mientras tomaba proyectos reales: Estudio Jurídico Sánchez, sistemas POS y webs institucionales.",
   },
   {
-    date: "Desde 2021",
-    role: "Primeros proyectos propios",
-    company: "Formación autodidacta",
-    desc: "HTML, CSS, JS y React. Construcción del stack desde cero y primeros clientes reales.",
+    dateKey: "exp_date_3",  date: "Desde 2021",
+    roleKey: "exp_role_3",  role: "Primeros proyectos propios",
+    companyKey: "exp_company_3", company: "Formación autodidacta",
+    descKey: "exp_desc_3",  desc: "HTML, CSS, JS y React. Construcción del stack desde cero y primeros clientes reales.",
   },
 ];
 ---
@@ -24,19 +24,19 @@ const timeline = [
 <section class="section" id="experiencia">
   <div class="container">
     <div class="sec__head fu">
-      <div class="sec__eyebrow">experiencia</div>
-      <div class="sec__title">Trayectoria laboral.</div>
+      <div class="sec__eyebrow" data-i18n="exp_eyebrow">experiencia</div>
+      <div class="sec__title" data-i18n="exp_title">Trayectoria laboral.</div>
     </div>
 
     <div class="experience__wrap">
       <div class="timeline fu">
-        {timeline.map(({ date, role, company, desc }) => (
+        {timeline.map(({ dateKey, date, roleKey, role, companyKey, company, descKey, desc }) => (
           <div class="timeline__item">
             <div class="timeline__dot"></div>
-            <div class="timeline__date">{date}</div>
-            <div class="timeline__role">{role}</div>
-            <div class="timeline__company">{company}</div>
-            <div class="timeline__desc">{desc}</div>
+            <div class="timeline__date" data-i18n={dateKey}>{date}</div>
+            <div class="timeline__role" data-i18n={roleKey}>{role}</div>
+            <div class="timeline__company" data-i18n={companyKey}>{company}</div>
+            <div class="timeline__desc" data-i18n={descKey}>{desc}</div>
           </div>
         ))}
       </div>
@@ -45,8 +45,8 @@ const timeline = [
         <div class="cv-box">
           <div class="cv-box__icon">📄</div>
           <div class="cv-box__title">Curriculum Vitae</div>
-          <p class="cv-box__sub">Experiencia, formación y proyectos detallados en PDF.</p>
-          <a href="#" class="cv-box__btn" id="cvBtn">Descargar CV</a>
+          <p class="cv-box__sub" data-i18n="exp_cv_sub">Experiencia, formación y proyectos detallados en PDF.</p>
+          <a href="#" class="cv-box__btn" id="cvBtn" data-i18n="exp_cv_btn">Descargar CV</a>
         </div>
       </div>
     </div>

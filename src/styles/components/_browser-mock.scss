@@ -1,0 +1,101 @@
+.browser-mock {
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  box-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.8) inset,
+    0 12px 40px rgba(0, 0, 0, 0.10),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+  background: #fff;
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    height: 38px;
+    background: #ebebeb;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+  }
+
+  &__dots {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+
+    span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+
+      &:nth-child(1) { background: #ff5f57; }
+      &:nth-child(2) { background: #febc2e; }
+      &:nth-child(3) { background: #28c840; }
+    }
+  }
+
+  &__url {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 6px;
+    height: 22px;
+    padding: 0 10px;
+    font-size: 0.68rem;
+    color: $text-3;
+    display: flex;
+    align-items: center;
+    max-width: 300px;
+    margin: 0 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+
+  &__screen {
+    overflow: hidden;
+    background: $bg-2;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  // ── Variant: full-size cover on project detail page ──
+  &--cover {
+    max-width: clamp(560px, 88%, 960px);
+    margin: 0 auto;
+  }
+
+  // ── Variant: compact inside project card ──
+  &--card {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+
+    .browser-mock__bar {
+      height: 28px;
+      padding: 0 10px;
+      gap: 8px;
+      background: #f0f0f0;
+    }
+
+    .browser-mock__dots span {
+      width: 8px;
+      height: 8px;
+    }
+
+    .browser-mock__url {
+      height: 16px;
+      font-size: 0.6rem;
+      max-width: 220px;
+    }
+
+    .browser-mock__screen {
+      max-height: 220px;
+    }
+  }
+}

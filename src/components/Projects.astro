@@ -1,67 +1,99 @@
 ---
 import projects from "../data/projects";
+
+function getDomain(links: { href: string; type: string }[]): string {
+  const live = links.find((l) => l.type === "live");
+  if (!live) return "";
+  try { return new URL(live.href).hostname.replace("www.", ""); }
+  catch { return ""; }
+}
 ---
 
 <section class="section" id="proyectos">
   <div class="container">
     <div class="sec__head fu">
-      <div class="sec__eyebrow">proyectos</div>
-      <div class="sec__title">Trabajo real para<br />clientes reales.</div>
+      <div class="sec__eyebrow" data-i18n="proj_eyebrow">proyectos</div>
+      <div class="sec__title" data-i18n-html="proj_title">Trabajo real para<br />clientes reales.</div>
     </div>
 
     <div class="proj-grid">
-      {projects.map(({ slug, num, title, desc, problem, solution, tags, links, private: isPrivate, full }, i) => (
-        <a
-          href={`/proyectos/${slug}`}
-          class={`proj-card fu${full ? " proj-grid__full" : ""}${i > 0 ? ` d${Math.min(i, 3)}` : ""}`}
-        >
-          <div class="proj-card__num">{num} · proyecto</div>
-          <div class="proj-card__title">
-            {title}
-            <span class="proj-card__arrow">→</span>
-          </div>
-          <div class="proj-card__desc">{desc}</div>
-
-          {full ? (
-            <div class="proj-card__detail-grid">
-              <div class="proj-detail">
-                <div class="proj-detail__label">Problema</div>
-                <div class="proj-detail__text">{problem}</div>
+      {projects.map(({ slug, num, title, desc, desc_en, problem, problem_en, solution, solution_en, tags, links, private: isPrivate, full, cover }, i) => {
+        const domain = getDomain(links);
+        return (
+          <a
+            href={`/proyectos/${slug}`}
+            class={`proj-card fu${full ? " proj-grid__full" : ""}${i > 0 ? ` d${Math.min(i, 3)}` : ""}`}
+          >
+            {cover ? (
+              <div class="proj-card__cover">
+                <div class="browser-mock browser-mock--card">
+                  <div class="browser-mock__bar">
+                    <div class="browser-mock__dots">
+                      <span></span><span></span><span></span>
+                    </div>
+                    {domain && <div class="browser-mock__url">{domain}</div>}
+                  </div>
+                  <div class="browser-mock__screen">
+                    <img src={cover} alt={title} loading="lazy" />
+                  </div>
+                </div>
               </div>
-              <div class="proj-detail">
-                <div class="proj-detail__label">Solución</div>
-                <div class="proj-detail__text">{solution}</div>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div class="proj-detail">
-                <div class="proj-detail__label">Problema</div>
-                <div class="proj-detail__text">{problem}</div>
-              </div>
-              <div class="proj-detail">
-                <div class="proj-detail__label">Solución</div>
-                <div class="proj-detail__text">{solution}</div>
-              </div>
-            </>
-          )}
-
-          <div class="proj-tags">
-            {tags.map(tag => <span class="tag">{tag}</span>)}
-          </div>
-
-          <div class="proj-links">
-            {isPrivate ? (
-              <span class="plink plink--priv">🔒 Repositorio privado</span>
             ) : (
-              links.slice(0, 1).map(({ label }) => (
-                <span class="plink plink--live">{label}</span>
-              ))
+              <div class="proj-card__placeholder" aria-hidden="true">
+                <span class="proj-card__placeholder-num">{num}</span>
+              </div>
             )}
-            <span class="plink plink--see-more">Ver caso completo →</span>
-          </div>
-        </a>
-      ))}
+
+            <div class="proj-card__num">
+              {num} · <span data-i18n="proj_unit">proyecto</span>
+            </div>
+            <div class="proj-card__title">
+              {title}
+              <span class="proj-card__arrow">→</span>
+            </div>
+            <div class="proj-card__desc" data-es={desc} data-en={desc_en || desc}>{desc}</div>
+
+            {full ? (
+              <div class="proj-card__detail-grid">
+                <div class="proj-detail">
+                  <div class="proj-detail__label" data-i18n="proj_problem">Problema</div>
+                  <div class="proj-detail__text" data-es={problem} data-en={problem_en || problem}>{problem}</div>
+                </div>
+                <div class="proj-detail">
+                  <div class="proj-detail__label" data-i18n="proj_solution">Solución</div>
+                  <div class="proj-detail__text" data-es={solution} data-en={solution_en || solution}>{solution}</div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div class="proj-detail">
+                  <div class="proj-detail__label" data-i18n="proj_problem">Problema</div>
+                  <div class="proj-detail__text" data-es={problem} data-en={problem_en || problem}>{problem}</div>
+                </div>
+                <div class="proj-detail">
+                  <div class="proj-detail__label" data-i18n="proj_solution">Solución</div>
+                  <div class="proj-detail__text" data-es={solution} data-en={solution_en || solution}>{solution}</div>
+                </div>
+              </>
+            )}
+
+            <div class="proj-tags">
+              {tags.map(tag => <span class="tag">{tag}</span>)}
+            </div>
+
+            <div class="proj-links">
+              {isPrivate ? (
+                <span class="plink plink--priv" data-i18n="proj_private">🔒 Repositorio privado</span>
+              ) : (
+                links.slice(0, 1).map(({ label }) => (
+                  <span class="plink plink--live">{label}</span>
+                ))
+              )}
+              <span class="plink plink--see-more" data-i18n="proj_see_more">Ver caso completo →</span>
+            </div>
+          </a>
+        );
+      })}
     </div>
   </div>
 </section>

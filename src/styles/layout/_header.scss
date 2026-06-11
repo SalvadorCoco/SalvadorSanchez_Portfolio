@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 clamp(1.5rem, 5vw, 5rem);
-  background: rgba(248, 250, 249, 0.94);
+  background: var(--header-bg);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid $border;
 
@@ -21,6 +21,7 @@
     display: flex;
     align-items: center;
     gap: 7px;
+    flex-shrink: 0;
   }
 
   &__logo-mark {
@@ -36,6 +37,10 @@
     color: #fff;
   }
 
+  &__nav-wrap {
+    @include media-breakpoint-down(md) { display: none; }
+  }
+
   &__nav {
     display: flex;
     gap: 2rem;
@@ -46,19 +51,90 @@
       font-weight: 500;
       color: $text-2;
       transition: color 0.2s;
-
       &:hover { color: $mint; }
     }
   }
 
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  // ── Theme toggle pill ──────────────────────────
+  &__theme {
+    background: none;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  &__theme-track {
+    width: 40px;
+    height: 22px;
+    background: $bg-3;
+    border-radius: 11px;
+    position: relative;
+    display: block;
+    border: 1.5px solid var(--border);
+    transition: background 0.25s, border-color 0.25s;
+  }
+
+  &__theme-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: $text-2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s $ease-out, background 0.25s;
+  }
+
+  &__theme-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    color: #fff;
+    transition: opacity 0.15s;
+
+    &--sun  { opacity: 1; }
+    &--moon { opacity: 0; }
+  }
+
+  &__lang {
+    padding: 6px 14px;
+    border: 1.5px solid $border;
+    background: transparent;
+    border-radius: $border-radius-pill;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $text-2;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    &:hover { border-color: $mint; color: $mint; }
+  }
+
   &__cta {
     padding: 8px 20px;
+    min-width: 108px;
+    text-align: center;
     background: $mint;
     color: #fff;
     border-radius: $border-radius-pill;
     font-size: 0.82rem;
     font-weight: 600;
-    transition: all 0.2s;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 
     &:hover {
       background: $mint-dark;
@@ -66,10 +142,87 @@
       transform: translateY(-1px);
       box-shadow: 0 6px 18px rgba(37, 99, 235, 0.25);
     }
+
+    @include media-breakpoint-down(md) { display: none; }
   }
 
-  @include media-breakpoint-down(sm) {
-    &__nav,
-    &__cta { display: none; }
+  // ── Hamburger ──────────────────────────────────
+  &__burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 8px;
+    transition: background 0.2s;
+
+    &:hover { background: $mint-dim; }
+
+    span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: $text;
+      border-radius: 2px;
+      transition: transform 0.25s $ease-out, opacity 0.2s;
+      transform-origin: center;
+    }
+
+    &.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    &.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    &.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @include media-breakpoint-down(md) { display: flex; }
+  }
+
+  // ── Mobile nav drawer ──────────────────────────
+  &__mobile-nav {
+    position: fixed;
+    top: $header-h;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background: var(--header-mobile-bg);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid $border;
+    padding: 0.5rem clamp(1.5rem, 5vw, 5rem) 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: opacity 0.2s $ease-out, transform 0.2s $ease-out;
+
+    &.open {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    @include media-breakpoint-up(lg) { display: none; }
+  }
+
+  &__mobile-link {
+    padding: 1rem 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: $text;
+    border-bottom: 1px solid $border;
+    transition: color 0.2s;
+    &:hover { color: $mint; }
+  }
+
+  &__mobile-cta {
+    margin-top: 1.25rem;
+    @include btn-primary;
+    justify-content: center;
+    text-align: center;
   }
 }

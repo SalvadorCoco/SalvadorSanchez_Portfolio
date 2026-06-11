@@ -6,12 +6,12 @@ interface Props {
 
 const {
   title = "Salvador Sanchez — Frontend Developer",
-  description = "Construyo webs con React y Next.js pensando siempre en quien las va a usar — funcionales, claras y con buen diseño.",
+  description = "Hago webs con React y Next.js pensando siempre en quien las va a usar — funcionales, claras y fáciles de navegar.",
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" data-lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,8 +24,210 @@ const {
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
+    <!-- Detect language + theme before paint to avoid flash -->
+    <script is:inline>
+      (function () {
+        // ── Language detection ──────────────────────────
+        var LATAM = ['ar','mx','cl','co','pe','ve','bo','uy','py','ec','gt','hn','sv','ni','cr','pa','do','cu','pr'];
+        var savedLang = localStorage.getItem('portfolio-lang');
+        var lang;
+        if (savedLang) {
+          lang = savedLang;
+        } else {
+          var loc = (navigator.language || '').toLowerCase();
+          var parts = loc.split('-');
+          var l = parts[0];
+          var c = parts[1] || '';
+          lang = (l === 'es' && (!c || LATAM.indexOf(c) > -1)) ? 'es' : 'en';
+        }
+        document.documentElement.setAttribute('data-lang', lang);
+        document.documentElement.setAttribute('lang', lang);
+
+        // ── Theme detection ─────────────────────────────
+        var savedTheme = localStorage.getItem('portfolio-theme');
+        var theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <slot />
+    <script is:inline>
+      window.__T = {
+        es: {
+          hero_badge: "Disponible para proyectos",
+          hero_title: 'Interfaces <span class="hl">fáciles</span><br />de usar y<br />de navegar.',
+          hero_desc: "Hola, soy Salvador, de Río Cuarto. Hago webs con React y Next.js pensando siempre en quien las va a usar — que no se pierda, que encuentre lo que busca, que vuelva.",
+          hero_cta_primary: "Ver proyectos →",
+          hero_cta_secondary: "Hablemos",
+          ic_name: "Nombre", ic_role: "Rol", ic_location: "Ubicación",
+          ic_experience: "Experiencia", ic_projects: "Proyectos",
+          ic_available: "Disponible",
+          ic_role_val: "Frontend Developer",
+          ic_experience_val: "3+ años",
+          ic_projects_val: "10+ entregados",
+          ic_available_val: "Sí ✓",
+          proj_eyebrow: "proyectos",
+          proj_title: "Trabajo real para<br />clientes reales.",
+          proj_unit: "proyecto",
+          proj_problem: "Problema", proj_solution: "Solución",
+          proj_see_more: "Ver caso completo →",
+          proj_private: "🔒 Repositorio privado",
+          sk_eyebrow: "stack técnico",
+          sk_title: "Las herramientas que uso.",
+          sk_desc: "No acumulo tecnologías — uso las que tienen sentido para cada proyecto.",
+          exp_eyebrow: "experiencia", exp_title: "Trayectoria laboral.",
+          exp_cv_sub: "Experiencia, formación y proyectos detallados en PDF.",
+          exp_cv_btn: "Descargar CV",
+          exp_role_1: "Desarrollador Frontend",
+          exp_company_1: "Municipalidad de Río Cuarto",
+          exp_desc_1: "Portal Municipal, EMOS y sistemas internos. Next.js, SCSS, Docker. Foco en accesibilidad y experiencia del vecino.",
+          exp_role_2: "Formación + Proyectos Freelance",
+          exp_company_2: "ITEC · Río Cuarto",
+          exp_desc_2: "Carrera en desarrollo en el ITEC mientras tomaba proyectos reales: Estudio Jurídico Sánchez, sistemas POS y webs institucionales.",
+          exp_role_3: "Primeros proyectos propios",
+          exp_company_3: "Formación autodidacta",
+          exp_desc_3: "HTML, CSS, JS y React. Construcción del stack desde cero y primeros clientes reales.",
+          exp_date_1: "2025 — Hoy", exp_date_2: "2023 — 2025", exp_date_3: "Desde 2021",
+          ct_eyebrow: "contacto",
+          ct_title: "¿Hablamos sobre<br />tu proyecto?",
+          ct_intro: "Trabajo con quien valora que las cosas funcionen bien. Si tu proyecto necesita una interfaz que cualquier persona use sin ayuda, escribíme.",
+          ct_label_name: "Nombre", ct_label_email: "Email",
+          ct_label_subject: "Asunto", ct_label_message: "Mensaje",
+          ct_ph_name: "Tu nombre", ct_ph_email: "tu@email.com",
+          ct_ph_subject: "¿En qué puedo ayudarte?",
+          ct_ph_message: "Contáme sobre tu proyecto...",
+          ct_submit: "Enviar mensaje", ct_sending: "Enviando...",
+          ct_success: "✓ ¡Mensaje enviado! Te respondo pronto.",
+          ct_error: "Completá todos los campos",
+          nav_projects: "Proyectos", nav_skills: "Skills",
+          nav_experience: "Experiencia", nav_contact: "Contacto",
+          header_cta: "Contratáme",
+          proj_back: "← Volver a proyectos",
+          proj_client: "Cliente", proj_year: "Año",
+          proj_context_title: "Contexto", proj_process_title: "Proceso",
+          proj_result_label: "Resultado",
+          proj_prev: "← Anterior", proj_next: "Siguiente →",
+          lang_toggle: "EN",
+          footer_location: "Río Cuarto, Córdoba, Argentina",
+        },
+        en: {
+          hero_badge: "Available for projects",
+          hero_title: 'Interfaces <span class="hl">easy</span><br />to use and<br />to navigate.',
+          hero_desc: "Hi, I'm Salvador from Río Cuarto, Argentina. I build websites with React and Next.js, always thinking about the people who'll use them — functional, clear, easy to find your way around.",
+          hero_cta_primary: "See projects →",
+          hero_cta_secondary: "Let's talk",
+          ic_name: "Name", ic_role: "Role", ic_location: "Location",
+          ic_experience: "Experience", ic_projects: "Projects",
+          ic_available: "Available",
+          ic_role_val: "Frontend Developer",
+          ic_experience_val: "3+ years",
+          ic_projects_val: "10+ delivered",
+          ic_available_val: "Yes ✓",
+          proj_eyebrow: "projects",
+          proj_title: "Real work for<br />real clients.",
+          proj_unit: "project",
+          proj_problem: "Problem", proj_solution: "Solution",
+          proj_see_more: "See full case →",
+          proj_private: "🔒 Private repository",
+          sk_eyebrow: "tech stack",
+          sk_title: "The tools I use.",
+          sk_desc: "I don't collect technologies — I master the ones that make sense for each project.",
+          exp_eyebrow: "experience", exp_title: "Work history.",
+          exp_cv_sub: "Experience, education and detailed projects in PDF.",
+          exp_cv_btn: "Download CV",
+          exp_role_1: "Frontend Developer",
+          exp_company_1: "Municipality of Río Cuarto",
+          exp_desc_1: "Municipal portal, EMOS and internal systems. Next.js, SCSS, Docker. Focus on accessibility and citizen experience.",
+          exp_role_2: "Training + Freelance Projects",
+          exp_company_2: "ITEC · Río Cuarto",
+          exp_desc_2: "Studied software development at ITEC while taking on real projects: law firm website, POS systems and institutional sites.",
+          exp_role_3: "First personal projects",
+          exp_company_3: "Self-taught",
+          exp_desc_3: "HTML, CSS, JS and React. Built the stack from scratch and landed first real clients.",
+          exp_date_1: "2025 — Present", exp_date_2: "2023 — 2025", exp_date_3: "Since 2021",
+          ct_eyebrow: "contact",
+          ct_title: "Want to talk about<br />your project?",
+          ct_intro: "I work with people who value things that work well. If your project needs an interface anyone can use without help, reach out.",
+          ct_label_name: "Name", ct_label_email: "Email",
+          ct_label_subject: "Subject", ct_label_message: "Message",
+          ct_ph_name: "Your name", ct_ph_email: "you@email.com",
+          ct_ph_subject: "How can I help you?",
+          ct_ph_message: "Tell me about your project...",
+          ct_submit: "Send message", ct_sending: "Sending...",
+          ct_success: "✓ Message sent! I'll get back to you soon.",
+          ct_error: "Please fill in all fields",
+          nav_projects: "Projects", nav_skills: "Skills",
+          nav_experience: "Experience", nav_contact: "Contact",
+          header_cta: "Hire me",
+          proj_back: "← Back to projects",
+          proj_client: "Client", proj_year: "Year",
+          proj_context_title: "Context", proj_process_title: "Process",
+          proj_result_label: "Result",
+          proj_prev: "← Previous", proj_next: "Next →",
+          lang_toggle: "ES",
+          footer_location: "Río Cuarto, Córdoba, Argentina",
+        }
+      };
+
+      function applyLang(lang) {
+        var t = window.__T[lang];
+        if (!t) return;
+        document.documentElement.setAttribute('data-lang', lang);
+        document.documentElement.setAttribute('lang', lang);
+        localStorage.setItem('portfolio-lang', lang);
+
+        // Static UI keys → textContent
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n');
+          if (t[key] !== undefined) el.textContent = t[key];
+        });
+
+        // Static UI keys → innerHTML (for <br> etc.)
+        document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n-html');
+          if (t[key] !== undefined) el.innerHTML = t[key];
+        });
+
+        // Input placeholders
+        document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n-ph');
+          if (t[key] !== undefined) el.setAttribute('placeholder', t[key]);
+        });
+
+        // Dynamic content with explicit es/en text (e.g. project descriptions)
+        document.querySelectorAll('[data-es]').forEach(function(el) {
+          var text = lang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-es');
+          if (text !== null) el.textContent = text;
+        });
+
+        // Dynamic content with explicit es/en HTML (e.g. skills with highlight spans)
+        document.querySelectorAll('[data-es-html]').forEach(function(el) {
+          var html = lang === 'en' ? el.getAttribute('data-en-html') : el.getAttribute('data-es-html');
+          if (html !== null) el.innerHTML = html;
+        });
+      }
+
+      window.__applyLang = applyLang;
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var lang = document.documentElement.getAttribute('data-lang') || 'es';
+        applyLang(lang);
+
+        document.getElementById('lang-toggle')?.addEventListener('click', function() {
+          var current = document.documentElement.getAttribute('data-lang') || 'es';
+          applyLang(current === 'es' ? 'en' : 'es');
+        });
+
+        document.getElementById('theme-toggle')?.addEventListener('click', function() {
+          var current = document.documentElement.getAttribute('data-theme') || 'light';
+          var next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('portfolio-theme', next);
+        });
+      });
+    </script>
   </body>
 </html>

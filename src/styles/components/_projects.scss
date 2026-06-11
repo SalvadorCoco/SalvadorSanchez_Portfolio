@@ -22,6 +22,59 @@
     padding: 2rem;
     transition: all 0.25s $ease-out;
 
+    &__cover {
+      margin: -2rem -2rem 1.5rem;
+      border-radius: $border-radius-lg $border-radius-lg 0 0;
+      overflow: hidden;
+      background: $bg-2;
+      border-bottom: 1px solid $border;
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.4s $ease-out;
+      }
+    }
+
+    &:hover &__cover img {
+      transform: scale(1.02);
+    }
+
+    &__placeholder {
+      margin: -2rem -2rem 1.5rem;
+      height: 175px;
+      border-radius: $border-radius-lg $border-radius-lg 0 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      // Subtle dot grid on the dark bg
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+    }
+
+    &__placeholder-num {
+      font-size: 7rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: rgba(255, 255, 255, 0.06);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      user-select: none;
+      position: relative;
+      z-index: 1;
+      font-family: ui-monospace, "Cascadia Code", monospace;
+    }
+
     &:hover {
       transform: translateY(-3px);
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07);

@@ -1,25 +1,81 @@
-// Bootstrap overrides — must come BEFORE bootstrap import
-$primary:           #2563eb;
-$primary-dark:      #1e40af;
-$primary-light:     #dbeafe;
-$font-family-sans-serif: "Plus Jakarta Sans", sans-serif;
-$border-radius:     10px;
-$border-radius-lg:  18px;
-$border-radius-pill: 100px;
+// ── Bootstrap overrides (must come BEFORE bootstrap import) ──────────────────
+$primary:                  #2563eb;
+$primary-dark:             #1e40af;
+$primary-light:            #dbeafe;
+$font-family-sans-serif:   "Plus Jakarta Sans", sans-serif;
+$border-radius:            10px;
+$border-radius-lg:         18px;
+$border-radius-pill:       100px;
 
-// Custom tokens
-$bg:          #f8fafc;
-$bg-2:        #eff6ff;
-$bg-3:        #dbeafe;
-$card:        #ffffff;
-$border:      rgba(0, 0, 0, 0.07);
-$mint:        #2563eb;
-$mint-dark:   #1e40af;
-$mint-light:  #dbeafe;
-$mint-dim:    rgba(37, 99, 235, 0.08);
-$text:        #0f172a;
-$text-2:      #64748b;
-$text-3:      #94a3b8;
+// ── Non-color tokens (don't change per theme) ─────────────────────────────────
+$ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+$header-h:  64px;
 
-$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-$header-h: 64px;
+// ── CSS custom properties ─────────────────────────────────────────────────────
+// Colors live as CSS vars so dark mode works at runtime without a rebuild.
+
+:root {
+  --bg:        #f9f8f6;
+  --bg-2:      #f0ede9;
+  --bg-3:      #e8e4de;
+  --card:      #ffffff;
+
+  --border:      rgba(0, 0, 0, 0.09);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+  --mint:        #2563eb;
+  --mint-dark:   #1e40af;
+  --mint-light:  #dbeafe;
+  --mint-dim:    rgba(37, 99, 235, 0.08);
+
+  --text:   #0f172a;
+  --text-2: #64748b;
+  --text-3: #94a3b8;
+
+  // Composite backgrounds used directly via var() in SCSS
+  --header-bg:        rgba(249, 248, 246, 0.94);
+  --header-mobile-bg: rgba(249, 248, 246, 0.98);
+  --breadcrumb-bg:    rgba(249, 248, 246, 0.95);
+  --stage-bg:         #0f172a;
+}
+
+[data-theme="dark"] {
+  --bg:        #0f172a;
+  --bg-2:      #162032;
+  --bg-3:      #1e293b;
+  --card:      #1a2642;
+
+  --border:      rgba(255, 255, 255, 0.09);
+  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.3);
+
+  --mint:        #60a5fa;
+  --mint-dark:   #3b82f6;
+  --mint-light:  rgba(96, 165, 250, 0.2);
+  --mint-dim:    rgba(96, 165, 250, 0.12);
+
+  --text:   #e2e8f0;
+  --text-2: #94a3b8;
+  --text-3: #4b6080;
+
+  --header-bg:        rgba(15, 23, 42, 0.94);
+  --header-mobile-bg: rgba(15, 23, 42, 0.98);
+  --breadcrumb-bg:    rgba(15, 23, 42, 0.95);
+  --stage-bg:         #1e293b;
+}
+
+// ── SCSS aliases → CSS custom properties ──────────────────────────────────────
+// All existing SCSS using $bg, $text, etc. compiles to var(--*) and
+// picks up the right value at runtime — no other files need to change.
+
+$bg:        var(--bg);
+$bg-2:      var(--bg-2);
+$bg-3:      var(--bg-3);
+$card:      var(--card);
+$border:    var(--border);
+$mint:      var(--mint);
+$mint-dark: var(--mint-dark);
+$mint-light:var(--mint-light);
+$mint-dim:  var(--mint-dim);
+$text:      var(--text);
+$text-2:    var(--text-2);
+$text-3:    var(--text-3);

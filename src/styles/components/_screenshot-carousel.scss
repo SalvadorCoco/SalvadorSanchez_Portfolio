@@ -1,0 +1,72 @@
+.sc-carousel {
+  &__track {
+    position: relative;
+  }
+
+  &__slide {
+    display: none;
+
+    &.active {
+      display: block;
+      animation: sc-fadein 0.35s $ease-out;
+    }
+  }
+
+  // Controls row under the slide
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid $border;
+    background: $bg-2;
+    color: $text-2;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+
+    &:hover {
+      background: $mint-dim;
+      color: $mint;
+      border-color: $mint;
+    }
+  }
+
+  &__dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background: $text-3;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.25s $ease-out;
+
+    &.active {
+      background: $mint;
+      width: 22px;
+    }
+  }
+}
+
+@keyframes sc-fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}

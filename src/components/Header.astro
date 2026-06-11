@@ -1,9 +1,9 @@
 ---
 const links = [
-  { href: "#proyectos", label: "Proyectos" },
-  { href: "#skills", label: "Skills" },
-  { href: "#experiencia", label: "Experiencia" },
-  { href: "#contacto", label: "Contacto" },
+  { href: "#proyectos",   key: "nav_projects",   label: "Proyectos" },
+  { href: "#skills",      key: "nav_skills",      label: "Skills" },
+  { href: "#experiencia", key: "nav_experience",  label: "Experiencia" },
+  { href: "#contacto",    key: "nav_contact",     label: "Contacto" },
 ];
 ---
 
@@ -13,13 +13,77 @@ const links = [
     Salvador Sanchez
   </a>
 
-  <nav>
+  <nav class="header__nav-wrap">
     <ul class="header__nav">
-      {links.map(({ href, label }) => (
-        <li><a href={href}>{label}</a></li>
+      {links.map(({ href, key, label }) => (
+        <li><a href={href} data-i18n={key}>{label}</a></li>
       ))}
     </ul>
   </nav>
 
-  <a href="#contacto" class="header__cta">Contratame</a>
+  <div class="header__right">
+    <button id="theme-toggle" class="header__theme" aria-label="Cambiar tema">
+      <span class="header__theme-track">
+        <span class="header__theme-thumb">
+          <svg class="header__theme-icon header__theme-icon--sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+            <circle cx="8" cy="8" r="2.5" fill="currentColor" stroke="none"/>
+            <line x1="8" y1="1" x2="8" y2="3.5"/>
+            <line x1="8" y1="12.5" x2="8" y2="15"/>
+            <line x1="1" y1="8" x2="3.5" y2="8"/>
+            <line x1="12.5" y1="8" x2="15" y2="8"/>
+            <line x1="3.2" y1="3.2" x2="4.8" y2="4.8"/>
+            <line x1="11.2" y1="11.2" x2="12.8" y2="12.8"/>
+            <line x1="12.8" y1="3.2" x2="11.2" y2="4.8"/>
+            <line x1="4.8" y1="11.2" x2="3.2" y2="12.8"/>
+          </svg>
+          <svg class="header__theme-icon header__theme-icon--moon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M13.5 10.5a6 6 0 0 1-8-8 6 6 0 1 0 8 8z"/>
+          </svg>
+        </span>
+      </span>
+    </button>
+    <button id="lang-toggle" class="header__lang" aria-label="Cambiar idioma" data-i18n="lang_toggle">EN</button>
+    <a href="#contacto" class="header__cta" data-i18n="header_cta">Contratáme</a>
+    <button class="header__burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
 </header>
+
+<!-- Mobile nav drawer -->
+<div class="header__mobile-nav" id="mobile-nav" aria-hidden="true">
+  {links.map(({ href, key, label }) => (
+    <a href={href} class="header__mobile-link" data-i18n={key}>{label}</a>
+  ))}
+  <a href="#contacto" class="header__mobile-cta" data-i18n="header_cta">Contratáme</a>
+</div>
+
+<script>
+  const burger = document.getElementById('burger')!;
+  const mobileNav = document.getElementById('mobile-nav')!;
+
+  function toggleMenu(open: boolean) {
+    burger.classList.toggle('open', open);
+    mobileNav.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    mobileNav.setAttribute('aria-hidden', String(!open));
+  }
+
+  burger.addEventListener('click', () => {
+    toggleMenu(!mobileNav.classList.contains('open'));
+  });
+
+  // Close on nav link click
+  mobileNav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => toggleMenu(false));
+  });
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!burger.contains(e.target as Node) && !mobileNav.contains(e.target as Node)) {
+      toggleMenu(false);
+    }
+  });
+</script>

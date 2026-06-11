@@ -15,132 +15,241 @@ const prev = projects[currentIndex - 1] ?? null;
 const next = projects[currentIndex + 1] ?? null;
 
 const hasScreenshots = project.screenshots.length > 0;
+const multipleScreenshots = project.screenshots.length > 1;
+const liveUrl = project.links.find((l) => l.type === "live")?.href ?? "";
+const domain = liveUrl
+  ? new URL(liveUrl).hostname.replace("www.", "")
+  : "";
 ---
 
 <Layout title={`${project.title} — Salvador Sanchez`} description={project.desc}>
   <Header />
 
   <main class="proj-page">
-    <!-- Breadcrumb / back -->
+
     <div class="proj-page__breadcrumb">
       <div class="container">
-        <a href="/#proyectos" class="proj-page__back">← Volver a proyectos</a>
+        <a href="/#proyectos" class="proj-page__back" data-i18n="proj_back">← Volver a proyectos</a>
       </div>
     </div>
 
-    <!-- Hero -->
+    <!-- Hero header -->
     <section class="proj-page__hero">
       <div class="container">
         <div class="proj-page__eyebrow">
-          <span class="sec__eyebrow">{project.num} · proyecto</span>
+          <span class="sec__eyebrow">{project.num} · <span data-i18n="proj_unit">proyecto</span></span>
           <span class="proj-page__year">{project.year}</span>
         </div>
         <h1 class="proj-page__title">{project.title}</h1>
         <p class="proj-page__client">{project.client}</p>
-        <p class="proj-page__lead">{project.desc}</p>
-
-        <div class="proj-page__meta">
-          <div class="proj-tags">
-            {project.tags.map(tag => <span class="tag">{tag}</span>)}
-          </div>
-          <div class="proj-links">
-            {project.private ? (
-              <span class="plink plink--priv">🔒 Repositorio privado</span>
-            ) : (
-              project.links.map(({ href, label, type }) => (
-                <a href={href} target="_blank" rel="noopener" class={`plink plink--${type}`}>
-                  {label}
-                </a>
-              ))
-            )}
-          </div>
-        </div>
+        <p
+          class="proj-page__lead"
+          data-es={project.desc}
+          data-en={project.desc_en ?? project.desc}
+        >{project.desc}</p>
       </div>
     </section>
 
-    <!-- Cover screenshot — full width, sin recorte -->
+    <!-- Dark stage with carousel -->
     {hasScreenshots && (
-      <section class="proj-page__cover-wrap">
+      <section class="proj-page__stage">
         <div class="container">
-          <div class="proj-page__cover">
-            <img
-              src={project.screenshots[0]}
-              alt={`${project.title} — captura principal`}
-              class="proj-page__cover-img"
-              loading="eager"
-            />
-          </div>
+          {multipleScreenshots ? (
+            <div class="sc-carousel" id="sc-carousel">
+              <div class="sc-carousel__track">
+                {project.screenshots.map((src, i) => (
+                  <div class={`sc-carousel__slide${i === 0 ? " active" : ""}`} data-index={i}>
+                    <div class="browser-mock browser-mock--cover">
+                      <div class="browser-mock__bar">
+                        <div class="browser-mock__dots">
+                          <span></span><span></span><span></span>
+                        </div>
+                        {domain && <div class="browser-mock__url">{domain}</div>}
+                      </div>
+                      <div class="browser-mock__screen">
+                        <img
+                          src={src}
+                          alt={`${project.title} — captura ${i + 1}`}
+                          loading={i === 0 ? "eager" : "lazy"}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div class="sc-carousel__controls">
+                <button class="sc-carousel__btn" id="sc-prev" aria-label="Anterior">←</button>
+                <div class="sc-carousel__dots" id="sc-dots">
+                  {project.screenshots.map((_, i) => (
+                    <button
+                      class={`sc-carousel__dot${i === 0 ? " active" : ""}`}
+                      data-index={i}
+                      aria-label={`Captura ${i + 1}`}
+                    />
+                  ))}
+                </div>
+                <button class="sc-carousel__btn" id="sc-next" aria-label="Siguiente">→</button>
+              </div>
+            </div>
+          ) : (
+            <div class="browser-mock browser-mock--cover">
+              <div class="browser-mock__bar">
+                <div class="browser-mock__dots">
+                  <span></span><span></span><span></span>
+                </div>
+                {domain && <div class="browser-mock__url">{domain}</div>}
+              </div>
+              <div class="browser-mock__screen">
+                <img
+                  src={project.screenshots[0]}
+                  alt={`${project.title} — captura principal`}
+                  loading="eager"
+                />
+              </div>
+            </div>
+          )}
         </div>
       </section>
     )}
 
-    <!-- Content -->
+    <!-- Two-column content layout -->
     <section class="proj-page__content">
       <div class="container">
-        <div class="proj-page__body">
+        <div class="proj-page__layout">
 
-          <div class="proj-page__section">
-            <h2 class="proj-page__section-title">Contexto</h2>
-            <p class="proj-page__text">{project.context}</p>
-          </div>
-
-          <div class="proj-page__split">
-            <div class="proj-page__split-item proj-page__split-item--problem">
-              <div class="proj-page__split-label">Problema</div>
-              <p class="proj-page__text">{project.problem}</p>
+          <!-- Sidebar -->
+          <aside class="proj-page__sidebar">
+            <div class="proj-page__sidebar-item">
+              <div class="proj-page__sidebar-label" data-i18n="proj_client">Cliente</div>
+              <div class="proj-page__sidebar-value">{project.client}</div>
             </div>
-            <div class="proj-page__split-item proj-page__split-item--solution">
-              <div class="proj-page__split-label">Solución</div>
-              <p class="proj-page__text">{project.solution}</p>
-            </div>
-          </div>
 
-          {project.screenshots.length > 1 && (
-            <div class="proj-page__screenshots">
-              {project.screenshots.slice(1).map((src, i) => (
-                <div class="proj-page__screenshot">
-                  <img
-                    src={src}
-                    alt={`${project.title} — captura ${i + 2}`}
-                    loading="lazy"
-                  />
+            <div class="proj-page__sidebar-item">
+              <div class="proj-page__sidebar-label" data-i18n="proj_year">Año</div>
+              <div class="proj-page__sidebar-value">{project.year}</div>
+            </div>
+
+            <div class="proj-page__sidebar-item">
+              <div class="proj-page__sidebar-label">Stack</div>
+              <div class="proj-tags proj-tags--wrap">
+                {project.tags.map(tag => <span class="tag">{tag}</span>)}
+              </div>
+            </div>
+
+            {!project.private && project.links.length > 0 && (
+              <div class="proj-page__sidebar-item">
+                <div class="proj-page__sidebar-label">Links</div>
+                <div class="proj-page__sidebar-links">
+                  {project.links.map(({ href, label, type }) => (
+                    <a href={href} target="_blank" rel="noopener" class={`plink plink--${type}`}>
+                      {label}
+                    </a>
+                  ))}
                 </div>
-              ))}
+              </div>
+            )}
+          </aside>
+
+          <!-- Body -->
+          <div class="proj-page__body">
+
+            <div class="proj-page__section">
+              <h2 class="proj-page__section-title" data-i18n="proj_context_title">Contexto</h2>
+              <p
+                class="proj-page__text"
+                data-es={project.context}
+                data-en={project.context_en ?? project.context}
+              >{project.context}</p>
             </div>
-          )}
 
-          <div class="proj-page__section">
-            <h2 class="proj-page__section-title">Proceso</h2>
-            <p class="proj-page__text">{project.process}</p>
+            <div class="proj-page__split">
+              <div class="proj-page__split-item proj-page__split-item--problem">
+                <div class="proj-page__split-label" data-i18n="proj_problem">Problema</div>
+                <p
+                  class="proj-page__text"
+                  data-es={project.problem}
+                  data-en={project.problem_en ?? project.problem}
+                >{project.problem}</p>
+              </div>
+              <div class="proj-page__split-item proj-page__split-item--solution">
+                <div class="proj-page__split-label" data-i18n="proj_solution">Solución</div>
+                <p
+                  class="proj-page__text"
+                  data-es={project.solution}
+                  data-en={project.solution_en ?? project.solution}
+                >{project.solution}</p>
+              </div>
+            </div>
+
+            <div class="proj-page__section">
+              <h2 class="proj-page__section-title" data-i18n="proj_process_title">Proceso</h2>
+              <p
+                class="proj-page__text"
+                data-es={project.process}
+                data-en={project.process_en ?? project.process}
+              >{project.process}</p>
+            </div>
+
+            <div class="proj-page__section proj-page__section--result">
+              <div class="proj-page__result-label" data-i18n="proj_result_label">Resultado</div>
+              <p
+                class="proj-page__result-text"
+                data-es={project.result}
+                data-en={project.result_en ?? project.result}
+              >{project.result}</p>
+            </div>
+
           </div>
-
-          <div class="proj-page__section proj-page__section--result">
-            <div class="proj-page__result-label">Resultado</div>
-            <p class="proj-page__result-text">{project.result}</p>
-          </div>
-
         </div>
       </div>
     </section>
 
-    <!-- Prev / Next -->
     <nav class="proj-page__nav">
       <div class="container">
         <div class="proj-page__nav-inner">
           {prev ? (
             <a href={`/proyectos/${prev.slug}`} class="proj-page__nav-link proj-page__nav-link--prev">
-              <span class="proj-page__nav-dir">← Anterior</span>
+              <span class="proj-page__nav-dir" data-i18n="proj_prev">← Anterior</span>
               <span class="proj-page__nav-name">{prev.title}</span>
             </a>
           ) : <div />}
           {next ? (
             <a href={`/proyectos/${next.slug}`} class="proj-page__nav-link proj-page__nav-link--next">
-              <span class="proj-page__nav-dir">Siguiente →</span>
+              <span class="proj-page__nav-dir" data-i18n="proj_next">Siguiente →</span>
               <span class="proj-page__nav-name">{next.title}</span>
             </a>
           ) : <div />}
         </div>
       </div>
     </nav>
+
   </main>
 </Layout>
+
+<script>
+  const carousel = document.getElementById('sc-carousel');
+  if (carousel) {
+    const slides = carousel.querySelectorAll<HTMLElement>('.sc-carousel__slide');
+    const dots   = carousel.querySelectorAll<HTMLElement>('.sc-carousel__dot');
+    let current  = 0;
+
+    function goTo(n: number) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = ((n % slides.length) + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }
+
+    document.getElementById('sc-prev')?.addEventListener('click', () => goTo(current - 1));
+    document.getElementById('sc-next')?.addEventListener('click', () => goTo(current + 1));
+    dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft')  goTo(current - 1);
+      if (e.key === 'ArrowRight') goTo(current + 1);
+    });
+  }
+</script>

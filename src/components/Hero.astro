@@ -1,11 +1,11 @@
 ---
 const stats = [
-  { label: "Nombre",      value: "Salvador Sanchez" },
-  { label: "Rol",         value: "Frontend Developer" },
-  { label: "Ubicación",   value: "Río Cuarto, AR" },
-  { label: "Experiencia", value: "3+ años" },
-  { label: "Proyectos",   value: "10+ entregados" },
-  { label: "Disponible",  value: "Sí ✓", available: true },
+  { labelKey: "ic_name",       label: "Nombre",      valueKey: "",                  value: "Salvador Sanchez" },
+  { labelKey: "ic_role",       label: "Rol",         valueKey: "ic_role_val",       value: "Frontend Developer" },
+  { labelKey: "ic_location",   label: "Ubicación",   valueKey: "",                  value: "Río Cuarto, AR" },
+  { labelKey: "ic_experience", label: "Experiencia", valueKey: "ic_experience_val", value: "3+ años" },
+  { labelKey: "ic_projects",   label: "Proyectos",   valueKey: "ic_projects_val",   value: "10+ entregados" },
+  { labelKey: "ic_available",  label: "Disponible",  valueKey: "ic_available_val",  value: "Sí ✓", available: true },
 ];
 ---
 
@@ -15,26 +15,28 @@ const stats = [
       <div>
         <div class="hero__badge fu">
           <div class="hero__badge-dot"></div>
-          Disponible para proyectos
+          <span data-i18n="hero_badge">Disponible para proyectos</span>
         </div>
-        <h1 class="hero__title fu d1">
-          Interfaces <span class="hl">fáciles</span><br />de usar y<br />de querer.
+        <h1 class="hero__title fu d1" data-i18n-html="hero_title">
+          Interfaces <span class="hl">fáciles</span><br />de usar y<br />de navegar.
         </h1>
-        <p class="hero__desc fu d2">
-          Hola, soy Salvador. Construyo webs con React y Next.js pensando
-          siempre en quien las va a usar — funcionales, claras y con buen diseño.
+        <p class="hero__desc fu d2" data-i18n="hero_desc">
+          Hola, soy Salvador, de Río Cuarto. Hago webs con React y Next.js pensando siempre en quien las va a usar — que no se pierda, que encuentre lo que busca, que vuelva.
         </p>
         <div class="hero__actions fu d3">
-          <a href="#proyectos" class="hero__btn-primary">Ver proyectos →</a>
-          <a href="#contacto" class="hero__btn-secondary">Hablemos</a>
+          <a href="#proyectos" class="hero__btn-primary" data-i18n="hero_cta_primary">Ver proyectos →</a>
+          <a href="#contacto" class="hero__btn-secondary" data-i18n="hero_cta_secondary">Hablemos</a>
         </div>
       </div>
 
       <div class="info-card fu d2">
-        {stats.map(({ label, value, available }) => (
+        {stats.map(({ labelKey, label, valueKey, value, available }) => (
           <div class="info-card__row">
-            <span class="info-card__label">{label}</span>
-            <span class={`info-card__value${available ? " info-card__value--available" : ""}`}>
+            <span class="info-card__label" data-i18n={labelKey}>{label}</span>
+            <span
+              class={`info-card__value${available ? " info-card__value--available" : ""}`}
+              {...(valueKey ? { "data-i18n": valueKey } : {})}
+            >
               {value}
             </span>
           </div>

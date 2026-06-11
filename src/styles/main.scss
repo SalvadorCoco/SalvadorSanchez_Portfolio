@@ -24,6 +24,8 @@
 @import "layout/section";
 
 // 5. Components
+@import "components/browser-mock";
+@import "components/screenshot-carousel";
 @import "components/hero";
 @import "components/projects";
 @import "components/skills";
@@ -34,3 +36,17 @@
 
 // 6. Pages
 @import "pages/project-page";
+
+// 7. Dark mode toggle state
+[data-theme="dark"] {
+  .header__theme-track {
+    background: var(--mint-dim);
+    border-color: var(--mint);
+  }
+  .header__theme-thumb {
+    transform: translateX(18px);
+    background: var(--mint);
+  }
+  .header__theme-icon--sun  { opacity: 0; }
+  .header__theme-icon--moon { opacity: 1; }
+}

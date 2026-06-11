@@ -1,11 +1,35 @@
 ---
 const skills = [
-  { name: "React",      where: [{ text: "Postas", highlight: true }, { text: "Proyectos propios" }] },
-  { name: "Next.js",    where: [{ text: "Portal Municipal", highlight: true }, { text: "EMOS", highlight: true }] },
-  { name: "SCSS",       where: [{ text: "Todos los proyectos" }] },
-  { name: "JavaScript", where: [{ text: "Todos los proyectos" }] },
-  { name: "Bootstrap",  where: [{ text: "Layouts · Prototipos" }] },
-  { name: "Astro",      where: [{ text: "Sitios estáticos" }] },
+  {
+    name: "React",
+    where_es: '<span>Postas</span> · Proyectos propios',
+    where_en: '<span>Postas</span> · Personal projects',
+  },
+  {
+    name: "Next.js",
+    where_es: '<span>Portal Municipal</span> · <span>EMOS</span>',
+    where_en: '<span>Portal Municipal</span> · <span>EMOS</span>',
+  },
+  {
+    name: "SCSS",
+    where_es: 'Todos los proyectos',
+    where_en: 'All projects',
+  },
+  {
+    name: "JavaScript",
+    where_es: 'Todos los proyectos',
+    where_en: 'All projects',
+  },
+  {
+    name: "Bootstrap",
+    where_es: 'Layouts · Prototipos',
+    where_en: 'Layouts · Prototypes',
+  },
+  {
+    name: "Astro",
+    where_es: 'Sitios estáticos',
+    where_en: 'Static sites',
+  },
 ];
 
 const methods = ["UI/UX Design", "Responsive", "Accesibilidad", "Performance", "Git", "Figma", "Docker"];
@@ -16,11 +40,11 @@ const methods = ["UI/UX Design", "Responsive", "Accesibilidad", "Performance", "
     <div class="skills__wrap">
       <div>
         <div class="sec__head fu">
-          <div class="sec__eyebrow">stack técnico</div>
-          <div class="sec__title">Las herramientas que uso.</div>
+          <div class="sec__eyebrow" data-i18n="sk_eyebrow">stack técnico</div>
+          <div class="sec__title" data-i18n="sk_title">Las herramientas que uso.</div>
         </div>
-        <p class="skills__desc fu d1">
-          No colecciono tecnologías — domino las que tienen sentido para cada proyecto.
+        <p class="skills__desc fu d1" data-i18n="sk_desc">
+          No acumulo tecnologías — uso las que tienen sentido para cada proyecto.
         </p>
         <div class="skills__methods fu d2">
           {methods.map(m => <span class="meth-tag">{m}</span>)}
@@ -28,17 +52,15 @@ const methods = ["UI/UX Design", "Responsive", "Accesibilidad", "Performance", "
       </div>
 
       <div class="skills__grid fu d1">
-        {skills.map(({ name, where }) => (
+        {skills.map(({ name, where_es, where_en }) => (
           <div class="sk-card">
             <div class="sk-card__name">{name}</div>
-            <div class="sk-card__where">
-              {where.map(({ text, highlight }, i) => (
-                <>
-                  {highlight ? <span>{text}</span> : text}
-                  {i < where.length - 1 && " · "}
-                </>
-              ))}
-            </div>
+            <div
+              class="sk-card__where"
+              data-es-html={where_es}
+              data-en-html={where_en}
+              set:html={where_es}
+            />
           </div>
         ))}
       </div>

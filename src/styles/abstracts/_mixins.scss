@@ -11,8 +11,9 @@
 
 @mixin card-base {
   background: $card;
-  border: 1px solid $border;
+  border: 1px solid var(--border);
   border-radius: $border-radius-lg;
+  box-shadow: var(--shadow-card);
 }
 
 @mixin btn-primary {
