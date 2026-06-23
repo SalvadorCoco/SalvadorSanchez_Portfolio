@@ -1,14 +1,14 @@
 ---
 const links = [
-  { href: "#proyectos",   key: "nav_projects",   label: "Proyectos" },
-  { href: "#skills",      key: "nav_skills",      label: "Skills" },
-  { href: "#experiencia", key: "nav_experience",  label: "Experiencia" },
-  { href: "#contacto",    key: "nav_contact",     label: "Contacto" },
+  { href: "/#proyectos",   key: "nav_projects",   label: "Proyectos" },
+  { href: "/#skills",      key: "nav_skills",      label: "Skills" },
+  { href: "/#experiencia", key: "nav_experience",  label: "Experiencia" },
+  { href: "/#contacto",    key: "nav_contact",     label: "Contacto" },
 ];
 ---
 
 <header class="header">
-  <a href="#inicio" class="header__logo">
+  <a href="/" class="header__logo">
     <div class="header__logo-mark">SS</div>
     Salvador Sanchez
   </a>
@@ -43,7 +43,7 @@ const links = [
       </span>
     </button>
     <button id="lang-toggle" class="header__lang" aria-label="Cambiar idioma" data-i18n="lang_toggle">EN</button>
-    <a href="#contacto" class="header__cta" data-i18n="header_cta">Contratáme</a>
+    <a href="/#contacto" class="header__cta" data-i18n="header_cta">Contratáme</a>
     <button class="header__burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
       <span></span>
       <span></span>
@@ -57,7 +57,7 @@ const links = [
   {links.map(({ href, key, label }) => (
     <a href={href} class="header__mobile-link" data-i18n={key}>{label}</a>
   ))}
-  <a href="#contacto" class="header__mobile-cta" data-i18n="header_cta">Contratáme</a>
+  <a href="/#contacto" class="header__mobile-cta" data-i18n="header_cta">Contratáme</a>
 </div>
 
 <script>
