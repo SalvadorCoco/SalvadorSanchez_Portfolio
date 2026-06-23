@@ -58,17 +58,10 @@ const {
       window.__T = {
         es: {
           hero_badge: "Disponible para proyectos",
-          hero_title: 'Interfaces <span class="hl">fáciles</span><br />de usar y<br />de navegar.',
+          hero_title: 'Interfaces donde <span class="hl">todo</span><br />está donde<br />lo esperás.',
           hero_desc: "Hola, soy Salvador, de Río Cuarto. Hago webs con React y Next.js pensando siempre en quien las va a usar — que no se pierda, que encuentre lo que busca, que vuelva.",
           hero_cta_primary: "Ver proyectos →",
           hero_cta_secondary: "Hablemos",
-          ic_name: "Nombre", ic_role: "Rol", ic_location: "Ubicación",
-          ic_experience: "Experiencia", ic_projects: "Proyectos",
-          ic_available: "Disponible",
-          ic_role_val: "Frontend Developer",
-          ic_experience_val: "3+ años",
-          ic_projects_val: "10+ entregados",
-          ic_available_val: "Sí ✓",
           proj_eyebrow: "proyectos",
           proj_title: "Trabajo real para<br />clientes reales.",
           proj_unit: "proyecto",
@@ -94,14 +87,9 @@ const {
           ct_eyebrow: "contacto",
           ct_title: "¿Hablamos sobre<br />tu proyecto?",
           ct_intro: "Trabajo con quien valora que las cosas funcionen bien. Si tu proyecto necesita una interfaz que cualquier persona use sin ayuda, escribíme.",
-          ct_label_name: "Nombre", ct_label_email: "Email",
-          ct_label_subject: "Asunto", ct_label_message: "Mensaje",
-          ct_ph_name: "Tu nombre", ct_ph_email: "tu@email.com",
-          ct_ph_subject: "¿En qué puedo ayudarte?",
-          ct_ph_message: "Contáme sobre tu proyecto...",
-          ct_submit: "Enviar mensaje", ct_sending: "Enviando...",
-          ct_success: "✓ ¡Mensaje enviado! Te respondo pronto.",
-          ct_error: "Completá todos los campos",
+          ct_wsp_title: "Escribíme por WhatsApp",
+          ct_wsp_desc: "Respondo rápido. Contáme sobre tu proyecto y te doy una mano.",
+          ct_wsp_btn: "Abrir WhatsApp →",
           nav_projects: "Proyectos", nav_skills: "Skills",
           nav_experience: "Experiencia", nav_contact: "Contacto",
           header_cta: "Contratáme",
@@ -115,17 +103,10 @@ const {
         },
         en: {
           hero_badge: "Available for projects",
-          hero_title: 'Interfaces <span class="hl">easy</span><br />to use and<br />to navigate.',
+          hero_title: 'Interfaces where <span class="hl">everything</span><br />is right where<br />you expect it.',
           hero_desc: "Hi, I'm Salvador from Río Cuarto, Argentina. I build websites with React and Next.js, always thinking about the people who'll use them — functional, clear, easy to find your way around.",
           hero_cta_primary: "See projects →",
           hero_cta_secondary: "Let's talk",
-          ic_name: "Name", ic_role: "Role", ic_location: "Location",
-          ic_experience: "Experience", ic_projects: "Projects",
-          ic_available: "Available",
-          ic_role_val: "Frontend Developer",
-          ic_experience_val: "3+ years",
-          ic_projects_val: "10+ delivered",
-          ic_available_val: "Yes ✓",
           proj_eyebrow: "projects",
           proj_title: "Real work for<br />real clients.",
           proj_unit: "project",
@@ -151,14 +132,9 @@ const {
           ct_eyebrow: "contact",
           ct_title: "Want to talk about<br />your project?",
           ct_intro: "I work with people who value things that work well. If your project needs an interface anyone can use without help, reach out.",
-          ct_label_name: "Name", ct_label_email: "Email",
-          ct_label_subject: "Subject", ct_label_message: "Message",
-          ct_ph_name: "Your name", ct_ph_email: "you@email.com",
-          ct_ph_subject: "How can I help you?",
-          ct_ph_message: "Tell me about your project...",
-          ct_submit: "Send message", ct_sending: "Sending...",
-          ct_success: "✓ Message sent! I'll get back to you soon.",
-          ct_error: "Please fill in all fields",
+          ct_wsp_title: "Message me on WhatsApp",
+          ct_wsp_desc: "I reply fast. Tell me about your project and I'll help you out.",
+          ct_wsp_btn: "Open WhatsApp →",
           nav_projects: "Projects", nav_skills: "Skills",
           nav_experience: "Experience", nav_contact: "Contact",
           header_cta: "Hire me",
@@ -208,6 +184,20 @@ const {
           var html = lang === 'en' ? el.getAttribute('data-en-html') : el.getAttribute('data-es-html');
           if (html !== null) el.innerHTML = html;
         });
+
+        // WhatsApp button: switch pre-filled message by language
+        var wspBtn = document.getElementById('wspBtn');
+        if (wspBtn) {
+          var wspHref = wspBtn.getAttribute('data-wsp-' + lang);
+          if (wspHref) wspBtn.setAttribute('href', wspHref);
+        }
+
+        // CV download: switch PDF by language
+        var cvBtn = document.querySelector('[data-cv-es]');
+        if (cvBtn) {
+          var cvHref = lang === 'en' ? cvBtn.getAttribute('data-cv-en') : cvBtn.getAttribute('data-cv-es');
+          if (cvHref) cvBtn.setAttribute('href', cvHref);
+        }
       }
 
       window.__applyLang = applyLang;

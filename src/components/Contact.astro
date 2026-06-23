@@ -3,7 +3,6 @@ const links = [
   { href: "mailto:salvadorcocosanchez@gmail.com", icon: "✉️", label: "Email", sub: "salvadorcocosanchez@gmail.com" },
   { href: "https://www.linkedin.com/in/salvador-sanchez-b08209297/", icon: "💼", label: "LinkedIn", sub: "linkedin.com/in/salvador-sanchez-b08209297", external: true },
   { href: "https://github.com/SalvadorCoco", icon: "🐙", label: "GitHub", sub: "github.com/SalvadorCoco", external: true },
-  { href: "https://wa.me/5493584120469", icon: "💬", label: "WhatsApp", sub: "+54 9 358 412-0469", external: true },
 ];
 ---
 
@@ -36,54 +35,25 @@ const links = [
         </div>
       </div>
 
-      <form class="contact-form fu d2" id="contactForm" novalidate>
-        <div class="contact-form__row">
-          <div class="contact-form__group">
-            <label class="contact-form__label" for="n" data-i18n="ct_label_name">Nombre</label>
-            <input class="contact-form__input" id="n" type="text" placeholder="Tu nombre" data-i18n-ph="ct_ph_name" />
-          </div>
-          <div class="contact-form__group">
-            <label class="contact-form__label" for="e" data-i18n="ct_label_email">Email</label>
-            <input class="contact-form__input" id="e" type="email" placeholder="tu@email.com" data-i18n-ph="ct_ph_email" />
-          </div>
+      <div class="contact__wsp fu d2">
+        <div class="wsp-card">
+          <div class="wsp-card__icon">💬</div>
+          <div class="wsp-card__title" data-i18n="ct_wsp_title">Escribíme por WhatsApp</div>
+          <p class="wsp-card__desc" data-i18n="ct_wsp_desc">Respondo rápido. Contáme sobre tu proyecto y te doy una mano.</p>
+          <a
+            href="https://wa.me/5493584120469?text=Hola%20Salvador!%20Vi%20tu%20portfolio%20y%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto."
+            class="wsp-card__btn"
+            target="_blank"
+            rel="noopener"
+            id="wspBtn"
+            data-wsp-es="https://wa.me/5493584120469?text=Hola%20Salvador!%20Vi%20tu%20portfolio%20y%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto."
+            data-wsp-en="https://wa.me/5493584120469?text=Hi%20Salvador!%20I%20saw%20your%20portfolio%20and%20I%27d%20like%20to%20talk%20about%20a%20project."
+            data-i18n="ct_wsp_btn"
+          >
+            Abrir WhatsApp →
+          </a>
         </div>
-        <div class="contact-form__group">
-          <label class="contact-form__label" for="a" data-i18n="ct_label_subject">Asunto</label>
-          <input class="contact-form__input" id="a" type="text" placeholder="¿En qué puedo ayudarte?" data-i18n-ph="ct_ph_subject" />
-        </div>
-        <div class="contact-form__group">
-          <label class="contact-form__label" for="m" data-i18n="ct_label_message">Mensaje</label>
-          <textarea class="contact-form__textarea" id="m" placeholder="Contáme sobre tu proyecto..." data-i18n-ph="ct_ph_message"></textarea>
-        </div>
-        <button type="submit" class="contact-form__submit" data-i18n="ct_submit">Enviar mensaje</button>
-      </form>
+      </div>
     </div>
   </div>
 </section>
-
-<script>
-  document.getElementById("contactForm")?.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const n  = (document.getElementById("n") as HTMLInputElement).value.trim();
-    const em = (document.getElementById("e") as HTMLInputElement).value.trim();
-    const m  = (document.getElementById("m") as HTMLTextAreaElement).value.trim();
-    const lang = document.documentElement.getAttribute('data-lang') || 'es';
-    const t = (window as any).__T?.[lang];
-
-    if (!n || !em || !m) {
-      (window as any).showToast?.(t?.ct_error || "Completá todos los campos");
-      return;
-    }
-
-    const btn = this.querySelector(".contact-form__submit") as HTMLButtonElement;
-    btn.textContent = t?.ct_sending || "Enviando...";
-    btn.disabled = true;
-
-    setTimeout(() => {
-      (this as HTMLFormElement).reset();
-      btn.disabled = false;
-      btn.textContent = t?.ct_submit || "Enviar mensaje";
-      (window as any).showToast?.(t?.ct_success || "✓ ¡Mensaje enviado!");
-    }, 1200);
-  });
-</script>

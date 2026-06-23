@@ -46,16 +46,9 @@ const timeline = [
           <div class="cv-box__icon">📄</div>
           <div class="cv-box__title">Curriculum Vitae</div>
           <p class="cv-box__sub" data-i18n="exp_cv_sub">Experiencia, formación y proyectos detallados en PDF.</p>
-          <a href="#" class="cv-box__btn" id="cvBtn" data-i18n="exp_cv_btn">Descargar CV</a>
+          <a href="/SalvadorSanchezCV.pdf" download class="cv-box__btn" data-i18n="exp_cv_btn" data-cv-es="/SalvadorSanchezCV.pdf" data-cv-en="/SalvadorSanchezCV_EN.pdf">Descargar CV</a>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<script>
-  document.getElementById("cvBtn")?.addEventListener("click", (e) => {
-    e.preventDefault();
-    (window as any).showToast?.("Actualizá el href con tu PDF");
-  });
-</script>

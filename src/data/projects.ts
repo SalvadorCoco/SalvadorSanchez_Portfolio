@@ -181,9 +181,12 @@ const projects: Project[] = [
     tags: ["React", "JavaScript", "UI/UX"],
     links: [],
     private: true,
-    full: true,
-    cover: "",
-    screenshots: [],
+    cover: "/images/projects/postas-pos/01.png",
+    screenshots: [
+      "/images/projects/postas-pos/01.png",
+      "/images/projects/postas-pos/02.png",
+      "/images/projects/postas-pos/03.png",
+    ],
   },
 ];
 

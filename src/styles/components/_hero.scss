@@ -1,17 +1,54 @@
 .hero {
-  min-height: 100vh;
+  min-height: 90vh;
   padding-top: $header-h;
   display: flex;
   align-items: center;
 
   &__inner {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
+    grid-template-columns: 1fr auto;
+    gap: 4rem;
     align-items: center;
 
     @include media-breakpoint-down(md) {
       grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  &__photo {
+    position: relative;
+
+    img {
+      width: 320px;
+      height: 400px;
+      object-fit: cover;
+      object-position: center bottom;
+      border-radius: 20px;
+      display: block;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 24px;
+      border: 2px solid $border;
+      pointer-events: none;
+    }
+
+    @include media-breakpoint-down(md) {
+      justify-self: center;
+
+      img {
+        width: 260px;
+        height: 340px;
+      }
+
+      &::after {
+        inset: -5px;
+        border-radius: 22px;
+      }
     }
   }
 
@@ -64,35 +101,4 @@
 
   &__btn-primary  { @include btn-primary; }
   &__btn-secondary { @include btn-secondary; }
-}
-
-.info-card {
-  @include card-base;
-  padding: 2rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
-
-  &__row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid $border;
-
-    &:last-child { border-bottom: none; padding-bottom: 0; }
-    &:first-child { padding-top: 0; }
-  }
-
-  &__label {
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: $text-2;
-  }
-
-  &__value {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: $text;
-
-    &--available { color: $mint; }
-  }
 }

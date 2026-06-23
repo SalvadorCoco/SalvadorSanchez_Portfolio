@@ -1,12 +1,4 @@
 ---
-const stats = [
-  { labelKey: "ic_name",       label: "Nombre",      valueKey: "",                  value: "Salvador Sanchez" },
-  { labelKey: "ic_role",       label: "Rol",         valueKey: "ic_role_val",       value: "Frontend Developer" },
-  { labelKey: "ic_location",   label: "Ubicación",   valueKey: "",                  value: "Río Cuarto, AR" },
-  { labelKey: "ic_experience", label: "Experiencia", valueKey: "ic_experience_val", value: "3+ años" },
-  { labelKey: "ic_projects",   label: "Proyectos",   valueKey: "ic_projects_val",   value: "10+ entregados" },
-  { labelKey: "ic_available",  label: "Disponible",  valueKey: "ic_available_val",  value: "Sí ✓", available: true },
-];
 ---
 
 <section class="hero section" id="inicio">
@@ -18,7 +10,7 @@ const stats = [
           <span data-i18n="hero_badge">Disponible para proyectos</span>
         </div>
         <h1 class="hero__title fu d1" data-i18n-html="hero_title">
-          Interfaces <span class="hl">fáciles</span><br />de usar y<br />de navegar.
+          Interfaces donde <span class="hl">todo</span><br />está donde<br />lo esperás.
         </h1>
         <p class="hero__desc fu d2" data-i18n="hero_desc">
           Hola, soy Salvador, de Río Cuarto. Hago webs con React y Next.js pensando siempre en quien las va a usar — que no se pierda, que encuentre lo que busca, que vuelva.
@@ -29,18 +21,8 @@ const stats = [
         </div>
       </div>
 
-      <div class="info-card fu d2">
-        {stats.map(({ labelKey, label, valueKey, value, available }) => (
-          <div class="info-card__row">
-            <span class="info-card__label" data-i18n={labelKey}>{label}</span>
-            <span
-              class={`info-card__value${available ? " info-card__value--available" : ""}`}
-              {...(valueKey ? { "data-i18n": valueKey } : {})}
-            >
-              {value}
-            </span>
-          </div>
-        ))}
+      <div class="hero__photo fu d2">
+        <img src="/images/fotito.webp" alt="Salvador Sanchez" width="400" height="500" />
       </div>
     </div>
   </div>
