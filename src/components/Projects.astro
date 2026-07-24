@@ -17,7 +17,7 @@ function getDomain(links: { href: string; type: string }[]): string {
     </div>
 
     <div class="proj-grid">
-      {projects.map(({ slug, num, title, desc, desc_en, problem, problem_en, solution, solution_en, tags, links, private: isPrivate, full, cover }, i) => {
+      {projects.map(({ slug, num, title, desc, desc_en, problem, problem_en, solution, solution_en, metric, metric_en, demo, tags, links, private: isPrivate, full, cover }, i) => {
         const domain = getDomain(links);
         return (
           <a
@@ -78,6 +78,9 @@ function getDomain(links: { href: string; type: string }[]): string {
             )}
 
             <div class="proj-tags">
+              {metric && (
+                <span class="tag tag--metric" data-es={`↑ ${metric}`} data-en={`↑ ${metric_en || metric}`}>↑ {metric}</span>
+              )}
               {tags.map(tag => <span class="tag">{tag}</span>)}
             </div>
 
@@ -88,6 +91,13 @@ function getDomain(links: { href: string; type: string }[]): string {
                 links.slice(0, 1).map(({ label }) => (
                   <span class="plink plink--live">{label}</span>
                 ))
+              )}
+              {demo && (
+                <span
+                  class={`plink plink--demo${demo.pending ? " plink--pending" : ""}`}
+                  data-es={`🎥 ${demo.label}${demo.pending ? " (próximamente)" : ""}`}
+                  data-en={`🎥 ${demo.label_en || demo.label}${demo.pending ? " (coming soon)" : ""}`}
+                >🎥 {demo.label}{demo.pending ? " (próximamente)" : ""}</span>
               )}
               <span class="plink plink--see-more" data-i18n="proj_see_more">Ver caso completo →</span>
             </div>

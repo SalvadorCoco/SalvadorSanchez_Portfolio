@@ -106,11 +106,17 @@
       color: $text-2;
       line-height: 1.75;
       margin-bottom: 1.25rem;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      min-height: calc(1.75em * 2);
     }
 
     &__detail-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      align-items: stretch;
       gap: 0.75rem;
       margin-bottom: 1rem;
     }
@@ -121,6 +127,8 @@
     background: $bg-2;
     border-radius: 10px;
     margin-bottom: 0.75rem;
+    display: flex;
+    flex-direction: column;
 
     &__label {
       font-size: 0.65rem;
@@ -135,6 +143,11 @@
       font-size: 0.82rem;
       color: $text-2;
       line-height: 1.65;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      min-height: calc(1.65em * 3);
     }
   }
 
@@ -149,6 +162,8 @@
 
   &-links {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
     margin-top: 0.75rem;
   }
@@ -161,6 +176,11 @@
   font-size: 0.7rem;
   font-weight: 600;
   color: $mint-dark;
+
+  &--metric {
+    background: $mint;
+    color: #fff;
+  }
 }
 
 .plink {
@@ -186,4 +206,14 @@
   }
 
   &--priv { color: $text-3; }
+
+  &--demo {
+    color: $text-3;
+    background: $bg-2;
+  }
+
+  &--pending {
+    opacity: 0.7;
+    cursor: default;
+  }
 }

@@ -4,6 +4,13 @@ export interface ProjectLink {
   type: "live" | "gh" | "priv";
 }
 
+export interface ProjectDemo {
+  label: string;
+  label_en?: string;
+  href?: string;
+  pending?: boolean;
+}
+
 export interface Project {
   slug: string;
   num: string;
@@ -16,6 +23,11 @@ export interface Project {
   problem_en?: string;
   solution: string;
   solution_en?: string;
+  // Small highlighted stat shown as a badge on the card grid (e.g. usage metric)
+  metric?: string;
+  metric_en?: string;
+  // Video/gallery walkthrough link; use `pending: true` while the asset isn't ready yet
+  demo?: ProjectDemo;
   // Extended content for the project page
   context: string;
   context_en?: string;
@@ -43,13 +55,15 @@ const projects: Project[] = [
     desc: "Sitio institucional oficial de la Municipalidad. Acceso ciudadano a trámites, noticias y servicios.",
     desc_en: "Official institutional website of the Municipality. Citizen access to procedures, news and services.",
     problem:
-      "Portal lento sin responsive. Los vecinos no encontraban los servicios digitales que necesitaban.",
+      "El portal anterior no tenía diseño responsive y concentraba decenas de accesos sin jerarquía visual: el vecino tenía que escanear una grilla enorme de botones para encontrar un trámite. Sin priorización entre lo informativo y lo transaccional.",
     problem_en:
-      "Slow portal with no mobile support. Citizens couldn't find the digital services they needed.",
+      "The previous portal had no responsive design and packed dozens of entry points with no visual hierarchy: citizens had to scan a huge grid of buttons to find a procedure. No priority between informational and transactional content.",
     solution:
-      "Rediseño completo con buscador integrado, asistente virtual y navegación clara para que cada vecino encuentre lo que necesita.",
+      "Rediseño completo con navegación jerarquizada, buscador integrado y asistente virtual. Los trámites más usados pasaron al primer scroll. Layout responsive sobre arquitectura de componentes en Next.js.",
     solution_en:
-      "Full redesign with integrated search, virtual assistant and clear navigation so every citizen finds what they need.",
+      "Full redesign with hierarchical navigation, integrated search and a virtual assistant. The most-used procedures moved to the first scroll. Responsive layout built on a Next.js component architecture.",
+    metric: "+9.000 usuarios semanales",
+    metric_en: "+9,000 weekly users",
     context:
       "La Municipalidad de Río Cuarto necesitaba modernizar su presencia digital. El portal anterior era lento, no funcionaba en celular y los ciudadanos abandonaban antes de completar sus trámites. Trabajé junto al equipo interno de sistemas.",
     context_en:
@@ -75,21 +89,61 @@ const projects: Project[] = [
     ],
   },
   {
-    slug: "emos",
+    slug: "postas-pos",
     num: "02",
+    title: "Postas · Sistema POS",
+    client: "Postas (cliente privado)",
+    year: "2023",
+    desc: "Frontend de punto de venta para comercios. UI ágil para ventas, productos e inventario.",
+    desc_en: "Point-of-sale frontend for retail. Agile UI for sales, products and inventory.",
+    problem:
+      "Caja ágil que el personal aprenda en minutos y funcione en táctil.",
+    problem_en:
+      "A fast register interface that staff could learn in minutes and works on touch screens.",
+    solution:
+      "Atajos de teclado, flujos simplificados y feedback visual inmediato.",
+    solution_en:
+      "Keyboard shortcuts, simplified flows and immediate visual feedback.",
+    context:
+      "Un comercio necesitaba reemplazar su sistema de caja por algo que el personal pudiera aprender rápido. El flujo de venta tenía que ser tan simple que alguien sin experiencia técnica pudiera operar sin errores desde el primer día.",
+    context_en:
+      "A business needed to replace their checkout system with something staff could learn quickly. The sales flow had to be so simple that someone without technical experience could operate without errors from day one.",
+    process:
+      "Mapeé el flujo de una venta completa y eliminé cada paso que no era necesario. Diseñé pensando en uso táctil (pantallas de caja) y agregué atajos de teclado para acelerar las operaciones repetitivas. El feedback visual fue clave: el cajero siempre sabe qué acaba de pasar.",
+    process_en:
+      "I mapped the complete sales flow and removed every unnecessary step. I designed for touch use (point-of-sale screens) and added keyboard shortcuts to speed up repetitive operations. Visual feedback was key: the cashier always knows what just happened.",
+    result:
+      "Sistema de caja que el equipo adoptó sin capacitación extensa. Flujo de venta rápido, con soporte táctil y errores casi nulos en operación diaria.",
+    result_en:
+      "A checkout system the team adopted without extensive training. Fast sales flow with touch support and near-zero errors in daily operation.",
+    // TODO: reemplazar por el link real al video/galería del flujo de venta cuando esté grabado/exportado.
+    demo: { label: "Demo del flujo de venta", label_en: "Sales flow demo", pending: true },
+    tags: ["React", "JavaScript", "UI/UX"],
+    links: [],
+    private: true,
+    cover: "/images/projects/postas-pos/01.png",
+    screenshots: [
+      "/images/projects/postas-pos/01.png",
+      "/images/projects/postas-pos/02.png",
+      "/images/projects/postas-pos/03.png",
+    ],
+  },
+  {
+    slug: "emos",
+    num: "03",
     title: "EMOS · Sitio Institucional",
     client: "Empresa Municipal de Obras y Servicios · Río Cuarto",
     year: "2025",
     desc: "Comunicación institucional y acceso a servicios para vecinos de Río Cuarto.",
     desc_en: "Institutional communication and service access for citizens of Río Cuarto.",
     problem:
-      "Sin presencia digital. Los vecinos no tenían forma de acceder a información de servicios ni contactar a la empresa.",
+      "Sitio sin adaptación mobile, con los accesos a trámites mezclados entre contenido informativo. Pagar una factura o hacer un reclamo requería navegar entre secciones sin relación clara.",
     problem_en:
-      "No digital presence. Citizens had no way to access service information or contact the company.",
+      "Site with no mobile adaptation, with procedure access points mixed in among informational content. Paying a bill or filing a complaint meant navigating between sections with no clear relationship.",
     solution:
-      "Plataforma Next.js limpia, mobile-first y accesible. Foco en que cualquier persona encuentre lo que necesita sin fricción.",
+      "Plataforma mobile-first en Next.js con los servicios (pago online, reclamos, cedulón digital) como eje de la página. Contenido institucional en segundo plano.",
     solution_en:
-      "Clean, mobile-first and accessible Next.js platform. Focus on letting anyone find what they need without friction.",
+      "Mobile-first Next.js platform with the services (online payment, complaints, digital cedulón) as the page's focal point. Institutional content takes a back seat.",
     context:
       "EMOS es la empresa municipal que gestiona obras y servicios públicos de Río Cuarto. No tenían presencia online: los vecinos dependían de llamados telefónicos para cualquier consulta. El objetivo era simple: llevar esa información a la web de forma clara.",
     context_en:
@@ -107,12 +161,16 @@ const projects: Project[] = [
       { href: "https://emos-site.vercel.app", label: "↗ Ver en vivo", type: "live" },
       { href: "https://github.com/gobderiocuarto/emos-site", label: "GitHub", type: "gh" },
     ],
-    cover: "",
-    screenshots: [],
+    cover: "/images/projects/emos/01.webp",
+    screenshots: [
+      "/images/projects/emos/01.webp",
+      "/images/projects/emos/02.webp",
+      "/images/projects/emos/03.webp",
+    ],
   },
   {
     slug: "estudio-juridico",
-    num: "03",
+    num: "04",
     title: "Estudio Jurídico Agustín Sánchez",
     client: "Estudio Jurídico Sánchez",
     year: "2024",
@@ -148,44 +206,6 @@ const projects: Project[] = [
       "/images/projects/estudio-juridico/01.webp",
       "/images/projects/estudio-juridico/02.webp",
       "/images/projects/estudio-juridico/03.webp",
-    ],
-  },
-  {
-    slug: "postas-pos",
-    num: "04",
-    title: "Postas · Sistema POS",
-    client: "Postas (cliente privado)",
-    year: "2023",
-    desc: "Frontend de punto de venta para comercios. UI ágil para ventas, productos e inventario.",
-    desc_en: "Point-of-sale frontend for retail. Agile UI for sales, products and inventory.",
-    problem:
-      "Caja ágil que el personal aprenda en minutos y funcione en táctil.",
-    problem_en:
-      "A fast register interface that staff could learn in minutes and works on touch screens.",
-    solution:
-      "Atajos de teclado, flujos simplificados y feedback visual inmediato.",
-    solution_en:
-      "Keyboard shortcuts, simplified flows and immediate visual feedback.",
-    context:
-      "Un comercio necesitaba reemplazar su sistema de caja por algo que el personal pudiera aprender rápido. El flujo de venta tenía que ser tan simple que alguien sin experiencia técnica pudiera operar sin errores desde el primer día.",
-    context_en:
-      "A business needed to replace their checkout system with something staff could learn quickly. The sales flow had to be so simple that someone without technical experience could operate without errors from day one.",
-    process:
-      "Mapeé el flujo de una venta completa y eliminé cada paso que no era necesario. Diseñé pensando en uso táctil (pantallas de caja) y agregué atajos de teclado para acelerar las operaciones repetitivas. El feedback visual fue clave: el cajero siempre sabe qué acaba de pasar.",
-    process_en:
-      "I mapped the complete sales flow and removed every unnecessary step. I designed for touch use (point-of-sale screens) and added keyboard shortcuts to speed up repetitive operations. Visual feedback was key: the cashier always knows what just happened.",
-    result:
-      "Sistema de caja que el equipo adoptó sin capacitación extensa. Flujo de venta rápido, con soporte táctil y errores casi nulos en operación diaria.",
-    result_en:
-      "A checkout system the team adopted without extensive training. Fast sales flow with touch support and near-zero errors in daily operation.",
-    tags: ["React", "JavaScript", "UI/UX"],
-    links: [],
-    private: true,
-    cover: "/images/projects/postas-pos/01.png",
-    screenshots: [
-      "/images/projects/postas-pos/01.png",
-      "/images/projects/postas-pos/02.png",
-      "/images/projects/postas-pos/03.png",
     ],
   },
 ];

@@ -149,6 +149,30 @@ const domain = liveUrl
                 </div>
               </div>
             )}
+
+            {project.demo && (
+              <div class="proj-page__sidebar-item">
+                <div class="proj-page__sidebar-label">Demo</div>
+                <div class="proj-page__sidebar-links">
+                  {project.demo.pending || !project.demo.href ? (
+                    <span
+                      class="plink plink--demo plink--pending"
+                      data-es={`🎥 ${project.demo.label} (próximamente)`}
+                      data-en={`🎥 ${project.demo.label_en || project.demo.label} (coming soon)`}
+                    >🎥 {project.demo.label} (próximamente)</span>
+                  ) : (
+                    <a
+                      href={project.demo.href}
+                      target="_blank"
+                      rel="noopener"
+                      class="plink plink--demo"
+                      data-es={`🎥 ${project.demo.label}`}
+                      data-en={`🎥 ${project.demo.label_en || project.demo.label}`}
+                    >🎥 {project.demo.label}</a>
+                  )}
+                </div>
+              </div>
+            )}
           </aside>
 
           <!-- Body -->

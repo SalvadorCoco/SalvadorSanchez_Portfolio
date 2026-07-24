@@ -4,19 +4,28 @@ const timeline = [
     dateKey: "exp_date_1",  date: "2025 — Hoy",
     roleKey: "exp_role_1",  role: "Desarrollador Frontend",
     companyKey: "exp_company_1", company: "Municipalidad de Río Cuarto",
-    descKey: "exp_desc_1",  desc: "Portal Municipal, EMOS y sistemas internos. Next.js, SCSS, Docker. Foco en accesibilidad y experiencia del vecino.",
-  },
-  {
-    dateKey: "exp_date_2",  date: "2023 — 2025",
-    roleKey: "exp_role_2",  role: "Formación + Proyectos Freelance",
-    companyKey: "exp_company_2", company: "ITEC · Río Cuarto",
-    descKey: "exp_desc_2",  desc: "Carrera en desarrollo en el ITEC mientras tomaba proyectos reales: Estudio Jurídico Sánchez, sistemas POS y webs institucionales.",
+    descKey: "exp_desc_1",  desc: "Único desarrollador frontend de la Dirección General de Informática. Rediseño del Portal Municipal (~9.100 usuarios activos y 14.000 sesiones semanales) y del sitio de EMOS, partiendo de plataformas heredadas sin soporte mobile. Next.js, TypeScript, SCSS, Docker. Foco en accesibilidad y experiencia del vecino.",
   },
   {
     dateKey: "exp_date_3",  date: "Desde 2021",
     roleKey: "exp_role_3",  role: "Primeros proyectos propios",
     companyKey: "exp_company_3", company: "Formación autodidacta",
     descKey: "exp_desc_3",  desc: "HTML, CSS, JS y React. Construcción del stack desde cero y primeros clientes reales.",
+  },
+];
+
+const formacion = [
+  {
+    dateKey: "exp_date_0",  date: "2026",
+    roleKey: "exp_role_0",  role: "Técnico en Desarrollo de Software",
+    companyKey: "exp_company_0", company: "ITEC · Río Cuarto",
+    descKey: "exp_desc_0",  desc: "Me recibí en el ITEC como Técnico en Desarrollo de Software, completando la formación que empecé en 2023.",
+  },
+  {
+    dateKey: "exp_date_2",  date: "2023 — 2025",
+    roleKey: "exp_role_2",  role: "Formación + Proyectos Freelance",
+    companyKey: "exp_company_2", company: "ITEC · Río Cuarto",
+    descKey: "exp_desc_2",  desc: "Carrera en desarrollo en el ITEC mientras tomaba proyectos reales: Estudio Jurídico Sánchez, sistemas POS y webs institucionales.",
   },
 ];
 ---
@@ -29,25 +38,53 @@ const timeline = [
     </div>
 
     <div class="experience__wrap">
-      <div class="timeline fu">
-        {timeline.map(({ dateKey, date, roleKey, role, companyKey, company, descKey, desc }) => (
-          <div class="timeline__item">
-            <div class="timeline__dot"></div>
-            <div class="timeline__date" data-i18n={dateKey}>{date}</div>
-            <div class="timeline__role" data-i18n={roleKey}>{role}</div>
-            <div class="timeline__company" data-i18n={companyKey}>{company}</div>
-            <div class="timeline__desc" data-i18n={descKey}>{desc}</div>
-          </div>
-        ))}
+      <div class="timeline-col fu">
+        <div class="timeline__order" data-i18n="exp_order">Más reciente primero</div>
+        <div class="timeline">
+          {timeline.map(({ dateKey, date, roleKey, role, companyKey, company, descKey, desc }) => (
+            <div class="timeline__item">
+              <div class="timeline__dot"></div>
+              <div class="timeline__date" data-i18n={dateKey}>{date}</div>
+              <div class="timeline__role" data-i18n={roleKey}>{role}</div>
+              <div class="timeline__company" data-i18n={companyKey}>{company}</div>
+              <div class="timeline__desc" data-i18n={descKey}>{desc}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div class="fu d1">
         <div class="cv-box">
-          <div class="cv-box__icon">📄</div>
+          <div class="cv-box__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+              <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
+              <path d="M9 13h6"/>
+              <path d="M9 17h6"/>
+            </svg>
+          </div>
           <div class="cv-box__title">Curriculum Vitae</div>
           <p class="cv-box__sub" data-i18n="exp_cv_sub">Experiencia, formación y proyectos detallados en PDF.</p>
           <a href="/SalvadorSanchezCV.pdf" download class="cv-box__btn" data-i18n="exp_cv_btn" data-cv-es="/SalvadorSanchezCV.pdf" data-cv-en="/SalvadorSanchezCV_EN.pdf">Descargar CV</a>
         </div>
+      </div>
+    </div>
+
+    <div class="formacion fu">
+      <div class="formacion__title" data-i18n="exp_edu_title">Formación</div>
+      <div class="formacion__list">
+        {formacion.map(({ dateKey, date, roleKey, role, companyKey, company, descKey, desc }) => (
+          <div class="formacion__item">
+            <div class="formacion__dot"></div>
+            <div class="formacion__body">
+              <div class="formacion__role" data-i18n={roleKey}>{role}</div>
+              <div class="formacion__meta">
+                <span data-i18n={companyKey}>{company}</span> · <span data-i18n={dateKey}>{date}</span>
+              </div>
+              <div class="formacion__desc" data-i18n={descKey}>{desc}</div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </div>
