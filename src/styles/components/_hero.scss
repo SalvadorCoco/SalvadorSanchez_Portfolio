@@ -1,8 +1,86 @@
+// The Hero carries the site's two "dimensions": dark = Miles/2099 neon
+// (unchanged from the original build), light = Gwen watercolor. Same
+// structural effects (glitch, chromatic-split photo, glow) in both —
+// only the palette swaps, via these tokens.
 .hero {
+  // Light (default) = Gwen
+  --hero-red:          #ff5fa0;
+  --hero-red-rgb:      255, 95, 160;
+  --hero-blue:         #9d7bff;
+  --hero-blue-rgb:     157, 123, 255;
+  --hero-magenta:      #58b8f0;
+  --hero-magenta-rgb:  88, 184, 240;
+  --hero-bg:           linear-gradient(160deg, #fdf1f7, #f4f0ff 45%, #eef8ff 100%);
+  --hero-fg:           #372a45;
+  --hero-fg-rgb:       55, 42, 69;
+  --hero-fg-dim:       #7a6a8c;
+  --hero-badge-fg:     #1f6f96;
+
+  [data-theme="dark"] & {
+    --hero-red:          #f0142a;
+    --hero-red-rgb:      240, 20, 42;
+    --hero-blue:         #3d5afe;
+    --hero-blue-rgb:     61, 90, 254;
+    --hero-magenta:      #ff2ec4;
+    --hero-magenta-rgb:  255, 46, 196;
+    --hero-bg:           #08060d;
+    --hero-fg:           #f5f4fa;
+    --hero-fg-rgb:       245, 244, 250;
+    --hero-fg-dim:       #b8b3c9;
+    --hero-badge-fg:     #ffb3ea;
+  }
+
+  position: relative;
   min-height: 90vh;
   padding-top: $header-h;
   display: flex;
   align-items: center;
+  overflow: hidden;
+  background: var(--hero-bg);
+  color: var(--hero-fg);
+
+  // ── Atmosphere: glow blobs + halftone grid + scanlines ─────────────────
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    background:
+      radial-gradient(circle at 85% 8%, rgba(var(--hero-magenta-rgb), 0.28), transparent 42%),
+      radial-gradient(circle at 8% 88%, rgba(var(--hero-blue-rgb), 0.32), transparent 45%),
+      radial-gradient(circle at 50% 105%, rgba(var(--hero-red-rgb), 0.22), transparent 50%);
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(rgba(var(--hero-magenta-rgb), 0.5) 1px, transparent 1.4px),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(var(--hero-fg-rgb), 0.05) 0px,
+        rgba(var(--hero-fg-rgb), 0.05) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    background-size: 20px 20px, 100% 3px;
+    opacity: 0.16;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 0;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: hero-scan 9s linear infinite;
+    }
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+  }
 
   &__inner {
     display: grid;
@@ -16,25 +94,62 @@
     }
   }
 
+  // ── Photo: real chromatic-split ghosts + neon halo ─────────────────────
   &__photo {
     position: relative;
+    transform: rotate(-2deg);
+    filter: drop-shadow(0 0 40px rgba(var(--hero-red-rgb), 0.3)) drop-shadow(0 0 70px rgba(var(--hero-blue-rgb), 0.22));
 
     img {
       width: 320px;
       height: 400px;
       object-fit: cover;
       object-position: center bottom;
-      border-radius: 20px;
+      border-radius: 6px;
       display: block;
+      position: relative;
+      z-index: 3;
+      box-shadow: 0 0 0 2px rgba(var(--hero-fg-rgb), 0.9), 6px 6px 0 var(--hero-red);
+      transition: transform 0.3s $ease-out;
     }
 
+    // RGB-split ghost layers, duplicating the photo itself. Tinted with
+    // background-blend-mode (exact hex, no filter guesswork) so they read
+    // as true accent colors instead of drifting toward the wrong hue.
+    &::before,
     &::after {
       content: "";
       position: absolute;
-      inset: -6px;
-      border-radius: 24px;
-      border: 2px solid $border;
-      pointer-events: none;
+      inset: 0;
+      background-size: cover, cover;
+      background-position: center bottom, center bottom;
+      background-blend-mode: color;
+      border-radius: 6px;
+      mix-blend-mode: screen;
+      z-index: 2;
+      opacity: 0.85;
+      transition: transform 0.35s $ease-out;
+    }
+
+    &::before {
+      background-image: linear-gradient(var(--hero-red), var(--hero-red)), var(--photo-src);
+      transform: translate(5px, -3px);
+    }
+
+    &::after {
+      background-image: linear-gradient(var(--hero-blue), var(--hero-blue)), var(--photo-src);
+      transform: translate(-5px, 3px);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      &::before { animation: hero-ghost-a 5s ease-in-out infinite; }
+      &::after  { animation: hero-ghost-b 5s ease-in-out infinite; }
+    }
+
+    &:hover {
+      img { transform: translate(2px, -2px); }
+      &::before { transform: translate(9px, -6px); }
+      &::after  { transform: translate(-9px, 6px); }
     }
 
     @include media-breakpoint-down(md) {
@@ -44,11 +159,6 @@
         width: 260px;
         height: 340px;
       }
-
-      &::after {
-        inset: -5px;
-        border-radius: 22px;
-      }
     }
   }
 
@@ -57,18 +167,21 @@
     align-items: center;
     gap: 7px;
     padding: 5px 14px;
-    background: $mint-light;
+    background: rgba(var(--hero-magenta-rgb), 0.1);
+    border: 1px solid rgba(var(--hero-magenta-rgb), 0.55);
     border-radius: $border-radius-pill;
     font-size: 0.75rem;
     font-weight: 600;
-    color: $mint-dark;
+    color: var(--hero-badge-fg);
+    box-shadow: 0 0 16px rgba(var(--hero-magenta-rgb), 0.25);
     margin-bottom: 1.75rem;
   }
 
   &__badge-dot {
     width: 6px;
     height: 6px;
-    background: $mint;
+    background: var(--hero-magenta);
+    box-shadow: 0 0 8px 1px var(--hero-magenta);
     border-radius: 50%;
     animation: blink 2s ease-in-out infinite;
   }
@@ -79,14 +192,24 @@
     letter-spacing: -0.03em;
     line-height: 1.08;
     margin-bottom: 1.5rem;
-    color: $text;
+    color: var(--hero-fg);
 
-    .hl { color: $mint; }
+    .hl {
+      color: var(--hero-red);
+      text-shadow:
+        0 0 18px rgba(var(--hero-red-rgb), 0.55),
+        2px 0 0 var(--hero-blue),
+        -2px 0 0 var(--hero-red);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      &.v .hl { animation: hero-glitch 0.7s steps(2) both; }
+    }
   }
 
   &__desc {
     font-size: 1.05rem;
-    color: $text-2;
+    color: var(--hero-fg-dim);
     line-height: 1.8;
     max-width: 440px;
     margin-bottom: 2.5rem;
@@ -99,6 +222,87 @@
     flex-wrap: wrap;
   }
 
-  &__btn-primary  { @include btn-primary; }
-  &__btn-secondary { @include btn-secondary; }
+  &__btn-primary {
+    @include btn-primary;
+    background: var(--hero-red);
+    box-shadow: 0 0 24px rgba(var(--hero-red-rgb), 0.35);
+    position: relative;
+    z-index: 1;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: -10px;
+      z-index: -1;
+      border-radius: inherit;
+      background-image: radial-gradient(var(--hero-magenta) 1.5px, transparent 1.6px);
+      background-size: 7px 7px;
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.3s, transform 0.3s $ease-out;
+      pointer-events: none;
+    }
+
+    &:hover {
+      box-shadow: 0 0 36px rgba(var(--hero-red-rgb), 0.55);
+      transform: translateY(-2px);
+
+      &::after {
+        opacity: 0.4;
+        transform: scale(1);
+      }
+    }
+  }
+
+  &__btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 13px 26px;
+    background: rgba(var(--hero-blue-rgb), 0.08);
+    color: var(--hero-fg-dim);
+    border: 1.5px solid rgba(var(--hero-blue-rgb), 0.45);
+    border-radius: $border-radius-pill;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: var(--hero-blue);
+      color: var(--hero-fg);
+      background: rgba(var(--hero-blue-rgb), 0.16);
+      box-shadow: 0 0 20px rgba(var(--hero-blue-rgb), 0.35);
+      text-decoration: none;
+    }
+  }
+}
+
+@keyframes hero-scan {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 40px 40px, 0 240px; }
+}
+
+@keyframes hero-ghost-a {
+  0%, 100% { transform: translate(5px, -3px); }
+  50%      { transform: translate(7px, -5px); }
+}
+
+@keyframes hero-ghost-b {
+  0%, 100% { transform: translate(-5px, 3px); }
+  50%      { transform: translate(-7px, 5px); }
+}
+
+@keyframes hero-glitch {
+  0%   { opacity: 0.4; text-shadow: 0 0 0 transparent; transform: translate(0); }
+  15%  { opacity: 1; text-shadow: -5px 0 0 var(--hero-blue), 5px 0 0 var(--hero-red); transform: translate(-3px, 0); }
+  30%  { opacity: 0.6; text-shadow: 5px 0 0 var(--hero-blue), -5px 0 0 var(--hero-red); transform: translate(3px, 0); }
+  45%  { opacity: 1; text-shadow: -3px 0 0 var(--hero-blue), 3px 0 0 var(--hero-red); transform: translate(-1px, 0); }
+  70%  { text-shadow: 2px 0 0 var(--hero-blue), -2px 0 0 var(--hero-red); transform: translate(0); }
+  100% {
+    text-shadow:
+      0 0 18px rgba(var(--hero-red-rgb), 0.55),
+      2px 0 0 var(--hero-blue),
+      -2px 0 0 var(--hero-red);
+    transform: translate(0);
+  }
 }

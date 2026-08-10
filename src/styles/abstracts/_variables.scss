@@ -1,8 +1,9 @@
 // ── Bootstrap overrides (must come BEFORE bootstrap import) ──────────────────
-$primary:                  #2563eb;
-$primary-dark:             #1e40af;
-$primary-light:            #dbeafe;
+$primary:                  #ff5fa0;
+$primary-dark:             #e0388a;
+$primary-light:            #ffe1f0;
 $font-family-sans-serif:   "Plus Jakarta Sans", sans-serif;
+$font-mono:                "JetBrains Mono", ui-monospace, monospace;
 $border-radius:            10px;
 $border-radius-lg:         18px;
 $border-radius-pill:       100px;
@@ -12,55 +13,69 @@ $ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
 $header-h:  64px;
 
 // ── CSS custom properties ─────────────────────────────────────────────────────
-// Colors live as CSS vars so dark mode works at runtime without a rebuild.
+// The theme toggle is the universe selector: light = Gwen (watercolor,
+// pastel), dark = Miles/2099 (neon, ink-black). Every section pulls from
+// these same tokens, so the whole page stays one consistent world.
 
 :root {
-  --bg:        #f9f8f6;
-  --bg-2:      #f0ede9;
-  --bg-3:      #e8e4de;
-  --card:      #ffffff;
+  --bg:        #fdf3f8;
+  --bg-2:      #f6f1ff;
+  --bg-3:      #eef8ff;
+  --card:      #fffbfe;
 
-  --border:      rgba(0, 0, 0, 0.09);
-  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --border:      rgba(190, 130, 220, 0.22);
+  --shadow-card: 0 4px 20px rgba(190, 130, 220, 0.16);
 
-  --mint:        #2563eb;
-  --mint-dark:   #1e40af;
-  --mint-light:  #dbeafe;
-  --mint-dim:    rgba(37, 99, 235, 0.08);
+  --mint:        #ff5fa0;
+  --mint-rgb:    255, 95, 160;
+  --mint-dark:   #e0388a;
+  --mint-light:  #ffe1f0;
+  --mint-dim:    rgba(255, 95, 160, 0.1);
 
-  --text:   #0f172a;
-  --text-2: #64748b;
-  --text-3: #94a3b8;
+  --accent-2:      #9d7bff;
+  --accent-2-rgb:  157, 123, 255;
+  --accent-3:      #58b8f0;
+  --accent-3-rgb:  88, 184, 240;
+
+  --text:   #372a45;
+  --text-2: #7a6a8c;
+  --text-3: #a698b8;
 
   // Composite backgrounds used directly via var() in SCSS
-  --header-bg:        rgba(249, 248, 246, 0.94);
-  --header-mobile-bg: rgba(249, 248, 246, 0.98);
-  --breadcrumb-bg:    rgba(249, 248, 246, 0.95);
-  --stage-bg:         #0f172a;
+  --header-bg:        rgba(253, 243, 248, 0.85);
+  --header-mobile-bg: rgba(253, 243, 248, 0.96);
+  --breadcrumb-bg:    rgba(253, 243, 248, 0.92);
+  --stage-bg:         #2b2038;
 }
 
 [data-theme="dark"] {
-  --bg:        #0f172a;
-  --bg-2:      #162032;
-  --bg-3:      #1e293b;
-  --card:      #1a2642;
+  --bg:        #050810;
+  --bg-2:      #0c1220;
+  --bg-3:      #141b2e;
+  --card:      #121a2e;
 
-  --border:      rgba(255, 255, 255, 0.09);
-  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.3);
+  --border:      rgba(240, 20, 42, 0.22);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
 
-  --mint:        #60a5fa;
-  --mint-dark:   #3b82f6;
-  --mint-light:  rgba(96, 165, 250, 0.2);
-  --mint-dim:    rgba(96, 165, 250, 0.12);
+  --mint:        #f0142a;
+  --mint-rgb:    240, 20, 42;
+  --mint-dark:   #b91c1c;
+  --mint-light:  rgba(240, 20, 42, 0.2);
+  --mint-dim:    rgba(240, 20, 42, 0.12);
 
-  --text:   #e2e8f0;
-  --text-2: #94a3b8;
-  --text-3: #4b6080;
+  --accent-2:      #3d5afe;
+  --accent-2-rgb:  61, 90, 254;
+  --accent-3:      #ff2ec4;
+  --accent-3-rgb:  255, 46, 196;
 
-  --header-bg:        rgba(15, 23, 42, 0.94);
-  --header-mobile-bg: rgba(15, 23, 42, 0.98);
-  --breadcrumb-bg:    rgba(15, 23, 42, 0.95);
-  --stage-bg:         #1e293b;
+  --text:   #eef2fb;
+  --text-2: #93a0c2;
+  --text-3: #5b6689;
+
+  --header-bg:        rgba(5, 8, 16, 0.85);
+  --header-mobile-bg: rgba(5, 8, 16, 0.96);
+  --breadcrumb-bg:    rgba(5, 8, 16, 0.92);
+  --stage-bg:         #0c1220;
 }
 
 // ── SCSS aliases → CSS custom properties ──────────────────────────────────────
@@ -76,6 +91,8 @@ $mint:      var(--mint);
 $mint-dark: var(--mint-dark);
 $mint-light:var(--mint-light);
 $mint-dim:  var(--mint-dim);
+$accent-2:  var(--accent-2);
+$accent-3:  var(--accent-3);
 $text:      var(--text);
 $text-2:    var(--text-2);
 $text-3:    var(--text-3);

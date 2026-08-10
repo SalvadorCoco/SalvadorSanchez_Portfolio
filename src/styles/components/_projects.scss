@@ -1,3 +1,7 @@
+.projects {
+  @include atmosphere;
+}
+
 .proj {
   &-grid {
     display: grid;
@@ -82,7 +86,7 @@
     &:hover {
       transform: translateY(-3px);
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07);
-      border-color: rgba(37, 99, 235, 0.25);
+      border-color: rgba(var(--mint-rgb), 0.25);
     }
 
     &__num {

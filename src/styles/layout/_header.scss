@@ -9,9 +9,36 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 clamp(1.5rem, 5vw, 5rem);
-  background: var(--header-bg);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid $border;
+  background: transparent;
+  backdrop-filter: none;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+
+  // Transparent while you're still inside the hero's own world; only
+  // becomes a normal opaque bar once you scroll into regular content.
+  // Text always uses the theme's own ink color — the Hero now shares
+  // that same ink in both light and dark, so it's never a mismatch.
+  &.is-scrolled {
+    background: var(--header-bg);
+    backdrop-filter: blur(16px);
+  }
+
+  // Signature hairline instead of a flat gray border — the one thread of
+  // the Hero's identity that follows you down the whole page.
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--mint), var(--accent-2), var(--accent-3), var(--mint));
+    background-size: 200% 100%;
+    opacity: 0.7;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: header-thread 10s linear infinite;
+    }
+  }
 
   &__logo {
     font-size: 1rem;
@@ -22,6 +49,10 @@
     align-items: center;
     gap: 7px;
     flex-shrink: 0;
+
+    &:hover .header__logo-mark {
+      transform: rotate(-6deg) scale(1.05);
+    }
   }
 
   &__logo-mark {
@@ -35,6 +66,8 @@
     font-size: 0.7rem;
     font-weight: 800;
     color: #fff;
+    box-shadow: 0 3px 12px var(--mint-dim);
+    transition: transform 0.25s $ease-out;
   }
 
   &__nav-wrap {
@@ -47,11 +80,28 @@
     list-style: none;
 
     a {
+      position: relative;
       font-size: 0.85rem;
       font-weight: 500;
       color: $text-2;
       transition: color 0.2s;
-      &:hover { color: $mint; }
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 100%;
+        bottom: -5px;
+        height: 2px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, $mint, var(--accent-2));
+        transition: right 0.25s $ease-out;
+      }
+
+      &:hover {
+        color: $text;
+        &::after { right: 0; }
+      }
     }
   }
 
@@ -112,7 +162,7 @@
 
   &__lang {
     padding: 6px 14px;
-    border: 1.5px solid $border;
+    border: 1.5px solid var(--border);
     background: transparent;
     border-radius: $border-radius-pill;
     font-size: 0.75rem;
@@ -140,7 +190,7 @@
       background: $mint-dark;
       color: #fff;
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.25);
+      box-shadow: 0 6px 20px var(--mint-dim);
     }
 
     @include media-breakpoint-down(md) { display: none; }
@@ -225,4 +275,9 @@
     justify-content: center;
     text-align: center;
   }
+}
+
+@keyframes header-thread {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
 }

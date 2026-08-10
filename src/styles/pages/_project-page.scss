@@ -155,7 +155,7 @@
       @include card-base;
       padding: 2rem;
       background: $bg-2;
-      border-color: rgba(37, 99, 235, 0.15);
+      border-color: rgba(var(--mint-rgb), 0.15);
     }
   }
 
@@ -233,7 +233,7 @@
     max-width: 280px;
 
     &--next { text-align: right; margin-left: auto; }
-    &:hover { border-color: rgba(37, 99, 235, 0.3); background: $mint-dim; }
+    &:hover { border-color: rgba(var(--mint-rgb), 0.3); background: $mint-dim; }
   }
 
   &__nav-dir {

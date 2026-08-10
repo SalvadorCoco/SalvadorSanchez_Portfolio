@@ -1,4 +1,6 @@
 .contact {
+  @include atmosphere;
+
   &__wrap {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
@@ -31,12 +33,13 @@
   gap: 12px;
   padding: 1rem 1.25rem;
   background: $card;
-  border: 1px solid $border;
+  border: 1px solid rgba(var(--mint-rgb), 0.16);
   border-radius: $border-radius;
+  backdrop-filter: blur(6px);
   transition: all 0.2s;
 
   &:hover {
-    border-color: rgba(37, 99, 235, 0.3);
+    border-color: rgba(var(--mint-rgb), 0.3);
     transform: translateX(4px);
   }
 

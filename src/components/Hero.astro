@@ -1,4 +1,5 @@
 ---
+const photoSrc = "/images/fotito.webp";
 ---
 
 <section class="hero section" id="inicio">
@@ -21,8 +22,8 @@
         </div>
       </div>
 
-      <div class="hero__photo fu d2">
-        <img src="/images/fotito.webp" alt="Salvador Sanchez" width="400" height="500" />
+      <div class="hero__photo fu d2" style={`--photo-src:url(${photoSrc})`}>
+        <img src={photoSrc} alt="Salvador Sanchez" width="400" height="500" />
       </div>
     </div>
   </div>

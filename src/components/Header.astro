@@ -7,7 +7,7 @@ const links = [
 ];
 ---
 
-<header class="header">
+<header class="header" id="site-header">
   <a href="/" class="header__logo">
     <div class="header__logo-mark">SS</div>
     Salvador Sanchez
@@ -61,8 +61,17 @@ const links = [
 </div>
 
 <script>
+  const siteHeader = document.getElementById('site-header')!;
   const burger = document.getElementById('burger')!;
   const mobileNav = document.getElementById('mobile-nav')!;
+
+  // Transparent over the hero, solid once you scroll into regular content —
+  // so the nav doesn't have to visually match every section's own look.
+  function onScroll() {
+    siteHeader.classList.toggle('is-scrolled', window.scrollY > 40);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
   function toggleMenu(open: boolean) {
     burger.classList.toggle('open', open);
