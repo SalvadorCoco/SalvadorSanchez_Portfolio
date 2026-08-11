@@ -1,20 +1,72 @@
 .section {
+  position: relative;
   padding: clamp(3.5rem, 7vw, 5.5rem) 0;
 
-  &--alt { background: $bg-2; }
+  // No alternating band color: an opaque background on every other
+  // section is exactly what draws a hard line between them. Sections
+  // are transparent and share the one ambient backdrop instead.
+
+  // The break is a comic panel gutter: a long hairline that fades out at
+  // both ends, with a small node at the centre. It only ever appears
+  // BETWEEN two sections (never above the hero, never below the last),
+  // and it's 1px tall, so it marks the beat without banding the page.
+  & + & {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(680px, 82%);
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(var(--mint-rgb), 0.16) 12%,
+        rgba(var(--mint-rgb), 0.5) 50%,
+        rgba(var(--mint-rgb), 0.16) 88%,
+        transparent
+      );
+      pointer-events: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 5px;
+      height: 5px;
+      background: $mint;
+      box-shadow: 0 0 10px rgba(var(--mint-rgb), 0.7);
+      pointer-events: none;
+    }
+  }
 }
 
 .sec {
+  // Comic narration box: the little caption panel the film stamps in the
+  // corner of a shot. Slightly off-square so it reads as printed and
+  // placed by hand rather than as a UI chip.
   &__eyebrow {
-    font-size: 0.72rem;
-    font-weight: 700;
+    display: inline-block;
+    padding: 4px 11px;
+    font-size: 0.7rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     color: $mint;
-    margin-bottom: 0.6rem;
+    background: var(--mint-dim);
+    border: 1.5px solid rgba(var(--mint-rgb), 0.55);
+    border-radius: 2px;
+    transform: rotate(-1.2deg);
+    margin-bottom: 0.9rem;
+    box-shadow: 2px 2px 0 rgba(var(--accent-2-rgb), 0.35);
   }
 
   &__title {
+    position: relative;
     font-size: clamp(1.8rem, 3.5vw, 2.6rem);
     font-weight: 700;
     letter-spacing: -0.03em;
@@ -22,7 +74,38 @@
     margin-bottom: 1rem;
   }
 
+  // The dimensional glitch, reused: every section heading tears into
+  // place the way the hero title does, so the effect reads as the site's
+  // language instead of a one-off trick in the header.
+  @media (prefers-reduced-motion: no-preference) {
+    &__head.v &__title {
+      animation: panel-glitch 0.45s steps(3) both;
+    }
+  }
+
   &__head {
     margin-bottom: 2.5rem;
+  }
+}
+
+@keyframes panel-glitch {
+  0% {
+    opacity: 0.5;
+    transform: translateX(-4px);
+    text-shadow: -4px 0 0 var(--accent-2), 4px 0 0 var(--mint);
+  }
+  40% {
+    opacity: 1;
+    transform: translateX(3px);
+    text-shadow: 3px 0 0 var(--accent-2), -3px 0 0 var(--mint);
+  }
+  70% {
+    transform: translateX(-1px);
+    text-shadow: -1px 0 0 var(--accent-2), 1px 0 0 var(--mint);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    text-shadow: none;
   }
 }

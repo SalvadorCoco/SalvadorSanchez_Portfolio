@@ -17,33 +17,37 @@ $header-h:  64px;
 // pastel), dark = Miles/2099 (neon, ink-black). Every section pulls from
 // these same tokens, so the whole page stays one consistent world.
 
+// Light = Mumbattan (Pavitr): warm cream paper, teal ink, saffron.
+// The teal is deliberately deeper than the "poster" turquoise so that
+// small text and white-on-button labels still clear contrast minimums.
 :root {
-  --bg:        #fdf3f8;
-  --bg-2:      #f6f1ff;
-  --bg-3:      #eef8ff;
-  --card:      #fffbfe;
+  --bg:        #fdf6e8;
+  --bg-2:      #f8efdb;
+  --bg-3:      #f1e5cb;
+  --card:      #fffdf7;
 
-  --border:      rgba(190, 130, 220, 0.22);
-  --shadow-card: 0 4px 20px rgba(190, 130, 220, 0.16);
+  --border:      rgba(140, 105, 45, 0.2);
+  --shadow-card: 0 4px 20px rgba(140, 105, 45, 0.14);
 
-  --mint:        #ff5fa0;
-  --mint-rgb:    255, 95, 160;
-  --mint-dark:   #e0388a;
-  --mint-light:  #ffe1f0;
-  --mint-dim:    rgba(255, 95, 160, 0.1);
+  --mint:        #0c7f78;
+  --mint-rgb:    12, 127, 120;
+  --mint-dark:   #0a6a64;
+  --mint-light:  #d5f0ed;
+  --mint-dim:    rgba(14, 139, 131, 0.1);
 
-  --accent-2:      #9d7bff;
-  --accent-2-rgb:  157, 123, 255;
+  --accent-2:      #e09318;
+  --accent-2-rgb:  224, 147, 24;
 
-  --text:   #372a45;
-  --text-2: #7a6a8c;
-  --text-3: #a698b8;
+  --text:     #241f1a;
+  --text-rgb: 36, 31, 26;
+  --text-2:   #6b6055;
+  --text-3:   #9c9184;
 
   // Composite backgrounds used directly via var() in SCSS
-  --header-bg:        rgba(253, 243, 248, 0.85);
-  --header-mobile-bg: rgba(253, 243, 248, 0.96);
-  --breadcrumb-bg:    rgba(253, 243, 248, 0.92);
-  --stage-bg:         #2b2038;
+  --header-bg:        rgba(253, 246, 232, 0.85);
+  --header-mobile-bg: rgba(253, 246, 232, 0.96);
+  --breadcrumb-bg:    rgba(253, 246, 232, 0.92);
+  --stage-bg:         #241f1a;
 }
 
 [data-theme="dark"] {
@@ -64,9 +68,10 @@ $header-h:  64px;
   --accent-2:      #3d5afe;
   --accent-2-rgb:  61, 90, 254;
 
-  --text:   #eef2fb;
-  --text-2: #93a0c2;
-  --text-3: #5b6689;
+  --text:     #eef2fb;
+  --text-rgb: 238, 242, 251;
+  --text-2:   #93a0c2;
+  --text-3:   #5b6689;
 
   --header-bg:        rgba(5, 8, 16, 0.85);
   --header-mobile-bg: rgba(5, 8, 16, 0.96);

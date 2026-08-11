@@ -23,8 +23,8 @@
 
   &-card {
     @include card-base;
+    @include spotlight;
     padding: 2rem;
-    transition: all 0.25s $ease-out;
     display: flex;
     flex-direction: column;
 

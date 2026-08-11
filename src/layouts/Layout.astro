@@ -230,6 +230,22 @@ const {
           localStorage.setItem('portfolio-theme', next);
         });
       });
+
+      // ── Card spotlight ────────────────────────────────
+      // One delegated listener feeds the cursor position to whichever
+      // card is under it; the CSS in @mixin spotlight does the rest.
+      (function () {
+        var SEL = '.proj-card, .sk-card, .clink, .wsp-card, .cv-box, .formacion__item';
+        if (window.matchMedia('(hover: none)').matches) return;
+
+        document.addEventListener('mousemove', function (e) {
+          var card = e.target.closest && e.target.closest(SEL);
+          if (!card) return;
+          var r = card.getBoundingClientRect();
+          card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+          card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        }, { passive: true });
+      })();
     </script>
   </body>
 </html>

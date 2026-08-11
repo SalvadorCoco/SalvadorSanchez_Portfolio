@@ -9,6 +9,32 @@
   }
 }
 
+// Cursor-following spotlight on cards — the technique from React Bits'
+// SpotlightCard (a radial gradient tracking --mx/--my), reimplemented on
+// the element's own background so it needs no pseudo-element (several
+// cards already use ::before/::after) and no React island per card: one
+// small delegated listener in Layout drives every card on the page.
+//
+// --spot is registered with @property below so it can actually animate;
+// without that, custom properties would snap instead of fade.
+@mixin spotlight($alpha: 0.14, $radius: 340px) {
+  --mx: 50%;
+  --my: 50%;
+  --spot: 0;
+  background-image: radial-gradient(
+    #{$radius} circle at var(--mx) var(--my),
+    rgba(var(--mint-rgb), calc(#{$alpha} * var(--spot))),
+    transparent 70%
+  );
+  transition: --spot 0.4s ease, transform 0.25s $ease-out,
+              box-shadow 0.25s $ease-out, border-color 0.25s $ease-out;
+
+  &:hover,
+  &:focus-within {
+    --spot: 1;
+  }
+}
+
 @mixin card-base {
   background: $card;
   border: 1px solid rgba(var(--mint-rgb), 0.16);
@@ -17,30 +43,16 @@
   backdrop-filter: blur(6px);
 }
 
-// One shared background language for every section: two glow blobs
-// (accent red, accent blue — the actual duo, not a third pink light),
-// pinned to the viewport with background-attachment: fixed so they form
-// ONE continuous field behind the whole page instead of each section
-// restarting its own pattern at its own edges. Sections can add their
-// own extra flavor on top, but this base layer never skips a section.
-@mixin atmosphere($strength: 1) {
+// Every section is transparent and sits on top of the ONE glow field
+// painted on <body> (see base/_reset.scss) — that's what makes section
+// boundaries invisible. This mixin just sets up the stacking context so
+// a section's own extra local flavor (a grid, grain, a WebGL layer...)
+// can sit between the shared glow and its real content.
+@mixin atmosphere {
   position: relative;
   overflow: hidden;
-  background: $bg;
+  background: transparent;
   color: $text;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image:
-      radial-gradient(circle at 82% 12%, rgba(var(--mint-rgb), 0.16 * $strength), transparent 42%),
-      radial-gradient(circle at 12% 85%, rgba(var(--accent-2-rgb), 0.15 * $strength), transparent 42%);
-    background-attachment: fixed;
-    filter: blur(60px);
-    pointer-events: none;
-    z-index: 0;
-  }
 
   > .container {
     position: relative;

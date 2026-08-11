@@ -3,14 +3,23 @@
   50%       { opacity: 0.3; }
 }
 
+// Content arrival is smooth and quick on purpose. Stepped "on twos"
+// motion belongs on deliberate EFFECTS (the title glitch), never on
+// content showing up: there, any stutter just reads as a slow site to
+// anyone who doesn't know the reference — which is most visitors.
 .fu {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(14px);
+  transition: opacity 0.35s $ease-out, transform 0.35s $ease-out;
 
   &.v { opacity: 1; transform: none; }
 
-  &.d1 { transition-delay: 0.1s; }
-  &.d2 { transition-delay: 0.2s; }
-  &.d3 { transition-delay: 0.3s; }
+  &.d1 { transition-delay: 0.06s; }
+  &.d2 { transition-delay: 0.12s; }
+  &.d3 { transition-delay: 0.18s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: opacity 0.25s ease;
+    transform: none;
+  }
 }

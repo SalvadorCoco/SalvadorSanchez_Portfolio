@@ -4,17 +4,9 @@
 .experience {
   @include atmosphere;
 
-  // Faint grain so the wash reads as painted, not flat
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(rgba(var(--mint-rgb), 0.5) 0.6px, transparent 0.8px);
-    background-size: 3px 3px;
-    opacity: 0.05;
-    pointer-events: none;
-    z-index: 0;
-  }
+  // No section-wide grain either — same reason as the others. The Gwen
+  // character is carried by the painted timeline stroke, the organic
+  // blob markers and the gradient dates, all of which live in content.
 
   &__wrap {
     display: grid;
@@ -105,12 +97,13 @@
 }
 
 .cv-box {
+  @include spotlight;
   position: relative;
   padding: 2rem;
   text-align: center;
   border-radius: 22px;
   overflow: hidden;
-  background: $card;
+  background-color: $card;
   border: 1px solid $border;
   box-shadow: var(--shadow-card);
 
@@ -136,7 +129,9 @@
     margin: 0 auto 1rem;
     background: linear-gradient(135deg, rgba(var(--mint-rgb), 0.24), rgba(var(--accent-2-rgb), 0.24));
     border-radius: 16px;
-    color: var(--accent-2);
+    // Saffron stays decorative only — as a foreground it can't clear
+    // contrast without turning brown, so anything readable uses teal.
+    color: $mint;
 
     svg { width: 26px; height: 26px; }
   }
@@ -184,12 +179,15 @@
   }
 
   &__item {
+    @include spotlight(0.12, 260px);
     display: flex;
     gap: 0.75rem;
     padding: 1rem 1.1rem;
-    background: $card;
+    background-color: $card;
     border: 1px solid $border;
     border-radius: 14px;
+
+    &:hover { border-color: rgba(var(--mint-rgb), 0.35); }
   }
 
   &__dot {
