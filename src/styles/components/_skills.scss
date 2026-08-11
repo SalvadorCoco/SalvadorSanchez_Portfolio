@@ -16,15 +16,16 @@
     $bg;
   background-size: 42px 42px, 42px 42px, 100% 100%;
 
-  // Same three glow blobs as every other section, in the same corners.
+  // Same red/blue glow duo as every other section, fixed to the
+  // viewport so it's the same continuous field, not a restart.
   &::before {
     content: "";
     position: absolute;
-    inset: -10%;
-    background:
-      radial-gradient(circle at 85% 8%, rgba(var(--accent-3-rgb), 0.16), transparent 45%),
-      radial-gradient(circle at 8% 88%, rgba(var(--accent-2-rgb), 0.14), transparent 45%),
-      radial-gradient(circle at 50% 105%, rgba(var(--mint-rgb), 0.12), transparent 50%);
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 82% 12%, rgba(var(--mint-rgb), 0.16), transparent 42%),
+      radial-gradient(circle at 12% 85%, rgba(var(--accent-2-rgb), 0.15), transparent 42%);
+    background-attachment: fixed;
     filter: blur(60px);
     pointer-events: none;
     z-index: 0;
@@ -170,8 +171,8 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--accent-3);
-      box-shadow: 0 0 6px var(--accent-3);
+      background: var(--accent-2);
+      box-shadow: 0 0 6px var(--accent-2);
       margin-right: 7px;
       flex-shrink: 0;
       animation: blink 2s ease-in-out infinite;

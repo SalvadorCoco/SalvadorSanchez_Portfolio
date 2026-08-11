@@ -8,26 +8,28 @@
   --hero-red-rgb:      255, 95, 160;
   --hero-blue:         #9d7bff;
   --hero-blue-rgb:     157, 123, 255;
-  --hero-magenta:      #58b8f0;
-  --hero-magenta-rgb:  88, 184, 240;
+  // Kept as its own slot for badge/dust accents, but pointed at the same
+  // blue as everything else — red + blue only, no third pink light.
+  --hero-magenta:      #9d7bff;
+  --hero-magenta-rgb:  157, 123, 255;
   --hero-bg:           linear-gradient(160deg, #fdf1f7, #f4f0ff 45%, #eef8ff 100%);
   --hero-fg:           #372a45;
   --hero-fg-rgb:       55, 42, 69;
   --hero-fg-dim:       #7a6a8c;
-  --hero-badge-fg:     #1f6f96;
+  --hero-badge-fg:     #5a3fc4;
 
   [data-theme="dark"] & {
     --hero-red:          #f0142a;
     --hero-red-rgb:      240, 20, 42;
     --hero-blue:         #3d5afe;
     --hero-blue-rgb:     61, 90, 254;
-    --hero-magenta:      #ff2ec4;
-    --hero-magenta-rgb:  255, 46, 196;
+    --hero-magenta:      #3d5afe;
+    --hero-magenta-rgb:  61, 90, 254;
     --hero-bg:           #08060d;
     --hero-fg:           #f5f4fa;
     --hero-fg-rgb:       245, 244, 250;
     --hero-fg-dim:       #b8b3c9;
-    --hero-badge-fg:     #ffb3ea;
+    --hero-badge-fg:     #c3d0ff;
   }
 
   position: relative;
@@ -39,15 +41,16 @@
   background: var(--hero-bg);
   color: var(--hero-fg);
 
-  // ── Atmosphere: glow blobs + halftone grid + scanlines ─────────────────
+  // ── Atmosphere: the same red/blue duo every other section uses, fixed
+  // to the viewport so it flows continuously into what comes after ─────
   &::before {
     content: "";
     position: absolute;
-    inset: -10%;
-    background:
-      radial-gradient(circle at 85% 8%, rgba(var(--hero-magenta-rgb), 0.28), transparent 42%),
-      radial-gradient(circle at 8% 88%, rgba(var(--hero-blue-rgb), 0.32), transparent 45%),
-      radial-gradient(circle at 50% 105%, rgba(var(--hero-red-rgb), 0.22), transparent 50%);
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 82% 12%, rgba(var(--hero-red-rgb), 0.3), transparent 42%),
+      radial-gradient(circle at 12% 85%, rgba(var(--hero-blue-rgb), 0.28), transparent 45%);
+    background-attachment: fixed;
     filter: blur(40px);
     pointer-events: none;
     z-index: 0;
