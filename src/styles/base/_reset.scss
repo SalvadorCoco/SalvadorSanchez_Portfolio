@@ -19,9 +19,9 @@ html {
 }
 
 body {
-  font-family: $font-family-sans-serif;
-  background: $bg;
-  color: $text;
+  font-family: $font-body;
+  background: $color-bg;
+  color: $color-text;
   overflow-x: hidden;
   line-height: 1.6;
 
@@ -36,8 +36,8 @@ body {
     z-index: -2;
     pointer-events: none;
     background:
-      radial-gradient(circle at 84% 6%, rgba(var(--mint-rgb), 0.18), transparent 45%),
-      radial-gradient(circle at 10% 80%, rgba(var(--accent-2-rgb), 0.16), transparent 45%);
+      radial-gradient(circle at 84% 6%, rgba(var(--color-red-rgb), 0.18), transparent 45%),
+      radial-gradient(circle at 10% 80%, rgba(var(--color-blue-rgb), 0.16), transparent 45%);
   }
 
   // Ben-Day halftone dots — the printed-comic texture the whole
@@ -49,9 +49,9 @@ body {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-image: radial-gradient(rgba(var(--mint-rgb), 0.6) 1px, transparent 1.6px);
+    background-image: radial-gradient(rgba(var(--color-red-rgb), 0.6) 1px, transparent 1.6px);
     background-size: 22px 22px;
-    opacity: 0.07;
+    opacity: var(--halftone-opacity);
   }
 }
 

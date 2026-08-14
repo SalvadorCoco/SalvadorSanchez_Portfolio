@@ -3,10 +3,10 @@
   bottom: 2rem;
   right: 2rem;
   padding: 12px 20px;
-  background: $card;
-  border: 1px solid rgba(var(--mint-rgb), 0.25);
+  background: $color-bg-soft;
+  border: 1px solid rgba(var(--color-red-rgb), 0.25);
   border-radius: $border-radius-pill;
-  color: $mint;
+  color: $color-red;
   font-size: 0.82rem;
   font-weight: 600;
   z-index: 9999;

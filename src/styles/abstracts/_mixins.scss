@@ -23,7 +23,7 @@
   --spot: 0;
   background-image: radial-gradient(
     #{$radius} circle at var(--mx) var(--my),
-    rgba(var(--mint-rgb), calc(#{$alpha} * var(--spot))),
+    rgba(var(--color-red-rgb), calc(#{$alpha} * var(--spot))),
     transparent 70%
   );
   transition: --spot 0.4s ease, transform 0.25s $ease-out,
@@ -36,8 +36,8 @@
 }
 
 @mixin card-base {
-  background: $card;
-  border: 1px solid rgba(var(--mint-rgb), 0.16);
+  background: $color-bg-soft;
+  border: 1px solid rgba(var(--color-red-rgb), 0.16);
   border-radius: $border-radius-lg;
   box-shadow: var(--shadow-card);
   backdrop-filter: blur(6px);
@@ -52,7 +52,7 @@
   position: relative;
   overflow: hidden;
   background: transparent;
-  color: $text;
+  color: $color-text;
 
   > .container {
     position: relative;
@@ -65,7 +65,7 @@
   align-items: center;
   gap: 7px;
   padding: 13px 26px;
-  background: $mint;
+  background: $color-red;
   color: #fff;
   border-radius: $border-radius-pill;
   font-size: 0.9rem;
@@ -74,10 +74,10 @@
   transition: all 0.25s $ease-out;
 
   &:hover {
-    background: $mint-dark;
+    background: $color-red-dark;
     color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 10px 28px var(--mint-dim);
+    box-shadow: 0 10px 28px var(--color-red-dim);
     text-decoration: none;
   }
 }
@@ -88,17 +88,17 @@
   gap: 7px;
   padding: 13px 26px;
   background: transparent;
-  color: $text-2;
-  border: 1.5px solid $border;
+  color: $color-muted;
+  border: 1.5px solid $color-border;
   border-radius: $border-radius-pill;
   font-size: 0.9rem;
   font-weight: 600;
   transition: all 0.2s;
 
   &:hover {
-    border-color: $mint;
-    color: $mint;
-    background: $mint-dim;
+    border-color: $color-red;
+    color: $color-red;
+    background: $color-red-dim;
     text-decoration: none;
   }
 }

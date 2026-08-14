@@ -28,18 +28,18 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    border: 1px solid $border;
-    background: $bg-2;
-    color: $text-2;
+    border: 1px solid $color-border;
+    background: $color-bg-soft;
+    color: $color-muted;
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s;
     line-height: 1;
 
     &:hover {
-      background: $mint-dim;
-      color: $mint;
-      border-color: $mint;
+      background: $color-red-dim;
+      color: $color-red;
+      border-color: $color-red;
     }
   }
 
@@ -53,14 +53,14 @@
     width: 6px;
     height: 6px;
     border-radius: 3px;
-    background: $text-3;
+    background: $color-muted-dim;
     border: none;
     cursor: pointer;
     padding: 0;
     transition: all 0.25s $ease-out;
 
     &.active {
-      background: $mint;
+      background: $color-red;
       width: 22px;
     }
   }

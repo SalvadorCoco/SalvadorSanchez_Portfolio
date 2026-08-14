@@ -9,7 +9,7 @@
     padding: 0.75rem 0;
     background: var(--breadcrumb-bg);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid $border;
+    border-bottom: 1px solid $color-border;
   }
 
   &__back {
@@ -18,9 +18,9 @@
     gap: 6px;
     font-size: 0.82rem;
     font-weight: 600;
-    color: $text-2;
+    color: $color-muted;
     transition: color 0.2s;
-    &:hover { color: $mint; }
+    &:hover { color: $color-red; }
   }
 
   // ── Hero ────────────────────────────────────────
@@ -38,29 +38,30 @@
   &__year {
     font-size: 0.72rem;
     font-weight: 600;
-    color: $text-3;
+    color: $color-muted-dim;
     letter-spacing: 0.08em;
   }
 
   &__title {
+    font-family: $font-display;
     font-size: clamp(2.4rem, 5vw, 4rem);
     font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.08;
     margin-bottom: 0.5rem;
-    color: $text;
+    color: $color-text;
   }
 
   &__client {
     font-size: 1rem;
-    color: $text-2;
+    color: $color-muted;
     font-weight: 500;
     margin-bottom: 1.25rem;
   }
 
   &__lead {
     font-size: 1.1rem;
-    color: $text-2;
+    color: $color-muted;
     line-height: 1.8;
     max-width: 680px;
   }
@@ -100,9 +101,9 @@
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 1.25rem;
       padding: 1.5rem;
-      background: $bg-2;
+      background: $color-bg-soft;
       border-radius: $border-radius-lg;
-      border: 1px solid $border;
+      border: 1px solid $color-border;
     }
   }
 
@@ -113,14 +114,14 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: $text-3;
+    color: $color-muted-dim;
     margin-bottom: 0.4rem;
   }
 
   &__sidebar-value {
     font-size: 0.9rem;
     font-weight: 600;
-    color: $text;
+    color: $color-text;
     line-height: 1.4;
   }
 
@@ -146,7 +147,7 @@
     &-title {
       font-size: 1.1rem;
       font-weight: 700;
-      color: $text;
+      color: $color-text;
       margin-bottom: 0.75rem;
       letter-spacing: -0.01em;
     }
@@ -154,14 +155,14 @@
     &--result {
       @include card-base;
       padding: 2rem;
-      background: $bg-2;
-      border-color: rgba(var(--mint-rgb), 0.15);
+      background: $color-bg-soft;
+      border-color: rgba(var(--color-red-rgb), 0.15);
     }
   }
 
   &__text {
     font-size: 1rem;
-    color: $text-2;
+    color: $color-muted;
     line-height: 1.85;
   }
 
@@ -179,9 +180,9 @@
   &__split-item {
     padding: 1.5rem;
     border-radius: $border-radius;
-    background: $bg-2;
+    background: $color-bg-soft;
 
-    &--solution { background: $mint-dim; }
+    &--solution { background: $color-red-dim; }
   }
 
   &__split-label {
@@ -189,7 +190,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: $mint-dark;
+    color: $color-red-dark;
     margin-bottom: 0.6rem;
   }
 
@@ -199,20 +200,20 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: $mint;
+    color: $color-red;
     margin-bottom: 0.6rem;
   }
 
   &__result-text {
     font-size: 1.05rem;
-    color: $text;
+    color: $color-text;
     font-weight: 500;
     line-height: 1.75;
   }
 
   // ── Prev / Next nav ──────────────────────────────
   &__nav {
-    border-top: 1px solid $border;
+    border-top: 1px solid $color-border;
     padding: 2.5rem 0;
   }
 
@@ -228,18 +229,18 @@
     gap: 4px;
     padding: 1rem 1.25rem;
     border-radius: $border-radius;
-    border: 1px solid $border;
+    border: 1px solid $color-border;
     transition: all 0.2s;
     max-width: 280px;
 
     &--next { text-align: right; margin-left: auto; }
-    &:hover { border-color: rgba(var(--mint-rgb), 0.3); background: $mint-dim; }
+    &:hover { border-color: rgba(var(--color-red-rgb), 0.3); background: $color-red-dim; }
   }
 
   &__nav-dir {
     font-size: 0.72rem;
     font-weight: 600;
-    color: $mint;
+    color: $color-red;
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
@@ -247,7 +248,7 @@
   &__nav-name {
     font-size: 0.95rem;
     font-weight: 700;
-    color: $text;
+    color: $color-text;
   }
 }
 
@@ -258,18 +259,18 @@
   opacity: 0;
   transform: translateX(-4px);
   transition: all 0.2s $ease-out;
-  color: $mint;
+  color: $color-red;
 }
 .proj-card:hover .proj-card__arrow { opacity: 1; transform: translateX(0); }
 
 .plink--see-more {
   font-size: 0.78rem;
   font-weight: 600;
-  color: $text-3;
+  color: $color-muted-dim;
   padding: 7px 0;
   transition: color 0.2s;
 }
-.proj-card:hover .plink--see-more { color: $mint; }
+.proj-card:hover .plink--see-more { color: $color-red; }
 
 // proj-tags when used in sidebar
 .proj-tags--wrap { flex-wrap: wrap; }

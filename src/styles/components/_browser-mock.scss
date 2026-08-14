@@ -43,7 +43,7 @@
     height: 22px;
     padding: 0 10px;
     font-size: 0.68rem;
-    color: $text-3;
+    color: $color-muted-dim;
     display: flex;
     align-items: center;
     max-width: 300px;
@@ -55,7 +55,7 @@
 
   &__screen {
     overflow: hidden;
-    background: $bg-2;
+    background: $color-bg-soft;
 
     img {
       width: 100%;

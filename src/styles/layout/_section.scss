@@ -1,6 +1,6 @@
 .section {
   position: relative;
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+  padding: $space-section-y 0;
 
   // No alternating band color: an opaque background on every other
   // section is exactly what draws a hard line between them. Sections
@@ -22,9 +22,9 @@
       background: linear-gradient(
         90deg,
         transparent,
-        rgba(var(--mint-rgb), 0.16) 12%,
-        rgba(var(--mint-rgb), 0.5) 50%,
-        rgba(var(--mint-rgb), 0.16) 88%,
+        rgba(var(--color-red-rgb), 0.16) 12%,
+        rgba(var(--color-red-rgb), 0.5) 50%,
+        rgba(var(--color-red-rgb), 0.16) 88%,
         transparent
       );
       pointer-events: none;
@@ -38,8 +38,8 @@
       transform: translateX(-50%) rotate(45deg);
       width: 5px;
       height: 5px;
-      background: $mint;
-      box-shadow: 0 0 10px rgba(var(--mint-rgb), 0.7);
+      background: $color-red;
+      box-shadow: 0 0 10px rgba(var(--color-red-rgb), 0.7);
       pointer-events: none;
     }
   }
@@ -56,17 +56,18 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: $mint;
-    background: var(--mint-dim);
-    border: 1.5px solid rgba(var(--mint-rgb), 0.55);
+    color: $color-red;
+    background: var(--color-red-dim);
+    border: 1.5px solid rgba(var(--color-red-rgb), 0.55);
     border-radius: 2px;
     transform: rotate(-1.2deg);
     margin-bottom: 0.9rem;
-    box-shadow: 2px 2px 0 rgba(var(--accent-2-rgb), 0.35);
+    box-shadow: 2px 2px 0 rgba(var(--color-blue-rgb), 0.35);
   }
 
   &__title {
     position: relative;
+    font-family: $font-display;
     font-size: clamp(1.8rem, 3.5vw, 2.6rem);
     font-weight: 700;
     letter-spacing: -0.03em;
@@ -92,16 +93,16 @@
   0% {
     opacity: 0.5;
     transform: translateX(-4px);
-    text-shadow: -4px 0 0 var(--accent-2), 4px 0 0 var(--mint);
+    text-shadow: -4px 0 0 var(--color-blue), 4px 0 0 var(--color-red);
   }
   40% {
     opacity: 1;
     transform: translateX(3px);
-    text-shadow: 3px 0 0 var(--accent-2), -3px 0 0 var(--mint);
+    text-shadow: 3px 0 0 var(--color-blue), -3px 0 0 var(--color-red);
   }
   70% {
     transform: translateX(-1px);
-    text-shadow: -1px 0 0 var(--accent-2), 1px 0 0 var(--mint);
+    text-shadow: -1px 0 0 var(--color-blue), 1px 0 0 var(--color-red);
   }
   100% {
     opacity: 1;

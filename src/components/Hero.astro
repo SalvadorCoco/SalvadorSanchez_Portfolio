@@ -1,30 +1,228 @@
 ---
 const photoSrc = "/images/fotito.webp";
+const stack = ["React", "Next.js", "Astro", "SCSS"];
 ---
 
-<section class="hero section" id="inicio">
-  <div class="container">
-    <div class="hero__inner">
-      <div>
-        <div class="hero__badge fu">
+<section class="hero" id="inicio">
+  <div class="container hero__stage">
+    <div class="hero__text">
+      <!-- STATE 01 — IDENTITY -->
+      <div class="hero__block hero__block--identity">
+        <div class="hero__badge">
           <div class="hero__badge-dot"></div>
           <span data-i18n="hero_badge">Disponible para proyectos</span>
         </div>
-        <h1 class="hero__title fu d1" data-i18n-html="hero_title">
+        <h1 class="hero__title" data-i18n-html="hero_title">
           Interfaces donde <span class="hl">todo</span><br />está donde<br />lo esperás.
         </h1>
-        <p class="hero__desc fu d2" data-i18n="hero_desc">
-          Hola, soy Salvador, de Río Cuarto. Hago webs con React y Next.js pensando siempre en quien las va a usar — que no se pierda, que encuentre lo que busca, que vuelva.
-        </p>
-        <div class="hero__actions fu d3">
+        <div class="hero__actions">
           <a href="#proyectos" class="hero__btn-primary" data-i18n="hero_cta_primary">Ver proyectos →</a>
           <a href="#contacto" class="hero__btn-secondary" data-i18n="hero_cta_secondary">Hablemos</a>
         </div>
       </div>
 
-      <div class="hero__photo fu d2" style={`--photo-src:url(${photoSrc})`}>
-        <img src={photoSrc} alt="Salvador Sanchez" width="400" height="500" />
+      <!-- STATE 02 — CRAFT -->
+      <div class="hero__block hero__block--craft">
+        <p class="hero__statement" data-i18n="hero_desc">
+          Hola, soy Salvador, de Río Cuarto. Hago webs con React y Next.js pensando siempre en quien las va a usar — que no se pierda, que encuentre lo que busca, que vuelva.
+        </p>
+      </div>
+
+      <!-- STATE 03 — WORK -->
+      <div class="hero__block hero__block--summary">
+        <div class="hero__id-inner">
+          <div class="hero__id-name">SALVADOR<br />SANCHEZ</div>
+          <div class="hero__id-role" data-i18n="exp_role_1">Desarrollador Frontend</div>
+          <ul class="hero__id-stack">
+            {stack.map((tech) => <li>{tech}</li>)}
+          </ul>
+          <div class="hero__id-location" data-i18n="footer_location">Río Cuarto, Córdoba, Argentina</div>
+          <div class="hero__badge">
+            <div class="hero__badge-dot"></div>
+            <span data-i18n="hero_badge">Disponible para proyectos</span>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="hero__photo" style={`--photo-src:url(${photoSrc})`}>
+      <img src={photoSrc} alt="Salvador Sanchez" width="400" height="500" />
+    </div>
+  </div>
+
+  <div class="hero__scrollcue">
+    <span data-i18n="hero_scroll_cue">Desliza para explorar</span>
+    <span class="hero__scrollcue-arrow">↓</span>
+  </div>
+
+  <div class="hero__nextcue">
+    <span class="hero__nextcue-arrow">↓</span>
+    <span data-i18n="proj_eyebrow">proyectos</span>
   </div>
 </section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const hero = document.querySelector<HTMLElement>(".hero");
+  if (hero) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const isDesktop = window.matchMedia("(min-width: 992px)");
+
+    let currentTrigger: ScrollTrigger | null = null;
+
+    // ── RGB registration-glitch burst ───────────────────
+    // A comic-print misregistration flash: two red + two blue clones of
+    // the target (each clipped to its own half so the split reads as
+    // displaced strips, not a solid silhouette) snap out to a chromatic
+    // offset in a couple of stepped frames, then recompose immediately.
+    // Clones are appended to `.hero__text` (never clipped, always
+    // visible) and positioned via a one-time rect snapshot — NOT as
+    // descendants of the target itself, since the target is mid-reveal
+    // under its own clip-path at the moment this fires, and a child
+    // can't escape its ancestor's clip. Runs at fixed wall-clock speed
+    // (a plain gsap.timeline, not the scrubbed master one) so it always
+    // reads as a quick flash regardless of scroll speed.
+    function rgbGlitchBurst(target: Element | null) {
+      const root = target?.closest<HTMLElement>(".hero__text");
+      if (!target || !root) return;
+
+      const rootRect = root.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const box = `position:absolute; margin:0; top:${targetRect.top - rootRect.top}px; left:${targetRect.left - rootRect.left}px; width:${targetRect.width}px; height:${targetRect.height}px;`;
+
+      const specs = [
+        { cls: "glitch-layer--red", clip: "inset(0% 0% 50% 0%)", x: 7, y: -2 },
+        { cls: "glitch-layer--red", clip: "inset(50% 0% 0% 0%)", x: 5, y: 2 },
+        { cls: "glitch-layer--blue", clip: "inset(0% 0% 50% 0%)", x: -7, y: 2 },
+        { cls: "glitch-layer--blue", clip: "inset(50% 0% 0% 0%)", x: -5, y: -2 },
+      ] as const;
+
+      const layers = specs.map(({ cls, clip }) => {
+        const layer = target.cloneNode(true) as HTMLElement;
+        ["id", "data-i18n", "data-i18n-html", "data-i18n-ph", "data-es", "data-en", "data-es-html", "data-en-html"].forEach(
+          (attr) => layer.removeAttribute(attr),
+        );
+        layer.setAttribute("aria-hidden", "true");
+        layer.classList.add("glitch-layer", cls);
+        layer.style.cssText = `${box} clip-path:${clip};`;
+        root.appendChild(layer);
+        return layer;
+      });
+
+      gsap.set(layers, { x: 0, y: 0 });
+      gsap
+        .timeline({ onComplete: () => layers.forEach((l) => l.remove()) })
+        .to(layers[0], { x: specs[0].x, y: specs[0].y, duration: 0.05, ease: "steps(2)" }, 0)
+        .to(layers[1], { x: specs[1].x, y: specs[1].y, duration: 0.05, ease: "steps(2)" }, 0)
+        .to(layers[2], { x: specs[2].x, y: specs[2].y, duration: 0.05, ease: "steps(2)" }, 0)
+        .to(layers[3], { x: specs[3].x, y: specs[3].y, duration: 0.05, ease: "steps(2)" }, 0)
+        .to(layers, { x: 0, y: 0, duration: 0.13, ease: "power3.out" }, 0.05);
+    }
+
+    function buildCinematicHero() {
+      hero!.classList.add("hero--cinematic");
+
+      // The reveal/conceal clip targets the actual content box (the
+      // paragraph, the identity-card wrapper) rather than the oversized
+      // absolutely-positioned `.hero__block`, so the mask sweeps tightly
+      // across the visible text instead of travelling through the empty
+      // vertical space the block reserves for crossfade layering.
+      const craftReveal = hero!.querySelector(".hero__statement");
+      const summaryReveal = hero!.querySelector(".hero__id-inner");
+      const summaryHeading = hero!.querySelector(".hero__id-name");
+
+      gsap.set(".hero__block--craft, .hero__block--summary", { autoAlpha: 0 });
+      gsap.set(craftReveal, { y: 26, clipPath: "inset(100% 0% 0% 0%)" });
+      gsap.set(summaryReveal, { y: 22, clipPath: "inset(100% 0% 0% 0%)" });
+      gsap.set(".hero__nextcue", { autoAlpha: 0 });
+      gsap.set(".hero__photo", { x: 0, y: 0, scale: 1, rotate: -2 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: hero,
+          start: "top top",
+          end: "+=140%",
+          scrub: 0.4,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
+      currentTrigger = tl.scrollTrigger as ScrollTrigger;
+
+      // Five zones, not five transitions: each state gets a wide stable
+      // hold where the timeline can sit at ANY progress within it and
+      // still show fully-resolved, legible content — the two
+      // transitions are short (12% of the scroll range each) and only
+      // ever the minority of the pin. Whatever progress the user stops
+      // scrolling at, they land in a settled state far more often than
+      // not, and even mid-transition the outgoing/incoming content
+      // overlap so nothing goes through a fully-empty beat.
+      //
+      //  0 ────── .26 ── .38 ────── .64 ── .76 ────── 1
+      //  |  IDENTITY  |trans.|  CRAFT   |trans.|  WORK  |
+      //     (stable)   (12%)  (stable)   (12%)  (stable)
+
+      tl.addLabel("identityStable", 0)
+        // ── Identity → Craft transition (.26 → .38) ───
+        .addLabel("toCraft", 0.26)
+        .to(".hero__scrollcue", { autoAlpha: 0, duration: 0.04 }, 0.24)
+        .to(".hero__block--identity", { autoAlpha: 0, y: -28, duration: 0.08, ease: "power1.in" }, 0.26)
+        .to(".hero__photo", { x: -18, y: 6, scale: 1.06, rotate: -1, duration: 0.12, ease: "power1.inOut" }, 0.26)
+        // Movement + clip-path wipe carry the beat; opacity only
+        // fast-tracks the block from hidden to "there." The glitch fires
+        // with the wipe, not before it, so it reads as one event.
+        .to(".hero__block--craft", { autoAlpha: 1, duration: 0.03 }, 0.28)
+        .call(() => rgbGlitchBurst(craftReveal), undefined, 0.28)
+        .to(craftReveal, { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 0.1, ease: "power2.out" }, 0.28)
+        .addLabel("craftStable", 0.38)
+        // ── hold: Craft fully visible, .38 → .64 ──────
+
+        // ── Craft → Work transition (.64 → .76) ───────
+        .addLabel("toWork", 0.64)
+        .to(craftReveal, { y: -22, clipPath: "inset(0% 0% 100% 0%)", duration: 0.08, ease: "power2.in" }, 0.64)
+        .to(".hero__block--craft", { autoAlpha: 0, duration: 0.03 }, 0.68)
+        .to(".hero__photo", { x: 14, y: -8, scale: 0.94, rotate: -3, duration: 0.12, ease: "power1.inOut" }, 0.64)
+        .to(".hero__block--summary", { autoAlpha: 1, duration: 0.03 }, 0.66)
+        .call(() => rgbGlitchBurst(summaryHeading), undefined, 0.66)
+        .to(summaryReveal, { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 0.1, ease: "power2.out" }, 0.66)
+        .addLabel("workStable", 0.76)
+        // ── hold: Work fully visible, .76 → 1 ─────────
+        .to(".hero__nextcue", { autoAlpha: 1, duration: 0.1 }, 0.82);
+    }
+
+    function teardownCinematicHero() {
+      currentTrigger?.kill();
+      currentTrigger = null;
+      hero!.classList.remove("hero--cinematic");
+      gsap.set(
+        [
+          ".hero__block--craft",
+          ".hero__block--summary",
+          ".hero__statement",
+          ".hero__id-inner",
+          ".hero__nextcue",
+          ".hero__photo",
+          ".hero__scrollcue",
+        ],
+        { clearProps: "all" },
+      );
+      // Belt-and-suspenders: a burst mid-flight when the breakpoint or
+      // motion preference flips shouldn't leave orphaned clone layers.
+      hero!.querySelectorAll(".glitch-layer").forEach((el) => el.remove());
+    }
+
+    function sync() {
+      const shouldAnimate = isDesktop.matches && !reduceMotion.matches;
+      if (shouldAnimate && !currentTrigger) buildCinematicHero();
+      if (!shouldAnimate && currentTrigger) teardownCinematicHero();
+    }
+
+    sync();
+    isDesktop.addEventListener("change", sync);
+    reduceMotion.addEventListener("change", sync);
+  }
+</script>

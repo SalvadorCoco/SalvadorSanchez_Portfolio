@@ -33,8 +33,8 @@
       height: 220px;
       border-radius: $border-radius-lg $border-radius-lg 0 0;
       overflow: hidden;
-      background: $bg-2;
-      border-bottom: 1px solid $border;
+      background: $color-bg-soft;
+      border-bottom: 1px solid $color-border;
 
       img {
         width: 100%;
@@ -80,13 +80,13 @@
       user-select: none;
       position: relative;
       z-index: 1;
-      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-family: $font-display;
     }
 
     &:hover {
       transform: translateY(-3px);
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07);
-      border-color: rgba(var(--mint-rgb), 0.25);
+      border-color: rgba(var(--color-red-rgb), 0.25);
     }
 
     &__num {
@@ -94,11 +94,12 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: $mint;
+      color: $color-red;
       margin-bottom: 0.6rem;
     }
 
     &__title {
+      font-family: $font-display;
       font-size: 1.2rem;
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -107,7 +108,7 @@
 
     &__desc {
       font-size: 0.875rem;
-      color: $text-2;
+      color: $color-muted;
       line-height: 1.75;
       margin-bottom: 1.25rem;
       display: -webkit-box;
@@ -128,7 +129,7 @@
 
   &-detail {
     padding: 0.9rem 1rem;
-    background: $bg-2;
+    background: $color-bg-soft;
     border-radius: 10px;
     margin-bottom: 0.75rem;
     display: flex;
@@ -139,13 +140,13 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: $mint-dark;
+      color: $color-red-dark;
       margin-bottom: 3px;
     }
 
     &__text {
       font-size: 0.82rem;
-      color: $text-2;
+      color: $color-muted;
       line-height: 1.65;
       display: -webkit-box;
       -webkit-box-orient: vertical;
@@ -175,14 +176,14 @@
 
 .tag {
   padding: 3px 10px;
-  background: $mint-dim;
+  background: $color-red-dim;
   border-radius: $border-radius-pill;
   font-size: 0.7rem;
   font-weight: 600;
-  color: $mint-dark;
+  color: $color-red-dark;
 
   &--metric {
-    background: $mint;
+    background: $color-red;
     color: #fff;
   }
 }
@@ -198,22 +199,22 @@
   transition: all 0.2s;
 
   &--live {
-    background: $mint;
+    background: $color-red;
     color: #fff;
-    &:hover { background: $mint-dark; color: #fff; }
+    &:hover { background: $color-red-dark; color: #fff; }
   }
 
   &--gh {
-    border: 1.5px solid $border;
-    color: $text-2;
-    &:hover { border-color: $mint; color: $mint; }
+    border: 1.5px solid $color-border;
+    color: $color-muted;
+    &:hover { border-color: $color-red; color: $color-red; }
   }
 
-  &--priv { color: $text-3; }
+  &--priv { color: $color-muted-dim; }
 
   &--demo {
-    color: $text-3;
-    background: $bg-2;
+    color: $color-muted-dim;
+    background: $color-bg-soft;
   }
 
   &--pending {

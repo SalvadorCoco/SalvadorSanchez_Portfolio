@@ -1,7 +1,7 @@
 .footer {
   @include atmosphere;
   padding: 2.5rem 0;
-  border-top: 1px solid $border;
+  border-top: 1px solid $color-border;
 
   &__inner {
     display: flex;
@@ -21,7 +21,7 @@
 
   &__location {
     font-size: 0.78rem;
-    color: $text-3;
+    color: $color-muted-dim;
   }
 
   &__links {
@@ -30,10 +30,10 @@
 
     a {
       font-size: 0.78rem;
-      color: $text-3;
+      color: $color-muted-dim;
       transition: color 0.2s;
 
-      &:hover { color: $mint; }
+      &:hover { color: $color-red; }
     }
   }
 }

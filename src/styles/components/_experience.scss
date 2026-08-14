@@ -1,10 +1,10 @@
 // Experience keeps its painterly form (blob markers, brushed timeline,
-// gradient-text dates) but pulls color from the shared theme tokens —
-// pink/violet watercolor in light, red/blue neon-ink in dark.
+// gradient-text dates) but pulls color from the shared red/blue theme
+// tokens, same as every other section.
 .experience {
   @include atmosphere;
 
-  // No section-wide grain either — same reason as the others. The Gwen
+  // No section-wide grain either — same reason as the others. The
   // character is carried by the painted timeline stroke, the organic
   // blob markers and the gradient dates, all of which live in content.
 
@@ -25,7 +25,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: $text-3;
+  color: $color-muted-dim;
   margin-bottom: 1.25rem;
 }
 
@@ -40,7 +40,7 @@
     top: 2px;
     bottom: 2px;
     width: 3px;
-    background: linear-gradient(180deg, $mint, var(--accent-2) 100%);
+    background: linear-gradient(180deg, $color-red, var(--color-blue) 100%);
     border-radius: 3px;
     opacity: 0.7;
   }
@@ -58,9 +58,9 @@
     top: 2px;
     width: 13px;
     height: 13px;
-    background: linear-gradient(135deg, $mint, var(--accent-2));
+    background: linear-gradient(135deg, $color-red, var(--color-blue));
     border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
-    box-shadow: 0 0 0 4px $bg, 0 0 16px rgba(var(--accent-2-rgb), 0.6);
+    box-shadow: 0 0 0 4px $color-bg, 0 0 16px rgba(var(--color-blue-rgb), 0.6);
   }
 
   &__date {
@@ -70,7 +70,7 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 4px;
-    background: linear-gradient(90deg, $mint, var(--accent-2));
+    background: linear-gradient(90deg, $color-red, var(--color-blue));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -79,19 +79,19 @@
   &__role {
     font-size: 1rem;
     font-weight: 700;
-    color: $text;
+    color: $color-text;
     margin-bottom: 2px;
   }
 
   &__company {
     font-size: 0.82rem;
-    color: $text-2;
+    color: $color-muted;
     margin-bottom: 8px;
   }
 
   &__desc {
     font-size: 0.875rem;
-    color: $text-2;
+    color: $color-muted;
     line-height: 1.75;
   }
 }
@@ -103,8 +103,8 @@
   text-align: center;
   border-radius: 22px;
   overflow: hidden;
-  background-color: $card;
-  border: 1px solid $border;
+  background-color: $color-bg-soft;
+  border: 1px solid $color-border;
   box-shadow: var(--shadow-card);
 
   &::before {
@@ -114,7 +114,7 @@
     right: -20%;
     width: 75%;
     height: 75%;
-    background: radial-gradient(circle, rgba(var(--accent-2-rgb), 0.32), transparent 70%);
+    background: radial-gradient(circle, rgba(var(--color-blue-rgb), 0.32), transparent 70%);
     filter: blur(24px);
     pointer-events: none;
   }
@@ -127,11 +127,11 @@
     align-items: center;
     justify-content: center;
     margin: 0 auto 1rem;
-    background: linear-gradient(135deg, rgba(var(--mint-rgb), 0.24), rgba(var(--accent-2-rgb), 0.24));
+    background: linear-gradient(135deg, rgba(var(--color-red-rgb), 0.24), rgba(var(--color-blue-rgb), 0.24));
     border-radius: 16px;
     // Saffron stays decorative only — as a foreground it can't clear
     // contrast without turning brown, so anything readable uses teal.
-    color: $mint;
+    color: $color-red;
 
     svg { width: 26px; height: 26px; }
   }
@@ -140,14 +140,14 @@
     position: relative;
     font-size: 1.1rem;
     font-weight: 700;
-    color: $text;
+    color: $color-text;
     margin-bottom: 0.4rem;
   }
 
   &__sub {
     position: relative;
     font-size: 0.875rem;
-    color: $text-2;
+    color: $color-muted;
     line-height: 1.7;
     margin-bottom: 1.5rem;
   }
@@ -163,12 +163,12 @@
 .formacion {
   margin-top: 3rem;
   padding-top: 2.25rem;
-  border-top: 1px solid $border;
+  border-top: 1px solid $color-border;
 
   &__title {
     font-size: 0.95rem;
     font-weight: 700;
-    color: $text;
+    color: $color-text;
     margin-bottom: 1.25rem;
   }
 
@@ -183,11 +183,11 @@
     display: flex;
     gap: 0.75rem;
     padding: 1rem 1.1rem;
-    background-color: $card;
-    border: 1px solid $border;
+    background-color: $color-bg-soft;
+    border: 1px solid $color-border;
     border-radius: 14px;
 
-    &:hover { border-color: rgba(var(--mint-rgb), 0.35); }
+    &:hover { border-color: rgba(var(--color-red-rgb), 0.35); }
   }
 
   &__dot {
@@ -195,7 +195,7 @@
     width: 9px;
     height: 9px;
     margin-top: 6px;
-    background: linear-gradient(135deg, var(--accent-2), $mint);
+    background: linear-gradient(135deg, var(--color-blue), $color-red);
     border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%;
   }
 
@@ -204,7 +204,7 @@
   &__role {
     font-size: 0.88rem;
     font-weight: 700;
-    color: $text;
+    color: $color-text;
     margin-bottom: 2px;
   }
 
@@ -213,13 +213,13 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: $text-3;
+    color: $color-muted-dim;
     margin-bottom: 6px;
   }
 
   &__desc {
     font-size: 0.8rem;
-    color: $text-2;
+    color: $color-muted;
     line-height: 1.6;
   }
 }

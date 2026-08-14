@@ -6,7 +6,7 @@
 // separate websites stacked on each other.
 .skills {
   position: relative;
-  color: $text;
+  color: $color-text;
 
   .container {
     position: relative;
@@ -27,7 +27,7 @@
 
   &__desc {
     font-size: 0.95rem;
-    color: $text-2;
+    color: $color-muted;
     line-height: 1.8;
     max-width: 320px;
   }
@@ -56,7 +56,7 @@
 
   .sec__title::after {
     content: "_";
-    color: $mint;
+    color: $color-red;
     margin-left: 3px;
     animation: blink 1s step-end infinite;
   }
@@ -66,8 +66,8 @@
   @include spotlight(0.16, 260px);
   position: relative;
   padding: 1.25rem 1.5rem;
-  background-color: $card;
-  border: 1px solid rgba(var(--mint-rgb), 0.28);
+  background-color: $color-bg-soft;
+  border: 1px solid rgba(var(--color-red-rgb), 0.28);
   border-radius: 10px;
   overflow: hidden;
 
@@ -78,7 +78,7 @@
     position: absolute;
     width: 11px;
     height: 11px;
-    border-color: $mint;
+    border-color: $color-red;
     opacity: 0.4;
     transition: opacity 0.2s, width 0.2s, height 0.2s;
     pointer-events: none;
@@ -99,9 +99,9 @@
   }
 
   &:hover {
-    border-color: $mint;
+    border-color: $color-red;
     transform: translateY(-2px);
-    box-shadow: 0 0 0 1px rgba(var(--mint-rgb), 0.2), 0 10px 28px rgba(var(--mint-rgb), 0.14);
+    box-shadow: 0 0 0 1px rgba(var(--color-red-rgb), 0.2), 0 10px 28px rgba(var(--color-red-rgb), 0.14);
 
     &::before, &::after {
       opacity: 1;
@@ -113,7 +113,7 @@
   &__name {
     font-size: 0.95rem;
     font-weight: 700;
-    color: $text;
+    color: $color-text;
     margin-bottom: 5px;
     display: flex;
     align-items: center;
@@ -124,8 +124,8 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--accent-2);
-      box-shadow: 0 0 6px var(--accent-2);
+      background: var(--color-blue);
+      box-shadow: 0 0 6px var(--color-blue);
       margin-right: 7px;
       flex-shrink: 0;
       animation: blink 2s ease-in-out infinite;
@@ -133,9 +133,9 @@
   }
 
   &__where {
-    font-family: $font-mono;
+    font-family: $font-body;
     font-size: 0.7rem;
-    color: $text-2;
+    color: $color-muted;
     letter-spacing: -0.01em;
 
     &::before {
@@ -143,27 +143,27 @@
       opacity: 0.5;
     }
 
-    span { color: $mint; font-weight: 600; }
+    span { color: $color-red; font-weight: 600; }
   }
 }
 
 .meth-tag {
   padding: 6px 13px;
-  background: $card;
-  border: 1px solid $border;
+  background: $color-bg-soft;
+  border: 1px solid $color-border;
   border-radius: 4px;
-  font-family: $font-mono;
+  font-family: $font-body;
   font-size: 0.72rem;
   font-weight: 500;
-  color: $text-2;
+  color: $color-muted;
   transition: all 0.2s;
 
   &::before { content: "["; opacity: 0.5; margin-right: 2px; }
   &::after  { content: "]"; opacity: 0.5; margin-left: 2px; }
 
   &:hover {
-    border-color: $mint;
-    color: $mint;
-    background: $mint-dim;
+    border-color: $color-red;
+    color: $color-red;
+    background: $color-red-dim;
   }
 }
