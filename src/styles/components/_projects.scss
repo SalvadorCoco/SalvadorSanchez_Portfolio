@@ -2,176 +2,253 @@
   @include atmosphere;
 }
 
-.proj {
-  &-grid {
+// `.proj-card` is the shared hover-target identity used by both the
+// featured spreads and the lighter "more projects" rows below (and by
+// the two small shared rules in pages/_project-page.scss —
+// `.proj-card:hover .proj-card__arrow` / `.plink--see-more` — which stay
+// untouched because this class name is still here). It carries no visual
+// styling of its own; `.proj-feature`/`.proj-mini` do that.
+.proj-card {
+  display: block;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// Featured case studies (Portal Municipal, Postas) — the two strongest
+// stories. Deliberately NOT a text-heavy breakdown: the full problem/
+// approach/result narrative already lives on the project's own
+// /proyectos/:slug page. This listing's job is to be a confident,
+// editorial teaser — title on top, then info and screenshot side by
+// side, so the screenshot reads as an illustration of the project
+// rather than a full-bleed photo taking over the section. No pin, no
+// ScrollTrigger — entrance reuses the site-wide `.fu`/`.v` fade-up
+// (IntersectionObserver, already global); the glow on the screenshot
+// reuses the exact tokens the Hero photo established.
+// ══════════════════════════════════════════════════════════════════
+.proj-features {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 6vw, 4.5rem);
+  margin-bottom: clamp(4.5rem, 9vw, 7rem);
+}
+
+.proj-feature {
+  &__head {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+
+  &__num {
+    font-family: $font-display;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1;
+    color: $color-red;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+
+    a:hover { color: $color-red; }
+  }
+
+  &__meta {
+    font-family: $font-body;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-muted;
+    margin-top: 0.5rem;
+
+    span { color: $color-red; margin: 0 2px; }
+  }
+
+  // Info (left) and screenshot (right) side by side — the screenshot
+  // carries more visual weight (it's the actual illustration of the
+  // work), the info column is a compact caption beside it, not an
+  // equal-sized box competing with it. `align-items: center` is the
+  // fix for a real layout bug found on review: the info column's
+  // content is always shorter than a 16:10 screenshot, and top-aligning
+  // both left a large dead void hanging under the text. Centering turns
+  // that height difference into balanced space above/below the text
+  // instead of an empty gap that only appears on one side. DOM order is
+  // text-first (foot, then shot), which also happens to land foot in
+  // the first grid column and shot in the second with no explicit
+  // `order` needed. Single column on mobile, text still first.
+  &__body {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: center;
+
+    @include media-breakpoint-down(lg) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  // Entrance reuses the exact same `.fu`/`.v` opacity+transform fade as
+  // every other reveal on the site (no custom clip-path timeline) — a
+  // slower custom transition on a tall element is easy to out-scroll
+  // before it finishes, which reads as "the image never shows up."
+  &__shot {
+    display: block;
+    overflow: hidden;
+    border-radius: $border-radius-lg;
+
+    .browser-mock {
+      filter:
+        drop-shadow(0 0 30px rgba(var(--color-red-rgb), var(--glow-red-opacity)))
+        drop-shadow(0 0 55px rgba(var(--color-blue-rgb), var(--glow-blue-opacity)));
+    }
+
+    &:hover .browser-mock {
+      transform: translateY(-4px);
+      transition: transform 0.3s $ease-out;
+    }
+  }
+
+  &__foot {
+    padding-top: 0.5rem;
+  }
+
+  // One editorial line — "how I build," not a case-study document. Same
+  // display-type-as-statement treatment the Hero's Craft state uses.
+  &__desc {
+    font-family: $font-display;
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+    font-weight: 500;
+    line-height: 1.4;
+    color: $color-text;
+    margin-bottom: 1.5rem;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  &__metric {
+    font-family: $font-display;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $color-text;
+
+    &::before {
+      content: "↑ ";
+      color: $color-red;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// More projects (EMOS, Estudio Jurídico) — real, working case studies,
+// told leaner. Deliberately lower visual weight than the two features
+// above: no problem/approach/result breakdown here (that's what their
+// own /proyectos/:slug page is for), just enough to recognize the work
+// and go deeper on click.
+// ══════════════════════════════════════════════════════════════════
+.proj-more {
+  padding-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid $color-border;
+
+  &__eyebrow {
+    font-family: $font-body;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-muted;
+    margin-bottom: 1.75rem;
+  }
+
+  &__list {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 2.5rem;
 
     @include media-breakpoint-down(md) {
       grid-template-columns: 1fr;
+      gap: 2rem;
     }
   }
+}
 
-  &-grid__full {
-    grid-column: span 2;
+.proj-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
-    @include media-breakpoint-down(md) {
-      grid-column: span 1;
-    }
+  &__visual .browser-mock {
+    transition: transform 0.3s $ease-out;
   }
 
-  &-card {
-    @include card-base;
-    @include spotlight;
-    padding: 2rem;
+  &:hover &__visual .browser-mock {
+    transform: translateY(-3px);
+  }
+
+  &__num {
+    font-family: $font-display;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $color-red;
+    margin-bottom: 0.4rem;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: $color-text;
     display: flex;
-    flex-direction: column;
-
-    &__cover {
-      margin: -2rem -2rem 1.5rem;
-      height: 220px;
-      border-radius: $border-radius-lg $border-radius-lg 0 0;
-      overflow: hidden;
-      background: $color-bg-soft;
-      border-bottom: 1px solid $color-border;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: top center;
-        display: block;
-        transition: transform 0.4s $ease-out;
-      }
-    }
-
-    &:hover &__cover img {
-      transform: scale(1.02);
-    }
-
-    &__placeholder {
-      margin: -2rem -2rem 1.5rem;
-      height: 220px;
-      border-radius: $border-radius-lg $border-radius-lg 0 0;
-      overflow: hidden;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-
-      &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
-        background-size: 20px 20px;
-      }
-    }
-
-    &__placeholder-num {
-      font-size: 7rem;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      color: rgba(255, 255, 255, 0.06);
-      line-height: 1;
-      letter-spacing: -0.04em;
-      user-select: none;
-      position: relative;
-      z-index: 1;
-      font-family: $font-display;
-    }
-
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07);
-      border-color: rgba(var(--color-red-rgb), 0.25);
-    }
-
-    &__num {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: $color-red;
-      margin-bottom: 0.6rem;
-    }
-
-    &__title {
-      font-family: $font-display;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-    }
-
-    &__desc {
-      font-size: 0.875rem;
-      color: $color-muted;
-      line-height: 1.75;
-      margin-bottom: 1.25rem;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-      min-height: calc(1.75em * 2);
-    }
-
-    &__detail-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: stretch;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-  }
-
-  &-detail {
-    padding: 0.9rem 1rem;
-    background: $color-bg-soft;
-    border-radius: 10px;
-    margin-bottom: 0.75rem;
-    display: flex;
-    flex-direction: column;
-
-    &__label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: $color-red-dark;
-      margin-bottom: 3px;
-    }
-
-    &__text {
-      font-size: 0.82rem;
-      color: $color-muted;
-      line-height: 1.65;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-      min-height: calc(1.65em * 3);
-    }
-  }
-
-  &-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 1rem 0 0;
-    margin-top: auto;
-    padding-top: 1rem;
-  }
-
-  &-links {
-    display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
-    margin-top: 0.75rem;
+    gap: 6px;
+    margin-bottom: 0.3rem;
   }
+
+  &__client {
+    font-family: $font-body;
+    font-size: 0.75rem;
+    color: $color-muted-dim;
+    margin-bottom: 0.6rem;
+  }
+
+  &__desc {
+    font-size: 0.85rem;
+    color: $color-muted;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    max-width: 42ch;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// Shared across both treatments (and reused verbatim, unmodified, by
+// the sidebar on /proyectos/:slug — see pages/_project-page.scss).
+// ══════════════════════════════════════════════════════════════════
+.proj-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 1rem 0;
+}
+
+.proj-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
 
 .tag {

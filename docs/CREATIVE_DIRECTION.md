@@ -52,7 +52,7 @@ The current codebase (see [PROJECT_ARCHITECTURE.md](PROJECT_ARCHITECTURE.md)) al
 
 ## Storytelling philosophy
 
-Content is revealed progressively through scroll, never dumped all at once. The hero is a three-state scroll story (see below). Each project is a small case study told in beats — problem, approach, result, tech — not a card with everything visible on load. The reader should feel like they're moving *through* a sequence someone composed, not scanning a page someone assembled.
+Content is revealed progressively through scroll, never dumped all at once. The hero is a three-state scroll story (see below). Each project's full case study — problem, approach, result, tech — lives on its own `/proyectos/:slug` page, told in full; the homepage listing itself stays a minimal, image-forward teaser (title, one line, a large screenshot, a CTA) rather than a duplicate of that page, after an earlier attempt at putting the full beat-by-beat breakdown on the listing read as a wall of text with the screenshot barely visible (see [ANIMATION_SYSTEM.md](ANIMATION_SYSTEM.md)). The reader should feel like they're moving *through* a sequence someone composed, not scanning a page someone assembled.
 
 This applies to language too: Spanish and English are treated as two designed versions of the same story, not literal translations. Spanish runs longer — type and layout must survive that without special-casing one language as the "real" one (see i18n notes in [PROJECT_ARCHITECTURE.md](PROJECT_ARCHITECTURE.md)).
 

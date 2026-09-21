@@ -70,11 +70,26 @@
     margin: 0 auto;
   }
 
-  // ── Variant: compact inside project card ──
-  &--card {
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
+  // ── Variant: Selected Work — featured case study ──
+  // `aspect-ratio` (not a fixed height) reserves the screenshot's space
+  // before the image loads, at any viewport width — no layout shift, and
+  // no dependency on the image finishing its request before anything
+  // else (a ScrollTrigger, a sibling layout) gets measured.
+  &--feature {
+    .browser-mock__screen {
+      aspect-ratio: 16 / 10;
+
+      img {
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+      }
+    }
+  }
+
+  // ── Variant: Selected Work — "more projects" row ──
+  &--mini {
+    border-radius: $border-radius;
 
     .browser-mock__bar {
       height: 28px;
@@ -95,7 +110,13 @@
     }
 
     .browser-mock__screen {
-      max-height: 220px;
+      aspect-ratio: 16 / 10;
+
+      img {
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+      }
     }
   }
 }

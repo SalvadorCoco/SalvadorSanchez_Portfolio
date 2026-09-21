@@ -16,13 +16,13 @@ Salvador Sanchez, a frontend developer in Río Cuarto, Córdoba, Argentina, need
 6. **No LAB/EXPERIMENTS section** in this release. Don't invent placeholder experiments to fill it.
 7. **No fabricated content, ever.** Four real projects, real metrics only where they exist (currently just Portal Municipal's `+9,000 weekly users`), no invented clients, no invented professional history.
 8. **Navbar CTA removed — Phase 3.** The old "Contratáme"/"Hire me" button is gone, replaced by the brief's "available for projects" status pill (matches the storyboard's nav mockup, which has no CTA button). Conversion now happens through the Contact section and the nav's own "Contact" link, not a persistent header button. Flagged for your review in case you'd rather it stayed.
-9. **Phase 5 (Selected Work) was attempted and reverted.** A cinematic rebuild of `Projects.astro` (featured Portal Municipal + lighter entries for the other three) was built, but a visual review found real layout/presentation problems during scroll that build checks and computed-style verification hadn't caught. Per user instruction, it was fully reverted rather than patched — `Projects.astro` is back to the original card grid. The design *intent* (Portal Municipal as proof-of-concept, consistent visual language across projects without identical choreography) is still believed correct; see [ANIMATION_SYSTEM.md](ANIMATION_SYSTEM.md) for what's still open before attempting the rebuild.
+9. **Phase 5 (Selected Work) — two attempts reverted/rejected, third attempt done, awaiting visual review.** The first cinematic rebuild (`ProjectFeatured`/`ProjectEntry`, stacked `ScrollTrigger` pins) broke visually and was reverted. The second attempt (sticky screenshot + per-beat problem/approach/result reveal) was rejected on visual review as a wall of text with the screenshot barely visible — explicit direction followed to research how real editorial sites (Nothin' by name) present project listings instead of continuing to guess. The third attempt moves the full problem/approach/result narrative entirely off the homepage listing — it stays exactly where it already lived, on each project's own `/proyectos/:slug` page — and replaces it with a minimal, image-forward teaser: number + title + client/year, one large full-width screenshot with a one-shot reveal, one editorial description line + metric (where one exists) + tags + links. **Portal Municipal AND Postas** (not just Portal Municipal) get this fuller treatment, per direct instruction, because those are the two strongest stories. EMOS and Estudio Jurídico render leaner below a "more projects" divider. Entrance is the sitewide `.fu` fade-up plus a one-shot `clip-path` wipe on the screenshot — no pin, no scrub, no sticky, no new JS at all. See [ANIMATION_SYSTEM.md](ANIMATION_SYSTEM.md) for the full breakdown.
 10. **Governing rule, added after the Phase 5 revert: "If an animation makes the content less usable, the animation is wrong."** Every scroll-driven state needs a real stable zone — wide enough that a user stopping anywhere in it sees fully-resolved, legible content — with transitions kept short and clearly the minority of the scroll range. This produced the Hero's current stable-zone timeline structure (three ~25%-wide stable holds, two ~12%-wide transitions) and must inform any future Selected Work rebuild from the start.
 
 ## Current technical decisions
 
-- Stack: Astro 4.16 (static), Bootstrap 5.3 (selective imports), SCSS, vanilla JS, GSAP 3.15 + ScrollTrigger (installed Phase 4; currently used only in `Hero.astro` — the Phase 5 attempt that would have made `Projects.astro` a second consumer was reverted).
-- No shared animation utilities exist right now. `rgbGlitchBurst()` was briefly extracted to `src/scripts/rgb-glitch.ts` during the Phase 5 attempt and moved back into `Hero.astro` when that was reverted — don't re-extract it (or build any other shared animation utility) until a second real consumer actually exists again, not just "for consistency" ahead of time.
+- Stack: Astro 4.16 (static), Bootstrap 5.3 (selective imports), SCSS, vanilla JS, GSAP 3.15 + ScrollTrigger (installed Phase 4; used **only** in `Hero.astro` — Projects, on its second attempt, deliberately uses none of it).
+- No shared animation utilities exist right now. `rgbGlitchBurst()` was briefly extracted to `src/scripts/rgb-glitch.ts` during the first Projects attempt and moved back into `Hero.astro` when that was reverted — don't re-extract it (or build any other shared animation utility) until a second real consumer actually exists again, not just "for consistency" ahead of time.
 - One `.astro` component per section, each with its own local `<script>` — no shared framework state, no global store.
 - Theming via SCSS variables aliasing CSS custom properties (`$color-red: var(--color-red)`, renamed from `$mint: var(--mint)` in Phase 2) — single dark `:root` block, no `[data-theme]` branching anywhere.
 - i18n via `data-i18n`/`data-es`/`data-en` DOM attributes swapped at runtime by `Layout.astro`'s inline script. **Fixed in Phase 2**: `src/i18n/translations.ts` is now the sole source of truth, injected into the client script via Astro's `define:vars` — there is no more duplicate copy to drift.
@@ -59,7 +59,7 @@ Salvador Sanchez, a frontend developer in Río Cuarto, Córdoba, Argentina, need
 4. One coherent visual system — every effect (RGB split, glitch, halftone, parallax) has a defined *reason* it's used where it's used, per [ANIMATION_SYSTEM.md](ANIMATION_SYSTEM.md)'s "what must not be overused" section.
 5. When adding a new one-off color/opacity/spacing value, check `_variables.scss` first — reuse or extend the token set there rather than hardcoding a literal, so [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) stays the actual source of truth.
 
-## Implementation phases (status: Phase 4 stabilized; Phase 5 attempted, reverted, awaiting rebuild)
+## Implementation phases (status: Phase 4 stabilized; Projects rebuilt, awaiting visual review; Stack done)
 
 ```
 0.  Audit current project                                       ✅ done
@@ -67,10 +67,10 @@ Salvador Sanchez, a frontend developer in Río Cuarto, Córdoba, Argentina, need
 2.  Design system: strip light theme, rename tokens, swap type  ✅ done
 3.  Navbar                                                       ✅ done
 4.  Hero — GSAP-pinned three-state timeline                     ✅ done (stabilized: stable-zone timeline structure)
-5.  Selected Work                                                ⏳ reverted after visual review; not approved, do not restart without being asked
-6.  Project transitions                                          ⏳ blocked on Phase 5
-7.  Stack
-8.  Experience
+5.  Selected Work — 2 featured entries + 2 leaner entries        ✅ done, third attempt, minimal/image-forward — awaiting your visual review
+6.  Project transitions                                          ⏳ not started
+7.  Stack — typographic list, replaced the leftover card grid    ✅ done
+8.  Experience                                                   ⏳ next candidate
 9.  Contact
 10. Responsive / mobile
 11. Accessibility

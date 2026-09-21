@@ -56,19 +56,20 @@ const methods = ["UI/UX Design", "Responsive", "Accesibilidad", "Performance", "
         </div>
       </div>
 
-      <div class="skills__grid fu d1">
-        {skills.map(({ name, where_es, where_en }) => (
-          <div class="sk-card">
-            <div class="sk-card__name">{name}</div>
-            <div
-              class="sk-card__where"
+      <ul class="skills__list fu d1">
+        {skills.map(({ name, where_es, where_en }, i) => (
+          <li class="sk-row">
+            <span class="sk-row__index">{String(i + 1).padStart(2, "0")}</span>
+            <span class="sk-row__name">{name}</span>
+            <span
+              class="sk-row__where"
               data-es-html={where_es}
               data-en-html={where_en}
               set:html={where_es}
             />
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   </div>
 </section>

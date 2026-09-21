@@ -32,14 +32,9 @@
     max-width: 320px;
   }
 
-  &__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-
-    @include media-breakpoint-down(sm) {
-      grid-template-columns: 1fr;
-    }
+  &__list {
+    list-style: none;
+    border-top: 1px solid $color-border;
   }
 
   &__methods {
@@ -62,88 +57,68 @@
   }
 }
 
-.sk-card {
-  @include spotlight(0.16, 260px);
-  position: relative;
-  padding: 1.25rem 1.5rem;
-  background-color: $color-bg-soft;
-  border: 1px solid rgba(var(--color-red-rgb), 0.28);
-  border-radius: 10px;
-  overflow: hidden;
+// Typographic list, not a card grid: each row is a line of type. Hover/
+// focus only shifts color and a hairline indent — no elevation, no
+// bordered box — so the "expand/highlight" interaction the brief asks
+// for reads as editorial emphasis, not a UI card reacting to a cursor.
+// Everything here (name, where-used) is visible by default; hover only
+// adds emphasis, never gates content — the row works identically on
+// touch devices with no hover at all.
+.sk-row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  align-items: baseline;
+  column-gap: 1.5rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid $color-border;
+  transition: background-color 0.2s, padding-left 0.2s;
 
-  // HUD corner brackets — always faintly on, snap bright on hover
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    width: 11px;
-    height: 11px;
-    border-color: $color-red;
-    opacity: 0.4;
-    transition: opacity 0.2s, width 0.2s, height 0.2s;
-    pointer-events: none;
+  @include media-breakpoint-down(sm) {
+    grid-template-columns: 2rem 1fr;
+    row-gap: 0.3rem;
   }
 
-  &::before {
-    top: 6px;
-    left: 6px;
-    border-top: 2px solid;
-    border-left: 2px solid;
-  }
+  &:hover,
+  &:focus-within {
+    padding-left: 0.75rem;
+    background: rgba(var(--color-red-rgb), 0.05);
 
-  &::after {
-    bottom: 6px;
-    right: 6px;
-    border-bottom: 2px solid;
-    border-right: 2px solid;
-  }
-
-  &:hover {
-    border-color: $color-red;
-    transform: translateY(-2px);
-    box-shadow: 0 0 0 1px rgba(var(--color-red-rgb), 0.2), 0 10px 28px rgba(var(--color-red-rgb), 0.14);
-
-    &::before, &::after {
-      opacity: 1;
-      width: 16px;
-      height: 16px;
+    .sk-row__index,
+    .sk-row__name {
+      color: $color-red;
     }
+  }
+
+  &__index {
+    font-family: $font-body;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: $color-muted-dim;
+    transition: color 0.2s;
   }
 
   &__name {
-    font-size: 0.95rem;
-    font-weight: 700;
+    font-family: $font-display;
+    font-size: clamp(1.35rem, 2.3vw, 1.85rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
     color: $color-text;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-
-    &::before {
-      content: "";
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--color-blue);
-      box-shadow: 0 0 6px var(--color-blue);
-      margin-right: 7px;
-      flex-shrink: 0;
-      animation: blink 2s ease-in-out infinite;
-    }
+    transition: color 0.2s;
   }
 
   &__where {
     font-family: $font-body;
-    font-size: 0.7rem;
+    font-size: 0.76rem;
     color: $color-muted;
+    text-align: right;
     letter-spacing: -0.01em;
 
-    &::before {
-      content: "// ";
-      opacity: 0.5;
-    }
-
     span { color: $color-red; font-weight: 600; }
+
+    @include media-breakpoint-down(sm) {
+      grid-column: 2 / -1;
+      text-align: left;
+    }
   }
 }
 

@@ -7,6 +7,16 @@ function getDomain(links: { href: string; type: string }[]): string {
   try { return new URL(live.href).hostname.replace("www.", ""); }
   catch { return ""; }
 }
+
+// The two strongest case studies (Portal Municipal, Postas) lead, image-
+// forward and minimal-text — the full problem/approach/result narrative
+// already lives on their own /proyectos/:slug page, so the listing's job
+// is to be a confident, editorial teaser, not a duplicate of that page.
+// The other two are real, working links too, just told leaner. Order
+// stays fixed per /docs/CLAUDE_CONTEXT.md; this only changes how much
+// space each gets.
+const featured = projects.slice(0, 2);
+const rest = projects.slice(2);
 ---
 
 <section class="section projects" id="proyectos">
@@ -16,94 +26,111 @@ function getDomain(links: { href: string; type: string }[]): string {
       <div class="sec__title" data-i18n-html="proj_title">Trabajo real para<br />clientes reales.</div>
     </div>
 
-    <div class="proj-grid">
-      {projects.map(({ slug, num, title, desc, desc_en, problem, problem_en, solution, solution_en, metric, metric_en, demo, tags, links, private: isPrivate, full, cover }, i) => {
+    <div class="proj-features">
+      {featured.map(({
+        slug, num, title, client, year, desc, desc_en,
+        metric, metric_en, demo, tags, links, private: isPrivate, cover,
+      }) => {
         const domain = getDomain(links);
+        const href = `/proyectos/${slug}`;
         return (
-          <a
-            href={`/proyectos/${slug}`}
-            class={`proj-card fu${full ? " proj-grid__full" : ""}${i > 0 ? ` d${Math.min(i, 3)}` : ""}`}
-          >
-            {cover ? (
-              <div class="proj-card__cover">
-                <div class="browser-mock browser-mock--card">
-                  <div class="browser-mock__bar">
-                    <div class="browser-mock__dots">
-                      <span></span><span></span><span></span>
+          // Three explicit link points (shot, title, CTA), not one link
+          // wrapping everything — the badges below aren't links, and a
+          // single anchor around the whole module is an awkward target.
+          <article class="proj-card proj-feature">
+            <div class="proj-feature__head fu">
+              <span class="proj-feature__num" aria-hidden="true">{num}</span>
+              <div>
+                <h3 class="proj-feature__title"><a href={href}>{title}</a></h3>
+                <div class="proj-feature__meta">{client} <span>·</span> {year}</div>
+              </div>
+            </div>
+
+            <div class="proj-feature__body">
+              <div class="proj-feature__foot fu">
+                <p class="proj-feature__desc" data-es={desc} data-en={desc_en || desc}>{desc}</p>
+
+                <div class="proj-feature__row">
+                  {metric && (
+                    <div class="proj-feature__metric" data-es={metric} data-en={metric_en || metric}>
+                      {metric}
                     </div>
+                  )}
+                  <div class="proj-tags">
+                    {tags.map((tag) => <span class="tag">{tag}</span>)}
+                  </div>
+                </div>
+
+                <div class="proj-links">
+                  {isPrivate ? (
+                    <span class="plink plink--priv" data-i18n="proj_private">🔒 Repositorio privado</span>
+                  ) : (
+                    links.slice(0, 1).map(({ label }) => <span class="plink plink--live">{label}</span>)
+                  )}
+                  {demo && (
+                    <span
+                      class={`plink plink--demo${demo.pending ? " plink--pending" : ""}`}
+                      data-es={`🎥 ${demo.label}${demo.pending ? " (próximamente)" : ""}`}
+                      data-en={`🎥 ${demo.label_en || demo.label}${demo.pending ? " (coming soon)" : ""}`}
+                    >🎥 {demo.label}{demo.pending ? " (próximamente)" : ""}</span>
+                  )}
+                  <a href={href} class="plink plink--see-more" data-i18n="proj_see_more">Ver caso completo →</a>
+                </div>
+              </div>
+
+              <a href={href} class="proj-feature__shot fu" aria-label={title}>
+                <div class="browser-mock browser-mock--feature">
+                  <div class="browser-mock__bar">
+                    <div class="browser-mock__dots"><span></span><span></span><span></span></div>
                     {domain && <div class="browser-mock__url">{domain}</div>}
                   </div>
                   <div class="browser-mock__screen">
-                    <img src={cover} alt={title} loading="lazy" />
+                    <img src={cover} alt={title} loading="lazy" width="1280" height="800" />
+                  </div>
+                </div>
+              </a>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <div class="proj-more">
+      <div class="proj-more__eyebrow fu" data-i18n="proj_more">Más proyectos</div>
+      <div class="proj-more__list">
+        {rest.map(({ slug, num, title, client, desc, desc_en, tags, links, private: isPrivate, cover }) => {
+          const domain = getDomain(links);
+          return (
+            <a href={`/proyectos/${slug}`} class="proj-card proj-mini fu">
+              <div class="proj-mini__visual">
+                <div class="browser-mock browser-mock--mini">
+                  <div class="browser-mock__bar">
+                    <div class="browser-mock__dots"><span></span><span></span><span></span></div>
+                    {domain && <div class="browser-mock__url">{domain}</div>}
+                  </div>
+                  <div class="browser-mock__screen">
+                    <img src={cover} alt={title} loading="lazy" width="1280" height="800" />
                   </div>
                 </div>
               </div>
-            ) : (
-              <div class="proj-card__placeholder" aria-hidden="true">
-                <span class="proj-card__placeholder-num">{num}</span>
+              <div class="proj-mini__text">
+                <div class="proj-mini__num">{num}</div>
+                <div class="proj-mini__title">
+                  {title}
+                  <span class="proj-card__arrow">→</span>
+                </div>
+                <div class="proj-mini__client">{client}</div>
+                <p class="proj-mini__desc" data-es={desc} data-en={desc_en || desc}>{desc}</p>
+                <div class="proj-tags">
+                  {isPrivate && <span class="plink plink--priv" data-i18n="proj_private">🔒 Repositorio privado</span>}
+                  {tags.map((tag) => <span class="tag">{tag}</span>)}
+                </div>
+                <span class="plink plink--see-more" data-i18n="proj_see_more">Ver caso completo →</span>
               </div>
-            )}
-
-            <div class="proj-card__num">
-              {num} · <span data-i18n="proj_unit">proyecto</span>
-            </div>
-            <div class="proj-card__title">
-              {title}
-              <span class="proj-card__arrow">→</span>
-            </div>
-            <div class="proj-card__desc" data-es={desc} data-en={desc_en || desc}>{desc}</div>
-
-            {full ? (
-              <div class="proj-card__detail-grid">
-                <div class="proj-detail">
-                  <div class="proj-detail__label" data-i18n="proj_problem">Problema</div>
-                  <div class="proj-detail__text" data-es={problem} data-en={problem_en || problem}>{problem}</div>
-                </div>
-                <div class="proj-detail">
-                  <div class="proj-detail__label" data-i18n="proj_solution">Solución</div>
-                  <div class="proj-detail__text" data-es={solution} data-en={solution_en || solution}>{solution}</div>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div class="proj-detail">
-                  <div class="proj-detail__label" data-i18n="proj_problem">Problema</div>
-                  <div class="proj-detail__text" data-es={problem} data-en={problem_en || problem}>{problem}</div>
-                </div>
-                <div class="proj-detail">
-                  <div class="proj-detail__label" data-i18n="proj_solution">Solución</div>
-                  <div class="proj-detail__text" data-es={solution} data-en={solution_en || solution}>{solution}</div>
-                </div>
-              </>
-            )}
-
-            <div class="proj-tags">
-              {metric && (
-                <span class="tag tag--metric" data-es={`↑ ${metric}`} data-en={`↑ ${metric_en || metric}`}>↑ {metric}</span>
-              )}
-              {tags.map(tag => <span class="tag">{tag}</span>)}
-            </div>
-
-            <div class="proj-links">
-              {isPrivate ? (
-                <span class="plink plink--priv" data-i18n="proj_private">🔒 Repositorio privado</span>
-              ) : (
-                links.slice(0, 1).map(({ label }) => (
-                  <span class="plink plink--live">{label}</span>
-                ))
-              )}
-              {demo && (
-                <span
-                  class={`plink plink--demo${demo.pending ? " plink--pending" : ""}`}
-                  data-es={`🎥 ${demo.label}${demo.pending ? " (próximamente)" : ""}`}
-                  data-en={`🎥 ${demo.label_en || demo.label}${demo.pending ? " (coming soon)" : ""}`}
-                >🎥 {demo.label}{demo.pending ? " (próximamente)" : ""}</span>
-              )}
-              <span class="plink plink--see-more" data-i18n="proj_see_more">Ver caso completo →</span>
-            </div>
-          </a>
-        );
-      })}
+            </a>
+          );
+        })}
+      </div>
     </div>
   </div>
 </section>

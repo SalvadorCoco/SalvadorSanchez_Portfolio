@@ -15,6 +15,7 @@ const T = {
     proj_solution: "Solución",
     proj_see_more: "Ver caso completo →",
     proj_private: "🔒 Repositorio privado",
+    proj_more: "Más proyectos",
     // Skills
     sk_eyebrow: "stack técnico",
     sk_title: "Las herramientas que uso.",
@@ -84,6 +85,7 @@ const T = {
     proj_solution: "Solution",
     proj_see_more: "See full case →",
     proj_private: "🔒 Private repository",
+    proj_more: "More projects",
     // Skills
     sk_eyebrow: "tech stack",
     sk_title: "The tools I use.",
