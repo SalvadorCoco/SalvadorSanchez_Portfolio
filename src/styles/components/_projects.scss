@@ -17,18 +17,24 @@
 // stories. Deliberately NOT a text-heavy breakdown: the full problem/
 // approach/result narrative already lives on the project's own
 // /proyectos/:slug page. This listing's job is to be a confident,
-// editorial teaser — title on top, then info and screenshot side by
-// side, so the screenshot reads as an illustration of the project
-// rather than a full-bleed photo taking over the section. No pin, no
-// ScrollTrigger — entrance reuses the site-wide `.fu`/`.v` fade-up
-// (IntersectionObserver, already global); the glow on the screenshot
-// reuses the exact tokens the Hero photo established.
+// editorial teaser — title on top, info and screenshot side by side,
+// CTA below.
+//
+// Static-first, on purpose: nothing here uses `.fu`/`.v` or any other
+// scroll-reveal. Everything is visible in the very first paint, with no
+// JS, no GSAP, no IntersectionObserver involved — a real bug found on
+// review is that content gated behind `.fu` is permanently invisible
+// (`opacity: 0`, forever) if the class-adding script never runs. This
+// section's own layout never depends on that mechanism working. If a
+// simple, optional entrance animation gets added back later, it must
+// keep this file's static state as a fully valid fallback — not the
+// other way around.
 // ══════════════════════════════════════════════════════════════════
 .proj-features {
   display: flex;
   flex-direction: column;
-  gap: clamp(3rem, 6vw, 4.5rem);
-  margin-bottom: clamp(4.5rem, 9vw, 7rem);
+  gap: clamp(3.5rem, 6vw, 5rem);
+  margin-bottom: clamp(3.5rem, 7vw, 5.5rem);
 }
 
 .proj-feature {
@@ -36,7 +42,7 @@
     display: flex;
     align-items: baseline;
     gap: 1.25rem;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.5rem;
   }
 
   &__num {
@@ -70,34 +76,46 @@
     span { color: $color-red; margin: 0 2px; }
   }
 
-  // Info (left) and screenshot (right) side by side — the screenshot
-  // carries more visual weight (it's the actual illustration of the
-  // work), the info column is a compact caption beside it, not an
-  // equal-sized box competing with it. `align-items: center` is the
-  // fix for a real layout bug found on review: the info column's
-  // content is always shorter than a 16:10 screenshot, and top-aligning
-  // both left a large dead void hanging under the text. Centering turns
-  // that height difference into balanced space above/below the text
-  // instead of an empty gap that only appears on one side. DOM order is
-  // text-first (foot, then shot), which also happens to land foot in
-  // the first grid column and shot in the second with no explicit
-  // `order` needed. Single column on mobile, text still first.
+  // Info (left) and screenshot (right) side by side on Portal Municipal;
+  // `--reverse` (Postas) flips which side each lands on via `order` on
+  // explicit CSS Grid columns — no `direction: rtl`. Source order always
+  // stays info-then-shot (reading order, a11y), only the visual position
+  // swaps. `align-items: center` keeps the (always shorter) info column
+  // centered against the screenshot instead of stranded at the top with
+  // dead space below it. Single column on mobile for both variants —
+  // alternating composition is a desktop reading-rhythm device; on a
+  // single column it would just make the reading order inconsistent
+  // between the two projects for no benefit.
   &__body {
     display: grid;
     grid-template-columns: 0.8fr 1.2fr;
-    gap: clamp(2rem, 4vw, 3.5rem);
+    gap: clamp(2rem, 4vw, 3rem);
     align-items: center;
 
     @include media-breakpoint-down(lg) {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: 1.5rem;
     }
   }
 
-  // Entrance reuses the exact same `.fu`/`.v` opacity+transform fade as
-  // every other reveal on the site (no custom clip-path timeline) — a
-  // slower custom transition on a tall element is easy to out-scroll
-  // before it finishes, which reads as "the image never shows up."
+  &--reverse .proj-feature__body {
+    grid-template-columns: 1.2fr 0.8fr;
+
+    @include media-breakpoint-down(lg) {
+      grid-template-columns: 1fr;
+    }
+
+    .proj-feature__info { order: 2; }
+    .proj-feature__shot { order: 1; }
+
+    @include media-breakpoint-down(lg) {
+      .proj-feature__info,
+      .proj-feature__shot {
+        order: initial;
+      }
+    }
+  }
+
   &__shot {
     display: block;
     overflow: hidden;
@@ -115,8 +133,11 @@
     }
   }
 
-  &__foot {
-    padding-top: 0.5rem;
+  // A thin accent rule anchors the text as its own designed block instead
+  // of loose copy floating beside the screenshot.
+  &__info {
+    padding: 0.25rem 0 0.25rem 1.25rem;
+    border-left: 2px solid $color-border;
   }
 
   // One editorial line — "how I build," not a case-study document. Same
@@ -127,7 +148,7 @@
     font-weight: 500;
     line-height: 1.4;
     color: $color-text;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
   }
 
   &__row {
@@ -135,7 +156,6 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;
-    margin-bottom: 1.25rem;
   }
 
   &__metric {
@@ -149,14 +169,26 @@
       color: $color-red;
     }
   }
+
+  // The CTA/link row: kept out of `.proj-feature__body` so it lands
+  // after the screenshot in source order (see Projects.astro) — on
+  // mobile that reads num → title → meta → desc → datos → imagen → CTA.
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 1.5rem;
+  }
 }
 
 // ══════════════════════════════════════════════════════════════════
-// More projects (EMOS, Estudio Jurídico) — real, working case studies,
-// told leaner. Deliberately lower visual weight than the two features
-// above: no problem/approach/result breakdown here (that's what their
-// own /proyectos/:slug page is for), just enough to recognize the work
-// and go deeper on click.
+// More projects — real, working case studies, told leaner and compact
+// on purpose: no problem/approach/result breakdown here (that's what
+// each project's own /proyectos/:slug page is for), just enough to
+// recognize the work and go deeper on click. Three columns rather than
+// two at desktop width so a growing list (currently five) settles into
+// tighter, more even rows instead of one mostly-empty trailing row.
 // ══════════════════════════════════════════════════════════════════
 .proj-more {
   padding-top: clamp(2rem, 4vw, 3rem);
@@ -174,12 +206,16 @@
 
   &__list {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem 2.5rem;
 
-    @include media-breakpoint-down(md) {
-      grid-template-columns: 1fr;
+    @include media-breakpoint-down(lg) {
+      grid-template-columns: 1fr 1fr;
       gap: 2rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+      grid-template-columns: 1fr;
     }
   }
 }

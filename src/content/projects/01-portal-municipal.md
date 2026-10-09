@@ -1,0 +1,33 @@
+---
+slug: "portal-municipal"
+num: "01"
+title: "Portal Municipal"
+client: "Municipalidad de Río Cuarto"
+desc: "Sitio institucional oficial de la Municipalidad. Acceso ciudadano a trámites, noticias y servicios."
+desc_en: "Official institutional website of the Municipality. Citizen access to procedures, news and services."
+problem: "El portal anterior no tenía diseño responsive y concentraba decenas de accesos sin jerarquía visual: el vecino tenía que escanear una grilla enorme de botones para encontrar un trámite. Sin priorización entre lo informativo y lo transaccional."
+problem_en: "The previous portal had no responsive design and packed dozens of entry points with no visual hierarchy: citizens had to scan a huge grid of buttons to find a procedure. No priority between informational and transactional content."
+solution: "Rediseño completo con navegación jerarquizada, buscador integrado y asistente virtual. Los trámites más usados pasaron al primer scroll. Layout responsive sobre arquitectura de componentes en Next.js."
+solution_en: "Full redesign with hierarchical navigation, integrated search and a virtual assistant. The most-used procedures moved to the first scroll. Responsive layout built on a Next.js component architecture."
+metric: "+9.000 usuarios semanales"
+metric_en: "+9,000 weekly users"
+context: "La Municipalidad de Río Cuarto necesitaba modernizar su presencia digital. El portal anterior era lento, no funcionaba en celular y los ciudadanos abandonaban antes de completar sus trámites. Trabajé junto al equipo interno de sistemas."
+context_en: "The Municipality of Río Cuarto needed to modernize its digital presence. The previous portal was slow, didn't work on mobile, and citizens would abandon before completing their procedures. I worked alongside the internal systems team."
+process: "Relevé las secciones más visitadas y los puntos de abandono. Rediseñé la arquitectura de información priorizando los servicios más usados. El buscador y el asistente virtual fueron desarrollados por el equipo de back-end; yo me encargué del diseño y la integración del frontend."
+process_en: "I surveyed the most visited sections and drop-off points. I redesigned the information architecture prioritizing the most-used services. The search engine and virtual assistant were built by the back-end team; I handled the design and frontend integration."
+result: "Un portal que cualquier vecino puede usar desde el celular. Navegación clara, tiempos de carga reducidos y acceso directo a los trámites más frecuentes desde la home."
+result_en: "A portal any citizen can use from their phone. Clear navigation, reduced load times, and direct access to the most frequent procedures from the homepage."
+tags: ["Next.js", "SCSS", "Docker", "SSR"]
+links:
+  - href: "https://www.riocuarto.gob.ar/"
+    label: "↗ Ver en vivo"
+    type: "live"
+  - href: "https://github.com/awsgobriocuarto/gobierno-rio-cuarto-site"
+    label: "GitHub"
+    type: "gh"
+cover: "/images/projects/portal-municipal/01.webp"
+screenshots:
+  - "/images/projects/portal-municipal/01.webp"
+  - "/images/projects/portal-municipal/02.webp"
+  - "/images/projects/portal-municipal/03.webp"
+---

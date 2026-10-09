@@ -1,11 +1,16 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
-import projects from "../../data/projects";
+import { getCollection } from "astro:content";
 import "../../styles/main.scss";
 
-export function getStaticPaths() {
-  return projects.map((p) => ({ params: { slug: p.slug } }));
+const entries = await getCollection("projects");
+entries.sort((a, b) => a.id.localeCompare(b.id));
+const projects = entries.map((entry) => ({ slug: entry.slug, ...entry.data }));
+
+export async function getStaticPaths() {
+  const entries = await getCollection("projects");
+  return entries.map((entry) => ({ params: { slug: entry.slug } }));
 }
 
 const { slug } = Astro.params;
@@ -38,7 +43,6 @@ const domain = liveUrl
       <div class="container">
         <div class="proj-page__eyebrow">
           <span class="sec__eyebrow">{project.num} · <span data-i18n="proj_unit">proyecto</span></span>
-          <span class="proj-page__year">{project.year}</span>
         </div>
         <h1 class="proj-page__title">{project.title}</h1>
         <p class="proj-page__client">{project.client}</p>
@@ -123,11 +127,6 @@ const domain = liveUrl
             <div class="proj-page__sidebar-item">
               <div class="proj-page__sidebar-label" data-i18n="proj_client">Cliente</div>
               <div class="proj-page__sidebar-value">{project.client}</div>
-            </div>
-
-            <div class="proj-page__sidebar-item">
-              <div class="proj-page__sidebar-label" data-i18n="proj_year">Año</div>
-              <div class="proj-page__sidebar-value">{project.year}</div>
             </div>
 
             <div class="proj-page__sidebar-item">

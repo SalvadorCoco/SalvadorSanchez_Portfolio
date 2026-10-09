@@ -1,0 +1,31 @@
+---
+slug: "emos"
+num: "03"
+title: "EMOS · Sitio Institucional"
+client: "Empresa Municipal de Obras y Servicios · Río Cuarto"
+desc: "Comunicación institucional y acceso a servicios para vecinos de Río Cuarto."
+desc_en: "Institutional communication and service access for citizens of Río Cuarto."
+problem: "Sitio sin adaptación mobile, con los accesos a trámites mezclados entre contenido informativo. Pagar una factura o hacer un reclamo requería navegar entre secciones sin relación clara."
+problem_en: "Site with no mobile adaptation, with procedure access points mixed in among informational content. Paying a bill or filing a complaint meant navigating between sections with no clear relationship."
+solution: "Plataforma mobile-first en Next.js con los servicios (pago online, reclamos, cedulón digital) como eje de la página. Contenido institucional en segundo plano."
+solution_en: "Mobile-first Next.js platform with the services (online payment, complaints, digital cedulón) as the page's focal point. Institutional content takes a back seat."
+context: "EMOS es la empresa municipal que gestiona obras y servicios públicos de Río Cuarto. No tenían presencia online: los vecinos dependían de llamados telefónicos para cualquier consulta. El objetivo era simple: llevar esa información a la web de forma clara."
+context_en: "EMOS is the municipal company that manages public works and services in Río Cuarto. They had no online presence: citizens depended on phone calls for any inquiry. The goal was simple: put that information on the web in a clear way."
+process: "Definí las secciones clave junto al cliente: servicios, novedades, contacto y transparencia. Diseñé una estructura mobile-first porque la mayoría de los vecinos acceden desde el celular. Puse foco especial en la legibilidad y en reducir la cantidad de clics para llegar a la información."
+process_en: "I defined the key sections with the client: services, news, contact and transparency. I designed a mobile-first structure because most citizens access from their phones. Special focus on readability and reducing the number of clicks to reach information."
+result: "Sitio institucional limpio que permite a cualquier vecino conocer los servicios, leer novedades y contactar a la empresa desde cualquier dispositivo."
+result_en: "A clean institutional site that lets any citizen learn about services, read news and contact the company from any device."
+tags: ["Next.js", "SCSS", "JavaScript", "Docker"]
+links:
+  - href: "https://emos-site.vercel.app"
+    label: "↗ Ver en vivo"
+    type: "live"
+  - href: "https://github.com/gobderiocuarto/emos-site"
+    label: "GitHub"
+    type: "gh"
+cover: "/images/projects/emos/01.webp"
+screenshots:
+  - "/images/projects/emos/01.webp"
+  - "/images/projects/emos/02.webp"
+  - "/images/projects/emos/03.webp"
+---

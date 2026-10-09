@@ -1,5 +1,5 @@
 ---
-import projects from "../data/projects";
+import { getCollection } from "astro:content";
 
 function getDomain(links: { href: string; type: string }[]): string {
   const live = links.find((l) => l.type === "live");
@@ -7,6 +7,11 @@ function getDomain(links: { href: string; type: string }[]): string {
   try { return new URL(live.href).hostname.replace("www.", ""); }
   catch { return ""; }
 }
+
+// File name prefixes (01-, 02-, ...) in src/content/projects/ define the order.
+const entries = await getCollection("projects");
+entries.sort((a, b) => a.id.localeCompare(b.id));
+const projects = entries.map((entry) => ({ slug: entry.slug, ...entry.data }));
 
 // The two strongest case studies (Portal Municipal, Postas) lead, image-
 // forward and minimal-text — the full problem/approach/result narrative
@@ -21,33 +26,36 @@ const rest = projects.slice(2);
 
 <section class="section projects" id="proyectos">
   <div class="container">
-    <div class="sec__head fu">
+    <div class="sec__head">
       <div class="sec__eyebrow" data-i18n="proj_eyebrow">proyectos</div>
       <div class="sec__title" data-i18n-html="proj_title">Trabajo real para<br />clientes reales.</div>
     </div>
 
     <div class="proj-features">
       {featured.map(({
-        slug, num, title, client, year, desc, desc_en,
+        slug, num, title, client, desc, desc_en,
         metric, metric_en, demo, tags, links, private: isPrivate, cover,
-      }) => {
+      }, i) => {
         const domain = getDomain(links);
         const href = `/proyectos/${slug}`;
         return (
           // Three explicit link points (shot, title, CTA), not one link
           // wrapping everything — the badges below aren't links, and a
           // single anchor around the whole module is an awkward target.
-          <article class="proj-card proj-feature">
-            <div class="proj-feature__head fu">
+          // No `.fu`/scroll-reveal here on purpose: everything below is
+          // visible in the initial render, full stop — see the note atop
+          // _projects.scss for why.
+          <article class={`proj-card proj-feature${i === 1 ? " proj-feature--reverse" : ""}`}>
+            <div class="proj-feature__head">
               <span class="proj-feature__num" aria-hidden="true">{num}</span>
               <div>
                 <h3 class="proj-feature__title"><a href={href}>{title}</a></h3>
-                <div class="proj-feature__meta">{client} <span>·</span> {year}</div>
+                <div class="proj-feature__meta">{client}</div>
               </div>
             </div>
 
             <div class="proj-feature__body">
-              <div class="proj-feature__foot fu">
+              <div class="proj-feature__info">
                 <p class="proj-feature__desc" data-es={desc} data-en={desc_en || desc}>{desc}</p>
 
                 <div class="proj-feature__row">
@@ -60,35 +68,46 @@ const rest = projects.slice(2);
                     {tags.map((tag) => <span class="tag">{tag}</span>)}
                   </div>
                 </div>
-
-                <div class="proj-links">
-                  {isPrivate ? (
-                    <span class="plink plink--priv" data-i18n="proj_private">🔒 Repositorio privado</span>
-                  ) : (
-                    links.slice(0, 1).map(({ label }) => <span class="plink plink--live">{label}</span>)
-                  )}
-                  {demo && (
-                    <span
-                      class={`plink plink--demo${demo.pending ? " plink--pending" : ""}`}
-                      data-es={`🎥 ${demo.label}${demo.pending ? " (próximamente)" : ""}`}
-                      data-en={`🎥 ${demo.label_en || demo.label}${demo.pending ? " (coming soon)" : ""}`}
-                    >🎥 {demo.label}{demo.pending ? " (próximamente)" : ""}</span>
-                  )}
-                  <a href={href} class="plink plink--see-more" data-i18n="proj_see_more">Ver caso completo →</a>
-                </div>
               </div>
 
-              <a href={href} class="proj-feature__shot fu" aria-label={title}>
+              <a href={href} class="proj-feature__shot" aria-label={title}>
                 <div class="browser-mock browser-mock--feature">
                   <div class="browser-mock__bar">
                     <div class="browser-mock__dots"><span></span><span></span><span></span></div>
                     {domain && <div class="browser-mock__url">{domain}</div>}
                   </div>
                   <div class="browser-mock__screen">
-                    <img src={cover} alt={title} loading="lazy" width="1280" height="800" />
+                    <img
+                      src={cover}
+                      alt={title}
+                      loading="lazy"
+                      width="1280"
+                      height="800"
+                      onerror="this.onerror=null;this.closest('.browser-mock__screen').classList.add('is-missing');this.remove()"
+                    />
                   </div>
                 </div>
               </a>
+            </div>
+
+            {/* Kept out of `.proj-feature__body` so it lands after the
+               screenshot in source order — on mobile that reads num →
+               title → meta → desc → datos → imagen → CTA, matching how
+               the rest of the page's content order already works. */}
+            <div class="proj-feature__actions">
+              {isPrivate ? (
+                <span class="plink plink--priv" data-i18n="proj_private">🔒 Repositorio privado</span>
+              ) : (
+                links.slice(0, 1).map(({ label }) => <span class="plink plink--live">{label}</span>)
+              )}
+              {demo && (
+                <span
+                  class={`plink plink--demo${demo.pending ? " plink--pending" : ""}`}
+                  data-es={`🎥 ${demo.label}${demo.pending ? " (próximamente)" : ""}`}
+                  data-en={`🎥 ${demo.label_en || demo.label}${demo.pending ? " (coming soon)" : ""}`}
+                >🎥 {demo.label}{demo.pending ? " (próximamente)" : ""}</span>
+              )}
+              <a href={href} class="plink plink--see-more" data-i18n="proj_see_more">Ver caso completo →</a>
             </div>
           </article>
         );
@@ -96,12 +115,12 @@ const rest = projects.slice(2);
     </div>
 
     <div class="proj-more">
-      <div class="proj-more__eyebrow fu" data-i18n="proj_more">Más proyectos</div>
+      <div class="proj-more__eyebrow" data-i18n="proj_more">Más proyectos</div>
       <div class="proj-more__list">
         {rest.map(({ slug, num, title, client, desc, desc_en, tags, links, private: isPrivate, cover }) => {
           const domain = getDomain(links);
           return (
-            <a href={`/proyectos/${slug}`} class="proj-card proj-mini fu">
+            <a href={`/proyectos/${slug}`} class="proj-card proj-mini">
               <div class="proj-mini__visual">
                 <div class="browser-mock browser-mock--mini">
                   <div class="browser-mock__bar">
@@ -109,7 +128,14 @@ const rest = projects.slice(2);
                     {domain && <div class="browser-mock__url">{domain}</div>}
                   </div>
                   <div class="browser-mock__screen">
-                    <img src={cover} alt={title} loading="lazy" width="1280" height="800" />
+                    <img
+                      src={cover}
+                      alt={title}
+                      loading="lazy"
+                      width="1280"
+                      height="800"
+                      onerror="this.onerror=null;this.closest('.browser-mock__screen').classList.add('is-missing');this.remove()"
+                    />
                   </div>
                 </div>
               </div>

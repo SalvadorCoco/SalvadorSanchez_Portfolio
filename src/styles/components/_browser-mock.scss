@@ -56,11 +56,33 @@
   &__screen {
     overflow: hidden;
     background: $color-bg-soft;
+    position: relative;
 
     img {
       width: 100%;
       height: auto;
       display: block;
+    }
+
+    // Fallback for a project whose screenshot file hasn't been added yet
+    // (`onerror` on the <img>, see Projects.astro/[slug].astro) — without
+    // this, a missing file renders as a broken-image glyph sitting on
+    // `--color-bg-soft`, which reads as a solid black hole in the mock.
+    // A flat neutral panel with a small centered marker reads as "no
+    // screenshot yet" instead of "something is broken."
+    &.is-missing {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #e2e2e5, #cfcfd4);
+
+      &::after {
+        content: "";
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 2px dashed rgba(0, 0, 0, 0.25);
+      }
     }
   }
 
@@ -74,10 +96,14 @@
   // `aspect-ratio` (not a fixed height) reserves the screenshot's space
   // before the image loads, at any viewport width — no layout shift, and
   // no dependency on the image finishing its request before anything
-  // else (a ScrollTrigger, a sibling layout) gets measured.
+  // else gets measured. 16:9 rather than the detail page's taller 16:10
+  // — this screenshot needs to read as the protagonist of a two-column
+  // row at a glance, and a wide, cinematic crop does that while staying
+  // legible, without ballooning the row's total height the way a taller
+  // crop did on review.
   &--feature {
     .browser-mock__screen {
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 16 / 9;
 
       img {
         height: 100%;
