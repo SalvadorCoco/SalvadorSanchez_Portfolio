@@ -25,34 +25,10 @@ body {
   overflow-x: hidden;
   line-height: 1.6;
 
-  // ONE ambient light for the whole site: a single fixed layer, painted
-  // once, never tiled and never repeated per section. Sections are all
-  // transparent on top of it, so there is no boundary to see — not at
-  // any scroll position, because there is only ever one of these.
-  &::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-    background:
-      radial-gradient(circle at 84% 6%, rgba(var(--color-red-rgb), 0.18), transparent 45%),
-      radial-gradient(circle at 10% 80%, rgba(var(--color-blue-rgb), 0.16), transparent 45%);
-  }
-
-  // Ben-Day halftone dots — the printed-comic texture the whole
-  // Spider-Verse look is built on. Also a single fixed layer, so it can
-  // never seam, and it costs nothing: no canvas, no JS, no GPU loop.
-  &::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background-image: radial-gradient(rgba(var(--color-red-rgb), 0.6) 1px, transparent 1.6px);
-    background-size: 22px 22px;
-    opacity: var(--halftone-opacity);
-  }
+  // Flat ink, nothing else. No fixed haze and no page-wide dot veil: the
+  // background is a printed ground, and the halftone texture lives only in
+  // a few delimited zones (see the halftone mixin, used by Hero and
+  // Contact). Section breaks are drawn by the rule in layout/_section.scss.
 }
 
 a {

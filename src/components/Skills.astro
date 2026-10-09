@@ -1,75 +1,107 @@
 ---
-const skills = [
-  {
-    name: "React",
-    where_es: '<span>Postas</span> · Proyectos propios',
-    where_en: '<span>Postas</span> · Personal projects',
-  },
-  {
-    name: "Next.js",
-    where_es: '<span>Portal Municipal</span> · <span>EMOS</span>',
-    where_en: '<span>Portal Municipal</span> · <span>EMOS</span>',
-  },
-  {
-    name: "TypeScript",
-    where_es: 'Todos los proyectos',
-    where_en: 'All projects',
-  },
-  {
-    name: "SCSS",
-    where_es: 'Todos los proyectos',
-    where_en: 'All projects',
-  },
-  {
-    name: "JavaScript",
-    where_es: 'Todos los proyectos',
-    where_en: 'All projects',
-  },
-  {
-    name: "Bootstrap",
-    where_es: 'Layouts · Prototipos',
-    where_en: 'Layouts · Prototypes',
-  },
-  {
-    name: "Astro",
-    where_es: 'Este portfolio',
-    where_en: 'This portfolio',
-  },
+import { getProjectViews } from "../lib/projects";
+
+// React and Next.js lead. Their "used in" lists are NOT hand-written: they
+// come from each project's own `tags` in src/content/projects/, so they can't
+// drift and can't claim something the data doesn't say. A technology with no
+// matching project simply shows no list.
+const projects = await getProjectViews();
+const usedIn = (tag: string) => projects.filter((p) => p.tags.includes(tag));
+
+const core = [
+  { name: "React", kind: "sk_kind_react", kindEs: "Librería de UI", uses: usedIn("React") },
+  { name: "Next.js", kind: "sk_kind_next", kindEs: "Framework de React", uses: usedIn("Next.js") },
 ];
 
-const methods = ["UI/UX Design", "Responsive", "Accesibilidad", "Performance", "Git", "Figma", "Docker"];
+// Everything else, grouped. Same technologies as before, nothing added
+// or dropped; only the grouping is new. Items that need translating carry
+// both texts (the rest are proper names).
+type Item = { es: string; en?: string };
+const group = (key: string, es: string, items: Item[]) => ({ key, es, items });
+
+const more = [
+  group("sk_cat_lang", "Lenguajes", [{ es: "JavaScript" }, { es: "TypeScript" }]),
+  group("sk_cat_style", "Estilos", [{ es: "SCSS" }, { es: "Bootstrap" }]),
+  group("sk_cat_framework", "Frameworks", [{ es: "Astro" }]),
+  group("sk_cat_tools", "Herramientas", [{ es: "Git" }, { es: "Figma" }, { es: "Docker" }]),
+  group("sk_cat_practice", "Prácticas", [
+    { es: "UI/UX Design" },
+    { es: "Responsive" },
+    { es: "Accesibilidad", en: "Accessibility" },
+    { es: "Performance" },
+  ]),
+];
+
+const pad = (n: number) => String(n).padStart(2, "0");
+const moreCount = more.reduce((n, g) => n + g.items.length, 0);
 ---
 
-<section class="section skills" id="skills">
+<section class="section skills" id="skills" aria-labelledby="skills-title">
   <div class="container">
-    <div class="skills__wrap">
-      <div>
-        <div class="sec__head fu">
-          <div class="sec__eyebrow" data-i18n="sk_eyebrow">stack técnico</div>
-          <div class="sec__title" data-i18n="sk_title">Las herramientas que uso.</div>
-        </div>
-        <p class="skills__desc fu d1" data-i18n="sk_desc">
-          No acumulo tecnologías — uso las que tienen sentido para cada proyecto.
-        </p>
-        <div class="skills__methods fu d2">
-          {methods.map(m => <span class="meth-tag">{m}</span>)}
-        </div>
+    <header class="skills__head">
+      <div class="skills__label">
+        <div class="sec__eyebrow" data-i18n="sk_eyebrow">stack técnico</div>
+        <span class="skills__count" aria-hidden="true">( {pad(core.length + moreCount)} )</span>
       </div>
+      <h2 class="skills__title" id="skills-title" data-i18n="sk_title">Las herramientas que uso.</h2>
+      <p class="skills__desc" data-i18n="sk_desc">
+        No acumulo tecnologías — uso las que tienen sentido para cada proyecto.
+      </p>
+    </header>
 
-      <ul class="skills__list fu d1">
-        {skills.map(({ name, where_es, where_en }, i) => (
-          <li class="sk-row">
-            <span class="sk-row__index">{String(i + 1).padStart(2, "0")}</span>
-            <span class="sk-row__name">{name}</span>
-            <span
-              class="sk-row__where"
-              data-es-html={where_es}
-              data-en-html={where_en}
-              set:html={where_es}
-            />
-          </li>
-        ))}
-      </ul>
+    <div class="sk-zone">
+      <h3 class="sk-zone__label" data-i18n="sk_core">Principales</h3>
+      <span class="sk-zone__rule" aria-hidden="true"></span>
+      <span class="sk-zone__count" aria-hidden="true">( {pad(core.length)} )</span>
+    </div>
+
+    <div class="sk-core">
+      {core.map((t, i) => (
+        <article class="sk-main" aria-labelledby={`sk-${i}`}>
+          <span class="sk-main__num" aria-hidden="true">{pad(i + 1)}</span>
+          <div class="sk-main__id">
+            <h4 class="sk-main__name" id={`sk-${i}`}>{t.name}</h4>
+            <p class="sk-main__kind" data-i18n={t.kind}>{t.kindEs}</p>
+          </div>
+          {t.uses.length > 0 && (
+            <div class="sk-main__use">
+              <p class="sk-main__use-label" data-i18n="sk_used_in">Usado en</p>
+              <ul class="sk-main__projects">
+                {t.uses.map((p) => (
+                  <li><a href={p.caseHref}>{p.title}</a></li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+
+    <div class="sk-plates" aria-hidden="true">
+      <span class="sk-plates__bar sk-plates__bar--red"></span>
+      <span class="sk-plates__bar sk-plates__bar--blue"></span>
+    </div>
+
+    <div class="sk-zone">
+      <h3 class="sk-zone__label" data-i18n="sk_more">Más herramientas</h3>
+      <span class="sk-zone__rule" aria-hidden="true"></span>
+      <span class="sk-zone__count" aria-hidden="true">( {pad(moreCount)} )</span>
+    </div>
+
+    <div class="sk-more">
+      {more.map((g) => (
+        <div class="sk-row">
+          <p class="sk-row__cat" data-i18n={g.key}>{g.es}</p>
+          <ul class="sk-row__items">
+            {g.items.map((item, i) => (
+              <li>
+                <span data-es={item.es} data-en={item.en ?? item.es}>{item.es}</span>
+                {i < g.items.length - 1 && <i class="sk-row__sep" aria-hidden="true">/</i>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   </div>
 </section>

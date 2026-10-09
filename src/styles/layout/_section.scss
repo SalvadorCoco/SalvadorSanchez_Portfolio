@@ -1,48 +1,40 @@
+// Every page of the site ends on the same panel rule: the Hero and each
+// section close with a 2px line at the width of the content grid, so the
+// breaks read as one system (the editorial rules inside the sections are
+// the same 2px, just brighter). Hero→Projects, Projects→Skills,
+// Skills→Experience, Experience→Contact and Contact→Footer are all this
+// one line, drawn at the bottom of the section above the break. It lives
+// on ::after so ::before stays free for a section's own graphic zone.
+.hero,
+.section {
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - #{$container-padding-x}); // .container content width (its padding is half this, each side)
+    height: 2px;
+    background: rgba(var(--color-text-rgb), 0.3);
+    pointer-events: none;
+  }
+
+  // Follow Bootstrap's stepped container widths so the rule always lines up
+  // with the content grid, at every breakpoint.
+  @each $bp, $max in $container-max-widths {
+    @include media-breakpoint-up($bp) {
+      &::after { width: calc(#{$max} - #{$container-padding-x}); }
+    }
+  }
+}
+
 .section {
   position: relative;
   padding: $space-section-y 0;
 
-  // No alternating band color: an opaque background on every other
-  // section is exactly what draws a hard line between them. Sections
-  // are transparent and share the one ambient backdrop instead.
-
-  // The break is a comic panel gutter: a long hairline that fades out at
-  // both ends, with a small node at the centre. It only ever appears
-  // BETWEEN two sections (never above the hero, never below the last),
-  // and it's 1px tall, so it marks the beat without banding the page.
-  & + & {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(680px, 82%);
-      height: 1px;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(var(--color-red-rgb), 0.16) 12%,
-        rgba(var(--color-red-rgb), 0.5) 50%,
-        rgba(var(--color-red-rgb), 0.16) 88%,
-        transparent
-      );
-      pointer-events: none;
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: -2px;
-      left: 50%;
-      transform: translateX(-50%) rotate(45deg);
-      width: 5px;
-      height: 5px;
-      background: $color-red;
-      box-shadow: 0 0 10px rgba(var(--color-red-rgb), 0.7);
-      pointer-events: none;
-    }
-  }
+  // No alternating band color and no tonal steps: the ground is one flat
+  // ink, and the breaks between sections are the rule above, not a change
+  // of background.
 }
 
 .sec {

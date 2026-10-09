@@ -43,11 +43,10 @@
   backdrop-filter: blur(6px);
 }
 
-// Every section is transparent and sits on top of the ONE glow field
-// painted on <body> (see base/_reset.scss) — that's what makes section
-// boundaries invisible. This mixin just sets up the stacking context so
-// a section's own extra local flavor (a grid, grain, a WebGL layer...)
-// can sit between the shared glow and its real content.
+// Sections are transparent over the flat ink background on <body> (see
+// base/_reset.scss). This mixin just sets up the stacking context so a
+// section's own extra local flavor can sit between the page background
+// and its real content.
 @mixin atmosphere {
   position: relative;
   overflow: hidden;
@@ -58,6 +57,19 @@
     position: relative;
     z-index: 1;
   }
+}
+
+// Ben-Day halftone: a square grid of hard round dots. It is only ever
+// applied to a delimited zone (Hero portrait panel, Contact corner), never
+// to the page. `$rgb` is a comma-separated colour channel list, e.g.
+// var(--color-blue-rgb); alpha comes from --halftone-opacity.
+@mixin halftone($rgb, $pitch: 12px, $dot: 2px) {
+  background-image: radial-gradient(
+    circle at center,
+    rgba($rgb, var(--halftone-opacity)) $dot,
+    transparent $dot + 0.6px
+  );
+  background-size: $pitch $pitch;
 }
 
 @mixin btn-primary {

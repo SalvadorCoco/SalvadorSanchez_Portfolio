@@ -1,59 +1,117 @@
 ---
-const links = [
-  { href: "mailto:salvadorcocosanchez@gmail.com", icon: "✉️", label: "Email", sub: "salvadorcocosanchez@gmail.com" },
-  { href: "https://www.linkedin.com/in/salvador-sanchez-dev/", icon: "💼", label: "LinkedIn", sub: "linkedin.com/in/salvador-sanchez-dev", external: true },
-  { href: "https://github.com/SalvadorCoco", icon: "🐙", label: "GitHub", sub: "github.com/SalvadorCoco", external: true },
+// Real channels already configured in this repo (nothing invented):
+//  - email: the address the old Contact and Footer already used
+//  - LinkedIn / GitHub: same URLs as the old Contact and the Footer
+//  - WhatsApp: same wa.me number and pre-filled ES/EN messages; the
+//    #wspBtn id + data-wsp-* attributes are what Layout.astro's language
+//    switch reads, so they stay.
+const email = "salvadorcocosanchez@gmail.com";
+
+const wsp = {
+  es: "https://wa.me/5493584120469?text=Hola%20Salvador!%20Vi%20tu%20portfolio%20y%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto.",
+  en: "https://wa.me/5493584120469?text=Hi%20Salvador!%20I%20saw%20your%20portfolio%20and%20I%27d%20like%20to%20talk%20about%20a%20project.",
+};
+
+// Order = hierarchy: LinkedIn (professional), GitHub, then WhatsApp.
+const also = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/salvador-sanchez-dev/" },
+  { label: "GitHub", href: "https://github.com/SalvadorCoco" },
+  { label: "WhatsApp", href: wsp.es, id: "wspBtn" },
 ];
 ---
 
-<section class="section contact" id="contacto">
+<section class="section contact" id="contacto" aria-labelledby="contact-title">
   <div class="container">
-    <div class="sec__head fu">
+    <div class="contact__eyebrow">
       <div class="sec__eyebrow" data-i18n="ct_eyebrow">contacto</div>
-      <div class="sec__title" data-i18n-html="ct_title">¿Hablamos sobre<br />tu proyecto?</div>
+      <span class="contact__rule" aria-hidden="true"></span>
     </div>
 
-    <div class="contact__wrap">
-      <div>
-        <p class="contact__intro" data-i18n="ct_intro">
-          Trabajo con quien valora que las cosas funcionen bien. Si tu proyecto necesita una interfaz que cualquier persona use sin ayuda, escribíme.
-        </p>
-        <div class="contact__links fu d1">
-          {links.map(({ href, icon, label, sub, external }) => (
-            <a
-              href={href}
-              class="clink"
-              {...(external ? { target: "_blank", rel: "noopener" } : {})}
-            >
-              <div class="clink__icon">{icon}</div>
-              <div class="clink__text">
-                <strong>{label}</strong>
-                <span>{sub}</span>
-              </div>
-            </a>
-          ))}
+    <h2 class="contact__title" id="contact-title" data-i18n-html="ct_title">
+      ¿Tenés un proyecto<br />o una oportunidad?
+    </h2>
+
+    <div class="contact__grid">
+      <p class="contact__lead" data-i18n="ct_lead">
+        Soy Salvador, desarrollador frontend en Río Cuarto. Si querés conversar sobre un proyecto, un puesto o una colaboración, escribime.
+      </p>
+
+      <div class="contact__act">
+        <a class="ct-mail" href={`mailto:${email}`}>
+          <span class="ct-mail__label" data-i18n="ct_mail_label">Escribime por email</span>
+          <span class="ct-mail__row">
+            <span class="ct-mail__addr">{email.split("@")[0]}@<wbr />{email.split("@")[1]}</span>
+            <span class="ct-mail__arrow" aria-hidden="true">→</span>
+          </span>
+        </a>
+
+        <!-- Progressive enhancement: hidden until the script confirms the
+             Clipboard API exists. Without JS the address is still right
+             there to read, select or open with the mailto link above. -->
+        <div class="ct-copy">
+          <button type="button" class="ct-copy__btn" data-copy-email={email} data-i18n="ct_copy" hidden>
+            Copiar email
+          </button>
+          <span class="ct-copy__status" role="status" aria-live="polite"></span>
         </div>
       </div>
 
-      <div class="contact__wsp fu d2">
-        <div class="wsp-card">
-          <div class="wsp-card__icon">💬</div>
-          <div class="wsp-card__title" data-i18n="ct_wsp_title">Escribíme por WhatsApp</div>
-          <p class="wsp-card__desc" data-i18n="ct_wsp_desc">Respondo rápido. Contáme sobre tu proyecto y te doy una mano.</p>
-          <a
-            href="https://wa.me/5493584120469?text=Hola%20Salvador!%20Vi%20tu%20portfolio%20y%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto."
-            class="wsp-card__btn"
-            target="_blank"
-            rel="noopener"
-            id="wspBtn"
-            data-wsp-es="https://wa.me/5493584120469?text=Hola%20Salvador!%20Vi%20tu%20portfolio%20y%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto."
-            data-wsp-en="https://wa.me/5493584120469?text=Hi%20Salvador!%20I%20saw%20your%20portfolio%20and%20I%27d%20like%20to%20talk%20about%20a%20project."
-            data-i18n="ct_wsp_btn"
-          >
-            Abrir WhatsApp →
-          </a>
-        </div>
+      <div class="contact__also">
+        <p class="contact__also-label" data-i18n="ct_also">También en</p>
+        <ul class="contact__links">
+          {also.map(({ label, href, id }) => (
+            <li>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener"
+                {...(id ? { id, "data-wsp-es": wsp.es, "data-wsp-en": wsp.en } : {})}
+              >
+                {label}<span class="contact__arrow" aria-hidden="true">↗</span>
+                <span class="contact__sr"> <span data-i18n="proj_new_tab">(se abre en una pestaña nueva)</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
+    </div>
+
+    <div class="contact__plates" aria-hidden="true">
+      <span class="contact__plate contact__plate--red"></span>
+      <span class="contact__plate contact__plate--blue"></span>
     </div>
   </div>
 </section>
+
+<script>
+  // Copy-to-clipboard for the email. Success is only reported after the
+  // browser confirms the write; any rejection shows an error instead.
+  const btn = document.querySelector<HTMLButtonElement>("[data-copy-email]");
+  const status = document.querySelector<HTMLElement>(".ct-copy__status");
+
+  if (btn && status && navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+    btn.hidden = false;
+    let timer: number | undefined;
+
+    const say = (key: "ct_copied" | "ct_copy_failed", fallback: string) => {
+      const lang = document.documentElement.getAttribute("data-lang") || "es";
+      const dict = (window as any).__T?.[lang] ?? {};
+      status.textContent = dict[key] ?? fallback;
+      status.dataset.state = key === "ct_copied" ? "ok" : "error";
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        status.textContent = "";
+        delete status.dataset.state;
+      }, 3000);
+    };
+
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copyEmail || "");
+        say("ct_copied", "Email copiado");
+      } catch {
+        say("ct_copy_failed", "No se pudo copiar el email");
+      }
+    });
+  }
+</script>
