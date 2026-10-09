@@ -1,0 +1,33 @@
+---
+import type { ProjectView } from "../../lib/projects";
+
+interface Props {
+  p: ProjectView;
+}
+
+// Three kinds of action, three looks, and each only renders when its
+// destination really exists: Visit (a public URL), Case (the detail page),
+// Repo (a public repository). Everything here is a real <a>.
+const { p } = Astro.props;
+---
+
+<div class="pa">
+  {p.live && (
+    <a class="pa__visit" href={p.live.href} target="_blank" rel="noopener">
+      <span data-i18n="proj_visit">Visitar</span><span class="pa__arrow" aria-hidden="true">↗</span>
+      <span class="pa__sr"> {p.name} <span data-i18n="proj_new_tab">(se abre en una pestaña nueva)</span></span>
+    </a>
+  )}
+
+  <a class="pa__case" href={p.caseHref}>
+    <span data-i18n="proj_case">Caso</span><span class="pa__arrow" aria-hidden="true">→</span>
+    <span class="pa__sr"> {p.name}</span>
+  </a>
+
+  {p.repos.map((repo) => (
+    <a class="pa__repo" href={repo.href} target="_blank" rel="noopener">
+      <span data-i18n="proj_repo">Repo</span>{repo.suffix && <span> · {repo.suffix}</span>}<span class="pa__arrow" aria-hidden="true">↗</span>
+      <span class="pa__sr"> {p.name} <span data-i18n="proj_new_tab">(se abre en una pestaña nueva)</span></span>
+    </a>
+  ))}
+</div>

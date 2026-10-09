@@ -1,3 +1,7 @@
+// Fake browser window — now used only by the project detail page
+// (/proyectos/:slug, `--cover` variant) and its carousel. Selected Work on
+// the home page no longer uses it: it frames the real screenshot directly
+// (see `.ps` in _projects.scss).
 .browser-mock {
   border-radius: $border-radius-lg;
   overflow: hidden;
@@ -56,33 +60,11 @@
   &__screen {
     overflow: hidden;
     background: $color-bg-soft;
-    position: relative;
 
     img {
       width: 100%;
       height: auto;
       display: block;
-    }
-
-    // Fallback for a project whose screenshot file hasn't been added yet
-    // (`onerror` on the <img>, see Projects.astro/[slug].astro) — without
-    // this, a missing file renders as a broken-image glyph sitting on
-    // `--color-bg-soft`, which reads as a solid black hole in the mock.
-    // A flat neutral panel with a small centered marker reads as "no
-    // screenshot yet" instead of "something is broken."
-    &.is-missing {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #e2e2e5, #cfcfd4);
-
-      &::after {
-        content: "";
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        border: 2px dashed rgba(0, 0, 0, 0.25);
-      }
     }
   }
 
@@ -90,59 +72,5 @@
   &--cover {
     max-width: clamp(560px, 88%, 960px);
     margin: 0 auto;
-  }
-
-  // ── Variant: Selected Work — featured case study ──
-  // `aspect-ratio` (not a fixed height) reserves the screenshot's space
-  // before the image loads, at any viewport width — no layout shift, and
-  // no dependency on the image finishing its request before anything
-  // else gets measured. 16:9 rather than the detail page's taller 16:10
-  // — this screenshot needs to read as the protagonist of a two-column
-  // row at a glance, and a wide, cinematic crop does that while staying
-  // legible, without ballooning the row's total height the way a taller
-  // crop did on review.
-  &--feature {
-    .browser-mock__screen {
-      aspect-ratio: 16 / 9;
-
-      img {
-        height: 100%;
-        object-fit: cover;
-        object-position: top center;
-      }
-    }
-  }
-
-  // ── Variant: Selected Work — "more projects" row ──
-  &--mini {
-    border-radius: $border-radius;
-
-    .browser-mock__bar {
-      height: 28px;
-      padding: 0 10px;
-      gap: 8px;
-      background: #f0f0f0;
-    }
-
-    .browser-mock__dots span {
-      width: 8px;
-      height: 8px;
-    }
-
-    .browser-mock__url {
-      height: 16px;
-      font-size: 0.6rem;
-      max-width: 220px;
-    }
-
-    .browser-mock__screen {
-      aspect-ratio: 16 / 10;
-
-      img {
-        height: 100%;
-        object-fit: cover;
-        object-position: top center;
-      }
-    }
   }
 }

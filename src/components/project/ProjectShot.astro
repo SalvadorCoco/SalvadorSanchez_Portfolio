@@ -1,0 +1,36 @@
+---
+import type { ProjectView } from "../../lib/projects";
+
+interface Props {
+  p: ProjectView;
+  // Hard offset "print plate" colour behind the frame.
+  tone?: "red" | "blue";
+  // Frame proportion. `wide` is the native proportion of a desktop capture;
+  // `tall` is a tighter crop anchored top-left for narrow columns.
+  crop?: "wide" | "tall";
+  caption?: boolean;
+}
+
+// The real screenshot, framed editorially (hard border + hard offset shadow)
+// instead of inside a fake browser window. Only rendered for projects whose
+// image exists — see `hasCover` in lib/projects.ts.
+const { p, tone = "red", crop = "wide", caption = true } = Astro.props;
+const alt = p.domain ? `${p.title} — ${p.domain}` : p.title;
+---
+
+<figure class={`ps ps--${tone} ps--${crop}`}>
+  <!-- The title link already goes to the same page; keep this one out of the
+       tab order so keyboard users don't hit two links to one place. -->
+  <a class="ps__frame" href={p.caseHref} tabindex="-1">
+    <img
+      class="ps__img"
+      src={p.cover}
+      alt={alt}
+      width="1900"
+      height="1000"
+      loading="lazy"
+      decoding="async"
+    />
+  </a>
+  {caption && p.domain && <figcaption class="ps__caption">{p.domain}</figcaption>}
+</figure>

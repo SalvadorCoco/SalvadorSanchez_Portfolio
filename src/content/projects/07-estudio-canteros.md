@@ -23,7 +23,7 @@ links:
   - href: "https://github.com/SalvadorCoco/Estudio-Canteros"
     label: "GitHub"
     type: "gh"
+    inactive: true
 cover: "/images/projects/estudio-canteros/01.webp"
-screenshots:
-  - "/images/projects/estudio-canteros/01.webp"
+screenshots: []
 ---

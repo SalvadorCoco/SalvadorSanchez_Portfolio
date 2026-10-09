@@ -1,296 +1,192 @@
-// RGB registration-glitch clones — injected/removed by rgbGlitchBurst() in
-// this component's own script, a comic-misprint flash used as an accent
-// at the Identity→Craft and Craft→Work transition moments only. Never a
-// permanent effect. Each clone is clipped to half its own box (top or
-// bottom strip) so the split reads as displaced print layers rather than
-// one solid silhouette; the actual x/y offset is driven by GSAP, not here.
-.glitch-layer {
-  position: absolute;
-  pointer-events: none;
-  user-select: none;
-  mix-blend-mode: screen;
-  opacity: 0.9;
-
-  &--red  { color: $color-red !important; }
-  &--blue { color: $color-blue !important; }
-}
-
-// The Hero has no palette of its own — it reads the same theme tokens as
-// every other section ($color-red / $color-blue / $color-text).
+// ══════════════════════════════════════════════════════════════════
+// Hero — a compact comic-editorial cover (same system as Selected Work:
+// 12-col grid, hard 2px borders, hard offset plates with no blur, folio
+// line, poster-scale condensed type).
 //
-// Baseline (no JS, reduced motion, or below the desktop breakpoint): the
-// three states render as plain stacked content in document flow — fully
-// readable, nothing hidden, nothing pinned. `.hero--cinematic` is added by
-// Hero.astro's script ONLY when GSAP actually builds the pinned timeline;
-// that class is what switches the three `.hero__block`s from a normal
-// column into three layers crossfading in the same box. See
-// /docs/ANIMATION_SYSTEM.md.
+// It is a normal block in the page flow: no pin, no scrub, no min-height
+// tied to the viewport. The whole composition exists in the first paint.
+// The entrance (~1.3s, runs once) is CSS keyframes with `backwards`
+// fill: before an element's turn it sits in its "from" state, and once
+// done it simply IS its normal style — so with animations off (reduced
+// motion, or anything failing) nothing is ever left hidden.
+// ══════════════════════════════════════════════════════════════════
+
+$hero-gap: clamp(1rem, 2.4vw, 2rem);
+
 .hero {
+  --hp: #{clamp(6px, 1vw, 12px)}; // hard plate offset
   position: relative;
-  padding-top: $header-h;
   overflow: hidden;
+  padding-top: calc(#{$header-h} + clamp(1.5rem, 4vw, 3rem));
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
   background: transparent;
   color: $color-text;
 
-  &:not(.hero--cinematic) {
-    padding-bottom: clamp(3rem, 6vw, 5rem);
-  }
-
-  &.hero--cinematic {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-
-    .hero__text {
-      position: relative;
-      min-height: 400px;
-
-      @include media-breakpoint-down(md) {
-        min-height: 320px;
-      }
-    }
-
-    .hero__block {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .hero__scrollcue,
-    .hero__nextcue {
-      display: flex;
-    }
-  }
-
-  &__stage {
-    position: relative;
-    z-index: 2;
-    width: 100%;
+  &__grid {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 4rem;
-    align-items: center;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: $hero-gap;
+    row-gap: clamp(1rem, 2vw, 1.5rem);
+    align-items: start;
 
-    @include media-breakpoint-down(md) {
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
-    }
+    > * { grid-column: 1 / -1; min-width: 0; }
   }
 
-  &__text {
+  // ── Folio: status — rule — place ────────────────────────────────
+  &__folio {
     display: flex;
-    flex-direction: column;
-    gap: 2.75rem;
-  }
-
-  // ── State 01 — Identity ─────────────────────────
-  &__badge {
-    display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 5px 14px;
-    background: rgba(var(--color-blue-rgb), 0.12);
-    border: 1px solid rgba(var(--color-blue-rgb), 0.5);
-    border-radius: $border-radius-pill;
+    gap: clamp(0.75rem, 1.6vw, 1.25rem);
     font-family: $font-body;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: $color-text;
-    width: fit-content;
-  }
-
-  &__badge-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--color-blue);
-    box-shadow: 0 0 8px 1px var(--color-blue);
-    border-radius: 50%;
-    animation: blink 2s ease-in-out infinite;
-  }
-
-  &__title {
-    font-family: $font-display;
-    font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.08;
-    margin-top: 1.5rem;
-    color: $color-text;
-
-    .hl {
-      color: $color-red;
-      text-shadow:
-        0 0 18px rgba(var(--color-red-rgb), 0.45),
-        2px 0 0 var(--color-blue),
-        -2px 0 0 $color-red;
-    }
-  }
-
-  &__actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 2rem;
-  }
-
-  &__btn-primary {
-    @include btn-primary;
-    box-shadow: 0 0 24px rgba(var(--color-red-rgb), 0.3);
-    position: relative;
-    z-index: 1;
-
-    &::after {
-      content: "";
-      position: absolute;
-      inset: -10px;
-      z-index: -1;
-      border-radius: inherit;
-      background-image: radial-gradient($color-red 1.5px, transparent 1.6px);
-      background-size: 7px 7px;
-      opacity: 0;
-      transform: scale(0.7);
-      transition: opacity 0.3s, transform 0.3s $ease-out;
-      pointer-events: none;
-    }
-
-    &:hover {
-      box-shadow: 0 0 36px rgba(var(--color-red-rgb), 0.45);
-      transform: translateY(-2px);
-
-      &::after {
-        opacity: 0.4;
-        transform: scale(1);
-      }
-    }
-  }
-
-  &__btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 13px 26px;
-    background: rgba(var(--color-blue-rgb), 0.08);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: $color-muted;
-    border: 1.5px solid rgba(var(--color-blue-rgb), 0.45);
-    border-radius: $border-radius-pill;
-    font-family: $font-body;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.2s;
-
-    &:hover {
-      border-color: var(--color-blue);
-      color: $color-text;
-      background: rgba(var(--color-blue-rgb), 0.16);
-      box-shadow: 0 0 20px rgba(var(--color-blue-rgb), 0.3);
-      text-decoration: none;
-    }
   }
 
-  // ── State 02 — Craft ─────────────────────────────
-  // "How I build" as one editorial statement — large, but a single
-  // paragraph, never a wall of text.
-  &__statement {
-    font-family: $font-display;
-    font-size: clamp(1.7rem, 3.2vw, 2.5rem);
-    font-weight: 500;
-    line-height: 1.28;
-    letter-spacing: -0.01em;
-    max-width: 640px;
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65em;
+    flex: 0 1 auto;
     color: $color-text;
   }
 
-  // ── State 03 — Work (identity summary) ──────────
-  &__id-name {
+  &__status-dot {
+    flex-shrink: 0;
+    width: 0.55em;
+    height: 0.55em;
+    background: $color-red;
+  }
+
+  &__rule {
+    flex: 1 1 1rem;
+    min-width: 1rem;
+    height: 2px;
+    background: rgba(var(--color-text-rgb), 0.85);
+    transform-origin: left;
+  }
+
+  &__where { flex: 0 1 auto; text-align: right; }
+
+  @include media-breakpoint-down(sm) {
+    &__folio { flex-wrap: wrap; gap: 0.35rem 1rem; }
+    &__rule  { display: none; }
+    &__where { flex-basis: 100%; text-align: left; }
+  }
+
+  // ── The name: the poster ────────────────────────────────────────
+  &__name {
+    margin: clamp(0.5rem, 2vw, 1.25rem) 0 0;
     font-family: $font-display;
-    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-size: clamp(4.5rem, 23vw, 11rem);
+    font-weight: 800;
+    line-height: 0.84;
+    letter-spacing: -0.012em;
+    text-transform: uppercase;
+    color: $color-text;
+    // Static misregistration: a red and a blue plate slipped either side.
+    text-shadow: 0.025em 0 0 var(--color-blue), -0.025em 0 0 var(--color-red);
+  }
+
+  // The mask the word rises through.
+  &__line {
+    display: block;
+    overflow: hidden;
+    padding: 0.06em 0.04em 0.02em;
+    margin: -0.06em -0.04em -0.02em;
+  }
+
+  &__word { display: inline-block; }
+
+  // ── Print plates: two offset bars under the name ────────────────
+  &__plates {
+    position: relative;
+    height: calc(clamp(10px, 1.4vw, 18px) + 12px);
+    margin-top: 0.25rem;
+  }
+
+  &__plate {
+    --slip: clamp(10px, 1.6vw, 22px);
+    position: absolute;
+    left: 0;
+    width: calc(100% - var(--slip));
+    height: clamp(10px, 1.4vw, 18px);
+    transform-origin: left;
+
+    &--red  { top: 0; background: $color-red; z-index: 1; }
+    &--blue { top: 12px; left: var(--slip); background: var(--color-blue); }
+  }
+
+  // ── Role + stack ────────────────────────────────────────────────
+  &__role {
+    margin: 0;
+    font-family: $font-display;
+    font-size: clamp(1.45rem, 2.2vw, 2rem);
     font-weight: 700;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    color: $color-text;
-  }
-
-  &__id-role {
-    font-family: $font-body;
-    font-size: 1rem;
-    font-weight: 600;
     letter-spacing: 0.04em;
+    line-height: 1.1;
     text-transform: uppercase;
     color: $color-red;
-    margin-top: 0.75rem;
   }
 
-  &__id-stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0;
-    list-style: none;
-    margin-top: 1.5rem;
+  &__stack {
+    margin: 0.5rem 0 0;
     font-family: $font-body;
-
-    li {
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      color: $color-muted;
-
-      & + li::before {
-        content: "/";
-        margin: 0 0.6rem;
-        color: $color-red;
-      }
-    }
-  }
-
-  &__id-location {
-    font-family: $font-body;
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: $color-muted;
-    margin-top: 1.25rem;
   }
 
-  &__block--summary &__badge {
-    margin-top: 1.5rem;
+  &__stack-sep {
+    margin: 0 0.6rem;
+    font-style: normal;
+    color: $color-red;
   }
 
-  // ── Photo: off-register colour plates, like a misprinted comic ────────
+  // ── Portrait ────────────────────────────────────────────────────
+  &__portrait {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 21rem);
+    aspect-ratio: 4 / 5;
+    margin-left: auto;
+    margin-right: var(--hp);
+  }
+
   &__photo {
     position: relative;
-    transform: rotate(-2deg);
-    filter: drop-shadow(0 0 40px rgba(var(--color-red-rgb), var(--glow-red-opacity))) drop-shadow(0 0 70px rgba(var(--color-blue-rgb), var(--glow-blue-opacity)));
+    height: 100%;
+    transform: rotate(-1.5deg);
 
     img {
-      width: 320px;
-      height: 400px;
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: block;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       object-position: center bottom;
-      border-radius: 6px;
-      display: block;
-      position: relative;
-      z-index: 3;
-      box-shadow: 0 0 0 2px rgba(var(--color-text-rgb), 0.85), 6px 6px 0 $color-red;
+      border: 2px solid rgba(var(--color-text-rgb), 0.92);
+      box-shadow: var(--hp) var(--hp) 0 var(--color-red);
     }
 
-    // The two ghost plates, tinted with background-blend-mode (exact hex,
-    // no filter guesswork) so they land on the real accent colours.
+    // Off-register colour plates behind the photo (the site's existing
+    // portrait technique, now static): same image, tinted exact red/blue,
+    // slipped a few px each way.
     &::before,
     &::after {
       content: "";
       position: absolute;
       inset: 0;
+      z-index: 2;
       background-size: cover, cover;
       background-position: center bottom, center bottom;
       background-blend-mode: color;
-      border-radius: 6px;
       mix-blend-mode: screen;
-      z-index: 2;
       opacity: 0.85;
-      transition: transform 0.35s $ease-out;
     }
 
     &::before {
@@ -302,75 +198,192 @@
       background-image: linear-gradient(var(--color-blue), var(--color-blue)), var(--photo-src);
       transform: translate(calc(var(--rgb-offset) * -1), 3px);
     }
+  }
 
-    // The gentle infinite drift is the baseline's "alive" cue (mobile,
-    // reduced-motion-safe by the media query). In cinematic mode GSAP
-    // owns the parent's transform instead, tied to scroll — the two
-    // never run at the same time, so they can't fight over the property.
-    @media (prefers-reduced-motion: no-preference) {
-      &::before { animation: hero-ghost-a 5s ease-in-out infinite; }
-      &::after  { animation: hero-ghost-b 5s ease-in-out infinite; }
-    }
+  // ── Tagline + copy + actions ────────────────────────────────────
+  &__tagline {
+    margin: 0;
+    font-family: $font-display;
+    font-size: clamp(1.9rem, 2.7vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    color: $color-text;
 
-    .hero:not(.hero--cinematic) &:hover {
-      img { transform: translate(2px, -2px); }
-      &::before { transform: translate(9px, -6px); }
-      &::after  { transform: translate(-9px, 6px); }
-    }
-
-    @include media-breakpoint-down(md) {
-      justify-self: center;
-
-      img {
-        width: 260px;
-        height: 340px;
-      }
+    .hl {
+      color: $color-red;
+      text-shadow: 0.04em 0 0 var(--color-blue);
     }
   }
 
-  // ── Scroll / next-section cues (cinematic mode only) ────────────
-  &__scrollcue,
-  &__nextcue {
-    display: none;
-    position: absolute;
-    left: 50%;
-    bottom: 2rem;
-    transform: translateX(-50%);
-    flex-direction: column;
+  &__desc {
+    margin: 0;
+    max-width: 42ch;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(var(--color-text-rgb), 0.86);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem 1rem;
+    margin-top: 1.5rem;
+  }
+
+  &__btn-primary,
+  &__btn-secondary {
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
+    padding: 0.85rem 1.25rem;
     font-family: $font-body;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: $color-muted;
-    z-index: 3;
-    white-space: nowrap;
+    border: 2px solid rgba(var(--color-text-rgb), 0.92);
+
+    &:focus-visible {
+      outline: 3px solid $color-text;
+      outline-offset: 4px;
+    }
   }
 
-  &__nextcue {
-    color: $color-red;
+  // Dark text on red (4.8:1), hard light plate like a stamp.
+  &__btn-primary {
+    background: $color-red;
+    color: $color-bg;
+    box-shadow: 4px 4px 0 rgba(var(--color-text-rgb), 0.92);
+
+    &:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 rgba(var(--color-text-rgb), 0.92);
+    }
   }
 
-  &__scrollcue-arrow,
-  &__nextcue-arrow {
-    font-size: 0.9rem;
-    animation: scrollcue-bounce 1.8s ease-in-out infinite;
+  &__btn-secondary {
+    background: transparent;
+    color: $color-text;
+
+    &:hover {
+      background: $color-text;
+      color: $color-bg;
+    }
+  }
+
+  // ── Tablet: portrait beside the tagline + copy ─────────────────
+  // (single column would leave a block of dead space next to the portrait)
+  @include media-breakpoint-between(md, lg) {
+    &__id      { grid-row: 4; grid-column: 1 / span 6; }
+    &__tagline { grid-row: 5; grid-column: 1 / span 6; }
+    &__copy    { grid-row: 6; grid-column: 1 / span 6; }
+
+    &__portrait {
+      grid-column: 7 / -1;
+      grid-row: 4 / span 3;
+      align-self: stretch;
+      width: auto;
+      aspect-ratio: auto;
+      margin: 0 var(--hp) 0 0;
+      min-height: 20rem;
+    }
+  }
+
+  // ── Desktop: the cover composition ──────────────────────────────
+  @include media-breakpoint-up(lg) {
+    &__name {
+      grid-column: 1 / span 8;
+      font-size: clamp(5.5rem, 14.5vw, 14rem);
+    }
+
+    // Explicit rows: the plates deliberately overlap the portrait's
+    // columns (they run behind it), which auto-placement wouldn't allow.
+    &__folio   { grid-row: 1; }
+    &__name    { grid-row: 2; }
+    &__plates  { grid-column: 1 / span 10; grid-row: 3; }
+    &__id      { grid-column: 1 / span 8; grid-row: 4; }
+    &__tagline { grid-column: 1 / span 4; grid-row: 5; }
+    &__copy    { grid-column: 5 / span 4; grid-row: 5; }
+
+    // The portrait spans name → copy, so it's as tall as the whole
+    // left block and the cover reads as one piece.
+    &__portrait {
+      grid-column: 9 / -1;
+      grid-row: 2 / span 4;
+      align-self: stretch;
+      width: auto;
+      aspect-ratio: auto;
+      margin: 0;
+      min-height: 22rem;
+    }
+
+    // Registration marks at two opposite corners of the portrait.
+    &__portrait::before,
+    &__portrait::after {
+      content: "";
+      position: absolute;
+      z-index: 4;
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+      color: rgba(var(--color-text-rgb), 0.7);
+      background:
+        linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat,
+        linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat;
+    }
+
+    &__portrait::before { top: -28px; right: -28px; }
+    &__portrait::after  { bottom: -28px; left: -28px; }
   }
 }
 
-@keyframes scrollcue-bounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(5px); }
+// ── Entrance: once, ~1.3s, CSS only, none if motion is reduced ─────
+@media (prefers-reduced-motion: no-preference) {
+  .hero {
+    &__rule  { animation: hero-draw 0.5s $ease-out backwards; }
+
+    // 1. The hit: red plate, then the blue one slips in behind it.
+    &__plate { animation: hero-draw 0.38s $ease-out backwards; }
+    &__plate--blue { animation-delay: 0.07s; }
+
+    // 2. The name rises through its mask, plates converging.
+    &__word { animation: hero-rise 0.6s $ease-out 0.12s backwards; }
+    &__line + &__line &__word { animation-delay: 0.24s; }
+
+    // 3. Portrait uncovered left→right, its hard shadow landing.
+    &__portrait { animation: hero-reveal 0.65s $ease-out 0.4s backwards; }
+    &__photo img { animation: hero-plate-in 0.65s $ease-out 0.4s backwards; }
+
+    // 4. Close: role, tagline, copy, actions — then it holds still.
+    &__id      { animation: hero-fade 0.4s $ease-out 0.62s backwards; }
+    &__tagline { animation: hero-fade 0.4s $ease-out 0.74s backwards; }
+    &__desc    { animation: hero-fade 0.4s $ease-out 0.86s backwards; }
+    &__actions { animation: hero-fade 0.4s $ease-out 0.96s backwards; }
+  }
 }
 
-@keyframes hero-ghost-a {
-  0%, 100% { transform: translate(var(--rgb-offset), -3px); }
-  50%      { transform: translate(7px, -5px); }
+@keyframes hero-draw {
+  from { transform: scaleX(0); }
 }
 
-@keyframes hero-ghost-b {
-  0%, 100% { transform: translate(calc(var(--rgb-offset) * -1), 3px); }
-  50%      { transform: translate(-7px, 5px); }
+@keyframes hero-rise {
+  from {
+    transform: translateY(104%);
+    text-shadow: 0.08em 0 0 var(--color-blue), -0.08em 0 0 var(--color-red);
+  }
+}
+
+// `to` is explicit and slightly oversized: it matches the finished look
+// (plates/shadow stay visible) so nothing pops when the clip is removed.
+@keyframes hero-reveal {
+  from { clip-path: inset(-40px 100% -40px -40px); }
+  to   { clip-path: inset(-40px -40px -40px -40px); }
+}
+
+@keyframes hero-plate-in {
+  from { box-shadow: 0 0 0 var(--color-red); }
+}
+
+@keyframes hero-fade {
+  from { opacity: 0; transform: translateY(10px); }
 }

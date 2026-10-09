@@ -1,162 +1,172 @@
 ---
-import { getCollection } from "astro:content";
+import { getProjectViews } from "../lib/projects";
+import type { ProjectView } from "../lib/projects";
+import ProjectActions from "./project/ProjectActions.astro";
+import ProjectFacts from "./project/ProjectFacts.astro";
+import ProjectShot from "./project/ProjectShot.astro";
 
-function getDomain(links: { href: string; type: string }[]): string {
-  const live = links.find((l) => l.type === "live");
-  if (!live) return "";
-  try { return new URL(live.href).hostname.replace("www.", ""); }
-  catch { return ""; }
-}
+// Selected Work is a small editorial publication: three headliners, each in
+// its own layout (`feature` in the content frontmatter), then a quieter
+// secondary group. Nothing here is gated behind JS or an animation — the
+// whole section is in the first paint.
+const all = await getProjectViews();
+const featured = all.filter((p) => p.feature);
+const secondary = all.filter((p) => !p.feature);
+const plates = secondary.filter((p) => p.hasCover);
+const index = secondary.filter((p) => !p.hasCover);
 
-// File name prefixes (01-, 02-, ...) in src/content/projects/ define the order.
-const entries = await getCollection("projects");
-entries.sort((a, b) => a.id.localeCompare(b.id));
-const projects = entries.map((entry) => ({ slug: entry.slug, ...entry.data }));
-
-// The two strongest case studies (Portal Municipal, Postas) lead, image-
-// forward and minimal-text — the full problem/approach/result narrative
-// already lives on their own /proyectos/:slug page, so the listing's job
-// is to be a confident, editorial teaser, not a duplicate of that page.
-// The other two are real, working links too, just told leaner. Order
-// stays fixed per /docs/CLAUDE_CONTEXT.md; this only changes how much
-// space each gets.
-const featured = projects.slice(0, 2);
-const rest = projects.slice(2);
+const pad = (n: number) => String(n).padStart(2, "0");
+const words = (name: string) => name.split(" ");
+const range =
+  secondary.length > 1
+    ? `${secondary[0].num} – ${secondary[secondary.length - 1].num}`
+    : secondary[0]?.num ?? "";
 ---
 
 <section class="section projects" id="proyectos">
   <div class="container">
-    <div class="sec__head">
-      <div class="sec__eyebrow" data-i18n="proj_eyebrow">proyectos</div>
-      <div class="sec__title" data-i18n-html="proj_title">Trabajo real para<br />clientes reales.</div>
-    </div>
-
-    <div class="proj-features">
-      {featured.map(({
-        slug, num, title, client, desc, desc_en,
-        metric, metric_en, demo, tags, links, private: isPrivate, cover,
-      }, i) => {
-        const domain = getDomain(links);
-        const href = `/proyectos/${slug}`;
-        return (
-          // Three explicit link points (shot, title, CTA), not one link
-          // wrapping everything — the badges below aren't links, and a
-          // single anchor around the whole module is an awkward target.
-          // No `.fu`/scroll-reveal here on purpose: everything below is
-          // visible in the initial render, full stop — see the note atop
-          // _projects.scss for why.
-          <article class={`proj-card proj-feature${i === 1 ? " proj-feature--reverse" : ""}`}>
-            <div class="proj-feature__head">
-              <span class="proj-feature__num" aria-hidden="true">{num}</span>
-              <div>
-                <h3 class="proj-feature__title"><a href={href}>{title}</a></h3>
-                <div class="proj-feature__meta">{client}</div>
-              </div>
-            </div>
-
-            <div class="proj-feature__body">
-              <div class="proj-feature__info">
-                <p class="proj-feature__desc" data-es={desc} data-en={desc_en || desc}>{desc}</p>
-
-                <div class="proj-feature__row">
-                  {metric && (
-                    <div class="proj-feature__metric" data-es={metric} data-en={metric_en || metric}>
-                      {metric}
-                    </div>
-                  )}
-                  <div class="proj-tags">
-                    {tags.map((tag) => <span class="tag">{tag}</span>)}
-                  </div>
-                </div>
-              </div>
-
-              <a href={href} class="proj-feature__shot" aria-label={title}>
-                <div class="browser-mock browser-mock--feature">
-                  <div class="browser-mock__bar">
-                    <div class="browser-mock__dots"><span></span><span></span><span></span></div>
-                    {domain && <div class="browser-mock__url">{domain}</div>}
-                  </div>
-                  <div class="browser-mock__screen">
-                    <img
-                      src={cover}
-                      alt={title}
-                      loading="lazy"
-                      width="1280"
-                      height="800"
-                      onerror="this.onerror=null;this.closest('.browser-mock__screen').classList.add('is-missing');this.remove()"
-                    />
-                  </div>
-                </div>
-              </a>
-            </div>
-
-            {/* Kept out of `.proj-feature__body` so it lands after the
-               screenshot in source order — on mobile that reads num →
-               title → meta → desc → datos → imagen → CTA, matching how
-               the rest of the page's content order already works. */}
-            <div class="proj-feature__actions">
-              {isPrivate ? (
-                <span class="plink plink--priv" data-i18n="proj_private">🔒 Repositorio privado</span>
-              ) : (
-                links.slice(0, 1).map(({ label }) => <span class="plink plink--live">{label}</span>)
-              )}
-              {demo && (
-                <span
-                  class={`plink plink--demo${demo.pending ? " plink--pending" : ""}`}
-                  data-es={`🎥 ${demo.label}${demo.pending ? " (próximamente)" : ""}`}
-                  data-en={`🎥 ${demo.label_en || demo.label}${demo.pending ? " (coming soon)" : ""}`}
-                >🎥 {demo.label}{demo.pending ? " (próximamente)" : ""}</span>
-              )}
-              <a href={href} class="plink plink--see-more" data-i18n="proj_see_more">Ver caso completo →</a>
-            </div>
-          </article>
-        );
-      })}
-    </div>
-
-    <div class="proj-more">
-      <div class="proj-more__eyebrow" data-i18n="proj_more">Más proyectos</div>
-      <div class="proj-more__list">
-        {rest.map(({ slug, num, title, client, desc, desc_en, tags, links, private: isPrivate, cover }) => {
-          const domain = getDomain(links);
-          return (
-            <a href={`/proyectos/${slug}`} class="proj-card proj-mini">
-              <div class="proj-mini__visual">
-                <div class="browser-mock browser-mock--mini">
-                  <div class="browser-mock__bar">
-                    <div class="browser-mock__dots"><span></span><span></span><span></span></div>
-                    {domain && <div class="browser-mock__url">{domain}</div>}
-                  </div>
-                  <div class="browser-mock__screen">
-                    <img
-                      src={cover}
-                      alt={title}
-                      loading="lazy"
-                      width="1280"
-                      height="800"
-                      onerror="this.onerror=null;this.closest('.browser-mock__screen').classList.add('is-missing');this.remove()"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="proj-mini__text">
-                <div class="proj-mini__num">{num}</div>
-                <div class="proj-mini__title">
-                  {title}
-                  <span class="proj-card__arrow">→</span>
-                </div>
-                <div class="proj-mini__client">{client}</div>
-                <p class="proj-mini__desc" data-es={desc} data-en={desc_en || desc}>{desc}</p>
-                <div class="proj-tags">
-                  {isPrivate && <span class="plink plink--priv" data-i18n="proj_private">🔒 Repositorio privado</span>}
-                  {tags.map((tag) => <span class="tag">{tag}</span>)}
-                </div>
-                <span class="plink plink--see-more" data-i18n="proj_see_more">Ver caso completo →</span>
-              </div>
-            </a>
-          );
-        })}
+    <header class="projects__head">
+      <div class="projects__label">
+        <div class="sec__eyebrow" data-i18n="proj_eyebrow">proyectos</div>
+        <span class="projects__count" aria-hidden="true">( {pad(all.length)} )</span>
       </div>
-    </div>
+      <h2 class="projects__title" data-i18n-html="proj_title">Trabajo real para<br />clientes reales.</h2>
+      <p class="projects__intro" data-i18n="proj_intro">
+        Proyectos seleccionados: trabajo para el sector público, un producto propio en desarrollo y un proyecto full stack.
+      </p>
+    </header>
+
+    {featured.map((p) => (
+      <article class={`pf pf--${p.feature}`} aria-labelledby={`pf-${p.slug}`}>
+        <header class="pf__folio">
+          <span class="pf__num" aria-hidden="true">{p.num}</span>
+          <span class="pf__rule" aria-hidden="true"></span>
+          <span class="pf__kicker" data-es={p.kicker} data-en={p.kicker_en}>{p.kicker}</span>
+        </header>
+
+        {p.feature === "showcase" && (
+          <>
+            <div class="pf__text">
+              <h3 class="pf__title" id={`pf-${p.slug}`}>
+                <a href={p.caseHref}>
+                  {words(p.name).map((w, i, arr) => (<><span class="pf__w">{w}</span>{i < arr.length - 1 && " "}</>))}
+                </a>
+              </h3>
+              {p.metric && p.metric_en && (
+                <p class="pf__metric">
+                  <span class="pf__metric-value" data-es={p.metric.value} data-en={p.metric_en.value}>{p.metric.value}</span>
+                  <span class="pf__metric-label" data-es={p.metric.label} data-en={p.metric_en.label}>{p.metric.label}</span>
+                </p>
+              )}
+              <p class="pf__desc" data-es={p.desc} data-en={p.desc_en}>{p.desc}</p>
+              <ProjectFacts p={p} />
+            </div>
+            <div class="pf__shot"><ProjectShot p={p} tone="red" /></div>
+            <div class="pf__actions"><ProjectActions p={p} /></div>
+          </>
+        )}
+
+        {p.feature === "product" && (
+          <>
+            <div class="pf__titlebar">
+              <h3 class="pf__title pf__title--xl" id={`pf-${p.slug}`}>
+                <a href={p.caseHref}>{p.name}</a>
+              </h3>
+              {p.sub && <span class="pf__tag">{p.sub}</span>}
+            </div>
+            <div class="pf__text">
+              <p class="pf__desc" data-es={p.desc} data-en={p.desc_en}>{p.desc}</p>
+              <ProjectFacts p={p} />
+            </div>
+            <div class="pf__shot"><ProjectShot p={p} tone="blue" /></div>
+            <div class="pf__actions"><ProjectActions p={p} /></div>
+          </>
+        )}
+
+        {p.feature === "poster" && (
+          <div class={`pp${p.hasCover || p.layers.length ? "" : " pp--solo"}`}>
+            <div class="pp__main">
+              <h3 class="pf__title pf__title--poster" id={`pf-${p.slug}`}>
+                <a href={p.caseHref}>
+                  {words(p.name).map((w, i, arr) => (<><span class="pf__w">{w}</span>{i < arr.length - 1 && " "}</>))}
+                </a>
+              </h3>
+              <p class="pf__desc" data-es={p.desc} data-en={p.desc_en}>{p.desc}</p>
+              <ProjectFacts p={p} />
+            </div>
+
+            {p.hasCover ? (
+              <div class="pp__visual"><ProjectShot p={p} tone="blue" crop="tall" /></div>
+            ) : p.layers.length > 0 ? (
+              <div class="pp__visual">
+                <div class="pl">
+                  {p.layers.map((layer, i) => (
+                    <>
+                      {i > 0 && <div class="pl__link" aria-hidden="true"><span>API</span></div>}
+                      <div class={`pl__node pl__node--${i % 2 ? "blue" : "red"}`}>
+                        <span class="pl__name">{layer.name}</span>
+                        <span class="pl__tech">{layer.tech}</span>
+                      </div>
+                    </>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            <div class="pp__actions"><ProjectActions p={p} /></div>
+          </div>
+        )}
+      </article>
+    ))}
+
+    {secondary.length > 0 && (
+      <div class="pm-group">
+        <div class="pm-head">
+          <span class="pm-head__label" data-i18n="proj_more">Más proyectos</span>
+          <span class="pm-head__rule" aria-hidden="true"></span>
+          <span class="pm-head__count" aria-hidden="true">( {range} )</span>
+        </div>
+
+        {plates.length > 0 && (
+          <div class="pm-list">
+            {plates.map((p: ProjectView, i: number) => (
+              <article class={`pm pm--${i % 2 ? "blue" : "red"}`} aria-labelledby={`pm-${p.slug}`}>
+                <ProjectShot p={p} tone={i % 2 ? "blue" : "red"} crop={i % 2 ? "tall" : "wide"} />
+                <div class="pm__body">
+                  <div class="pm__top">
+                    <span class="pm__num" aria-hidden="true">{p.num}</span>
+                    <h3 class="pm__title" id={`pm-${p.slug}`}><a href={p.caseHref}>{p.name}</a></h3>
+                  </div>
+                  {p.sub && <p class="pm__sub">{p.sub}</p>}
+                  <p class="pm__client">{p.client}</p>
+                  <p class="pm__desc" data-es={p.desc} data-en={p.desc_en}>{p.desc}</p>
+                  <ProjectFacts p={p} />
+                  <ProjectActions p={p} />
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+
+        {index.length > 0 && (
+          <div class="pi-list">
+            {index.map((p) => (
+              <article class="pi" aria-labelledby={`pi-${p.slug}`}>
+                <span class="pi__num" aria-hidden="true">{p.num}</span>
+                <div class="pi__id">
+                  <h3 class="pi__title" id={`pi-${p.slug}`}><a href={p.caseHref}>{p.title}</a></h3>
+                  <p class="pi__client">{p.client}</p>
+                </div>
+                <div class="pi__info">
+                  <p class="pi__desc" data-es={p.desc} data-en={p.desc_en}>{p.desc}</p>
+                  <ProjectFacts p={p} />
+                </div>
+                <div class="pi__actions"><ProjectActions p={p} /></div>
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
   </div>
 </section>

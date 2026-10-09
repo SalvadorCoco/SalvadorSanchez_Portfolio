@@ -11,6 +11,7 @@ solution: "Rediseño completo con navegación jerarquizada, buscador integrado y
 solution_en: "Full redesign with hierarchical navigation, integrated search and a virtual assistant. The most-used procedures moved to the first scroll. Responsive layout built on a Next.js component architecture."
 metric: "+9.000 usuarios semanales"
 metric_en: "+9,000 weekly users"
+feature: "showcase"
 context: "La Municipalidad de Río Cuarto necesitaba modernizar su presencia digital. El portal anterior era lento, no funcionaba en celular y los ciudadanos abandonaban antes de completar sus trámites. Trabajé junto al equipo interno de sistemas."
 context_en: "The Municipality of Río Cuarto needed to modernize its digital presence. The previous portal was slow, didn't work on mobile, and citizens would abandon before completing their procedures. I worked alongside the internal systems team."
 process: "Relevé las secciones más visitadas y los puntos de abandono. Rediseñé la arquitectura de información priorizando los servicios más usados. El buscador y el asistente virtual fueron desarrollados por el equipo de back-end; yo me encargué del diseño y la integración del frontend."

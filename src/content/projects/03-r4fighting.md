@@ -1,6 +1,6 @@
 ---
 slug: "r4fighting"
-num: "05"
+num: "03"
 title: "R4 Fighting"
 client: "R4F"
 desc: "Plataforma full stack para una organización de torneos de juegos de lucha: panel interno para administradores y sitio público que muestra torneos, eventos y ganadores en tiempo real."
@@ -23,10 +23,19 @@ links:
   - href: "https://github.com/SalvadorCoco/R4F-Front"
     label: "GitHub (Front)"
     type: "gh"
+    inactive: true
   - href: "https://github.com/SalvadorCoco/R4F-Back"
     label: "GitHub (Back)"
     type: "gh"
+    inactive: true
+feature: "poster"
+kicker: "Full stack · R4F"
+kicker_en: "Full stack · R4F"
+layers:
+  - name: "Front"
+    tech: "Next.js"
+  - name: "Back"
+    tech: "FilamentPHP · Laravel"
 cover: "/images/projects/r4fighting/01.webp"
-screenshots:
-  - "/images/projects/r4fighting/01.webp"
+screenshots: []
 ---

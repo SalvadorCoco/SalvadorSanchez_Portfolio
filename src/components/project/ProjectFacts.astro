@@ -1,0 +1,33 @@
+---
+import type { ProjectView } from "../../lib/projects";
+
+interface Props {
+  p: ProjectView;
+}
+
+// Plain text facts, deliberately not styled as controls: access state
+// (private repo, demo on the way) and the tech list as slash-separated type.
+const { p } = Astro.props;
+const hasStatus = p.isPrivate || !!p.demo;
+---
+
+{hasStatus && (
+  <ul class="pf-status">
+    {p.isPrivate && <li data-i18n="proj_repo_private">Repositorio privado</li>}
+    {p.demo && (
+      <li>
+        <span data-es={p.demo.label} data-en={p.demo.label_en}>{p.demo.label}</span>
+        {p.demo.pending && (<> · <span data-i18n="proj_soon">próximamente</span></>)}
+      </li>
+    )}
+  </ul>
+)}
+
+<p class="pf-tech">
+  {p.tags.map((tag, i) => (
+    <>
+      {i > 0 && <i class="pf-tech__sep" aria-hidden="true">/</i>}
+      <span>{tag}</span>
+    </>
+  ))}
+</p>

@@ -24,6 +24,5 @@ links:
     label: "GitHub"
     type: "gh"
 cover: "/images/projects/abog-penal/01.webp"
-screenshots:
-  - "/images/projects/abog-penal/01.webp"
+screenshots: []
 ---

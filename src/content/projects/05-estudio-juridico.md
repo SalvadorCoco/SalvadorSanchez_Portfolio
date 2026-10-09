@@ -1,6 +1,6 @@
 ---
 slug: "estudio-juridico"
-num: "04"
+num: "05"
 title: "Estudio Jurídico Agustín Sánchez"
 client: "Estudio Jurídico Sánchez"
 desc: "Web institucional para estudio de abogacía. Pensada para que cualquier persona con una consulta legal se informe y contacte al equipo sin barreras."
@@ -20,6 +20,7 @@ links:
   - href: "https://estudiojuridico-sanchez.com.ar/"
     label: "↗ Ver en vivo"
     type: "live"
+    inactive: true
   - href: "https://github.com/SalvadorCoco/estudio-agustin-sanchez"
     label: "GitHub"
     type: "gh"

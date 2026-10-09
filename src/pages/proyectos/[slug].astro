@@ -136,11 +136,11 @@ const domain = liveUrl
               </div>
             </div>
 
-            {!project.private && project.links.length > 0 && (
+            {!project.private && project.links.some((l) => !l.inactive) && (
               <div class="proj-page__sidebar-item">
                 <div class="proj-page__sidebar-label">Links</div>
                 <div class="proj-page__sidebar-links">
-                  {project.links.map(({ href, label, type }) => (
+                  {project.links.filter((l) => !l.inactive).map(({ href, label, type }) => (
                     <a href={href} target="_blank" rel="noopener" class={`plink plink--${type}`}>
                       {label}
                     </a>
