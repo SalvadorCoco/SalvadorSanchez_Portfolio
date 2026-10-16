@@ -51,7 +51,6 @@ const moreCount = more.reduce((n, g) => n + g.items.length, 0);
 
     <div class="sk-zone">
       <h3 class="sk-zone__label" data-i18n="sk_core">Principales</h3>
-      <span class="sk-zone__rule" aria-hidden="true"></span>
       <span class="sk-zone__count" aria-hidden="true">( {pad(core.length)} )</span>
     </div>
 
@@ -77,14 +76,8 @@ const moreCount = more.reduce((n, g) => n + g.items.length, 0);
       ))}
     </div>
 
-    <div class="sk-plates" aria-hidden="true">
-      <span class="sk-plates__bar sk-plates__bar--red"></span>
-      <span class="sk-plates__bar sk-plates__bar--blue"></span>
-    </div>
-
-    <div class="sk-zone">
+    <div class="sk-zone sk-zone--more">
       <h3 class="sk-zone__label" data-i18n="sk_more">Más herramientas</h3>
-      <span class="sk-zone__rule" aria-hidden="true"></span>
       <span class="sk-zone__count" aria-hidden="true">( {pad(moreCount)} )</span>
     </div>
 

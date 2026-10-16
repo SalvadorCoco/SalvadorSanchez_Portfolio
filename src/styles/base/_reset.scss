@@ -25,10 +25,8 @@ body {
   overflow-x: hidden;
   line-height: 1.6;
 
-  // Flat ink, nothing else. No fixed haze and no page-wide dot veil: the
-  // background is a printed ground, and the halftone texture lives only in
-  // a few delimited zones (see the halftone mixin, used by Hero and
-  // Contact). Section breaks are drawn by the rule in layout/_section.scss.
+  // Flat ink, nothing else: no fixed haze and no dot texture. Section
+  // breaks are drawn by the rule in layout/_section.scss.
 }
 
 a {

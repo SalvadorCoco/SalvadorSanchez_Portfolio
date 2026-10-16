@@ -1,46 +1,15 @@
-// Every page of the site ends on the same panel rule: the Hero and each
-// section close with a 2px line at the width of the content grid, so the
-// breaks read as one system (the editorial rules inside the sections are
-// the same 2px, just brighter). Hero→Projects, Projects→Skills,
-// Skills→Experience, Experience→Contact and Contact→Footer are all this
-// one line, drawn at the bottom of the section above the break. It lives
-// on ::after so ::before stays free for a section's own graphic zone.
-.hero,
-.section {
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - #{$container-padding-x}); // .container content width (its padding is half this, each side)
-    height: 2px;
-    background: rgba(var(--color-text-rgb), 0.3);
-    pointer-events: none;
-  }
-
-  // Follow Bootstrap's stepped container widths so the rule always lines up
-  // with the content grid, at every breakpoint.
-  @each $bp, $max in $container-max-widths {
-    @include media-breakpoint-up($bp) {
-      &::after { width: calc(#{$max} - #{$container-padding-x}); }
-    }
-  }
-}
-
 .section {
   position: relative;
   padding: $space-section-y 0;
 
-  // No alternating band color and no tonal steps: the ground is one flat
-  // ink, and the breaks between sections are the rule above, not a change
-  // of background.
+  // Sections are told apart by space and by their own opening (a label and
+  // a poster-scale title), not by a rule at the end of each one. The only
+  // closing gesture on the page is the red/blue pair of bars in Contact.
 }
 
 .sec {
   // Comic narration box: the little caption panel the film stamps in the
-  // corner of a shot. Slightly off-square so it reads as printed and
-  // placed by hand rather than as a UI chip.
+  // corner of a shot. Square and straight, so the small text stays crisp.
   &__eyebrow {
     display: inline-block;
     padding: 4px 11px;
@@ -52,9 +21,7 @@
     background: var(--color-red-dim);
     border: 1.5px solid rgba(var(--color-red-rgb), 0.55);
     border-radius: 2px;
-    transform: rotate(-1.2deg);
     margin-bottom: 0.9rem;
-    box-shadow: 2px 2px 0 rgba(var(--color-blue-rgb), 0.35);
   }
 
   &__title {
@@ -67,38 +34,8 @@
     margin-bottom: 1rem;
   }
 
-  // The dimensional glitch, reused: every section heading tears into
-  // place the way the hero title does, so the effect reads as the site's
-  // language instead of a one-off trick in the header.
-  @media (prefers-reduced-motion: no-preference) {
-    &__head.v &__title {
-      animation: panel-glitch 0.45s steps(3) both;
-    }
-  }
-
   &__head {
     margin-bottom: 2.5rem;
   }
 }
 
-@keyframes panel-glitch {
-  0% {
-    opacity: 0.5;
-    transform: translateX(-4px);
-    text-shadow: -4px 0 0 var(--color-blue), 4px 0 0 var(--color-red);
-  }
-  40% {
-    opacity: 1;
-    transform: translateX(3px);
-    text-shadow: 3px 0 0 var(--color-blue), -3px 0 0 var(--color-red);
-  }
-  70% {
-    transform: translateX(-1px);
-    text-shadow: -1px 0 0 var(--color-blue), 1px 0 0 var(--color-red);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-    text-shadow: none;
-  }
-}

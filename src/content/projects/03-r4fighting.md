@@ -37,5 +37,8 @@ layers:
   - name: "Back"
     tech: "FilamentPHP · Laravel"
 cover: "/images/projects/r4fighting/01.webp"
-screenshots: []
+screenshots:
+  - "/images/projects/r4fighting/01.webp"
+  - "/images/projects/r4fighting/02.webp"
+  - "/images/projects/r4fighting/03.webp"
 ---

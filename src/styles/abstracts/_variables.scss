@@ -51,6 +51,7 @@ $gap-lg:  32px;
   --color-red-rgb:     255, 22, 53;
   --color-red-dark:    #C9102A;
   --color-red-dim:     rgba(255, 22, 53, 0.12);
+  --color-red-text:    #FF5C70; // small red text on dark / red-tinted surfaces (>= 6:1)
 
   --color-blue:        #2634FF;
   --color-blue-rgb:    38, 52, 255;
@@ -73,7 +74,6 @@ $gap-lg:  32px;
   // shadow/opacity value across components is left for later phases.
   --glow-red-opacity:   0.3;
   --glow-blue-opacity:  0.22;
-  --halftone-opacity:   0.75; // ink strength of the localized halftone zones
   --rgb-offset:         5px;
 }
 
@@ -87,6 +87,7 @@ $color-border:     var(--color-border);
 $color-red:        var(--color-red);
 $color-red-dark:   var(--color-red-dark);
 $color-red-dim:    var(--color-red-dim);
+$color-red-text:   var(--color-red-text);
 $color-blue:       var(--color-blue);
 
 $color-text:       var(--color-text);

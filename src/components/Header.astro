@@ -31,7 +31,7 @@ const links = [
       <span class="header__available-dot"></span>
       <span data-i18n="hero_badge">Disponible para proyectos</span>
     </div>
-    <button class="header__burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+    <button class="header__burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-nav">
       <span></span>
       <span></span>
       <span></span>
@@ -40,7 +40,7 @@ const links = [
 </header>
 
 <!-- Mobile nav drawer -->
-<div class="header__mobile-nav" id="mobile-nav" aria-hidden="true">
+<div class="header__mobile-nav" id="mobile-nav" inert>
   {links.map(({ href, key, label, num }) => (
     <a href={href} class="header__mobile-link"><span class="header__nav-num">{num}</span><span data-i18n={key}>{label}</span></a>
   ))}
@@ -67,7 +67,8 @@ const links = [
     burger.classList.toggle('open', open);
     mobileNav.classList.toggle('open', open);
     burger.setAttribute('aria-expanded', String(open));
-    mobileNav.setAttribute('aria-hidden', String(!open));
+    // inert: closed links are not focusable nor exposed to assistive tech.
+    mobileNav.toggleAttribute('inert', !open);
   }
 
   burger.addEventListener('click', () => {
@@ -77,6 +78,14 @@ const links = [
   // Close on nav link click
   mobileNav.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => toggleMenu(false));
+  });
+
+  // Close with Escape and give focus back to the button
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+      toggleMenu(false);
+      burger.focus();
+    }
   });
 
   // Close on outside click

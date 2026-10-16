@@ -1,10 +1,10 @@
 // ══════════════════════════════════════════════════════════════════
 // Skills — the "index page" of the comic-editorial system.
 //
-// Same family as Hero and Selected Work (12-col grid, hard 2px rules,
-// folio/zone lines, poster-scale condensed type, offset red/blue plates)
-// but its own composition: two giant lines for React and Next.js, then a
-// quiet grouped list for everything else. A typographic list, not cards.
+// Same family as Hero and Selected Work (12-col grid, poster-scale condensed
+// type, red numbering) but its own composition: two giant lines for React and
+// Next.js, then a quiet grouped list for everything else. A typographic list,
+// not cards and not a table: groups are told apart by space, not by lines.
 //
 // Static: nothing here animates or depends on JS. Links are the only
 // interactive things, and only they get a (colour-only) hover.
@@ -23,27 +23,11 @@ $sk-gap: clamp(1rem, 2.4vw, 2rem);
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: $sk-gap;
     row-gap: 1rem;
-    align-items: end;
-    padding-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
-    margin-bottom: clamp(2.25rem, 4vw, 3.5rem);
-    border-bottom: 2px solid rgba(var(--color-text-rgb), 0.9);
+    margin-bottom: clamp(3rem, 6vw, 5rem);
 
     > * { grid-column: 1 / -1; min-width: 0; }
-
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -2px;
-      width: clamp(3rem, 7vw, 6rem);
-      height: 6px;
-      background: $color-red;
-    }
-
-    @include media-breakpoint-up(lg) {
-      .skills__title { grid-column: 1 / span 8; }
-      .skills__desc  { grid-column: 9 / -1; padding-bottom: 0.4rem; }
-    }
+    // Unlike Selected Work's two-column header, the description sits right
+    // under the title, so the section opens as one block.
   }
 
   &__label {
@@ -82,12 +66,15 @@ $sk-gap: clamp(1rem, 2.4vw, 2rem);
   }
 }
 
-// ── Zone line: label — rule — count ─────────────────────────────────
+// ── Zone label: label + count, no rule ──────────────────────────────
 .sk-zone {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 1rem;
   margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+
+  // The second zone starts after a clear gap instead of a break graphic.
+  &--more { margin-top: clamp(3.5rem, 7vw, 6rem); }
 
   &__label {
     margin: 0;
@@ -97,13 +84,6 @@ $sk-gap: clamp(1rem, 2.4vw, 2rem);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: $color-text;
-  }
-
-  &__rule {
-    flex: 1 1 1rem;
-    min-width: 1rem;
-    height: 2px;
-    background: rgba(var(--color-text-rgb), 0.85);
   }
 
   &__count {
@@ -126,7 +106,6 @@ $sk-gap: clamp(1rem, 2.4vw, 2rem);
   column-gap: 0.75rem;
   row-gap: 1rem;
   padding: clamp(1.25rem, 3vw, 2.25rem) 0;
-  border-bottom: 2px solid rgba(var(--color-text-rgb), 0.9);
 
   > * { grid-column: 2; min-width: 0; }
   > .sk-main__num { grid-column: 1; grid-row: 1; }
@@ -210,24 +189,6 @@ $sk-gap: clamp(1rem, 2.4vw, 2rem);
   }
 }
 
-// The two offset bars from the Hero, as the break between the two zones.
-.sk-plates {
-  position: relative;
-  height: 26px;
-  margin: clamp(2rem, 4vw, 3rem) 0;
-
-  &__bar {
-    --slip: clamp(10px, 1.6vw, 22px);
-    position: absolute;
-    left: 0;
-    width: calc(100% - var(--slip));
-    height: 10px;
-
-    &--red  { top: 0; background: $color-red; z-index: 1; }
-    &--blue { top: 12px; left: var(--slip); background: var(--color-blue); }
-  }
-}
-
 // ── Everything else: grouped typographic rows ───────────────────────
 .sk-more { margin: 0; }
 
@@ -235,8 +196,7 @@ $sk-gap: clamp(1rem, 2.4vw, 2rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   row-gap: 0.5rem;
-  padding: 1.1rem 0;
-  border-bottom: 1px solid rgba(var(--color-text-rgb), 0.22);
+  padding: 1.3rem 0;
 
   &__cat {
     margin: 0;

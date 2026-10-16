@@ -1,0 +1,23 @@
+---
+// Front/back architecture diagram, built from the project's own `layers`
+// frontmatter (the same data and the same `.pl` styles the home page uses
+// for the R4 poster). Used on the detail page when a project has no
+// screenshot but does have layers.
+interface Props {
+  layers: { name: string; tech: string }[];
+}
+
+const { layers } = Astro.props;
+---
+
+<div class="pl">
+  {layers.map((layer, i) => (
+    <>
+      {i > 0 && <div class="pl__link" aria-hidden="true"><span>API</span></div>}
+      <div class={`pl__node pl__node--${i % 2 ? "blue" : "red"}`}>
+        <span class="pl__name">{layer.name}</span>
+        <span class="pl__tech">{layer.tech}</span>
+      </div>
+    </>
+  ))}
+</div>

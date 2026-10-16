@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
+import ProjectLayers from "../../components/project/ProjectLayers.astro";
 import { getCollection } from "astro:content";
 import "../../styles/main.scss";
 
@@ -21,16 +22,34 @@ const next = projects[currentIndex + 1] ?? null;
 
 const hasScreenshots = project.screenshots.length > 0;
 const multipleScreenshots = project.screenshots.length > 1;
-const liveUrl = project.links.find((l) => l.type === "live")?.href ?? "";
-const domain = liveUrl
-  ? new URL(liveUrl).hostname.replace("www.", "")
-  : "";
+
+// "Postas · Sistema POS" → big name + a smaller second line (same split the
+// home page uses). The whole title stays inside the <h1>.
+const [name, ...subParts] = project.title.split(" · ");
+const sub = subParts.join(" · ");
+
+// Same label the home page puts next to the number.
+const kicker = project.kicker ?? project.client;
+const kickerEn = project.kicker_en ?? kicker;
+
+// The cover is chosen from data that already exists: a screenshot when there
+// is one, the real front/back layers when there are no screenshots, and a
+// purely typographic cover otherwise. No per-slug exceptions.
+const variant = hasScreenshots ? "shot" : project.layers?.length ? "layers" : "type";
+
+// Print-plate colour for the frame and the result panel: red on odd project
+// numbers, blue on even ones (as on the home page).
+const tone = Number(project.num) % 2 ? "red" : "blue";
+
+// Same visibility rule as before: no links for private projects, and links
+// flagged `inactive` stay hidden.
+const links = project.private ? [] : project.links.filter((l) => !l.inactive);
 ---
 
 <Layout title={`${project.title} — Salvador Sanchez`} description={project.desc}>
   <Header />
 
-  <main class="proj-page">
+  <main class={`proj-page proj-page--${tone}`}>
 
     <div class="proj-page__breadcrumb">
       <div class="container">
@@ -38,46 +57,116 @@ const domain = liveUrl
       </div>
     </div>
 
-    <!-- Hero header -->
-    <section class="proj-page__hero">
+    <!-- Cover -->
+    <section class={`proj-hero proj-hero--${variant}`}>
       <div class="container">
-        <div class="proj-page__eyebrow">
-          <span class="sec__eyebrow">{project.num} · <span data-i18n="proj_unit">proyecto</span></span>
+        <div class="proj-hero__grid">
+          <p class="proj-hero__folio">
+            <span class="proj-hero__num" aria-hidden="true">{project.num}</span>
+            <span class="proj-hero__kicker" data-es={kicker} data-en={kickerEn}>{kicker}</span>
+          </p>
+
+          <h1 class="proj-hero__title">
+            <span class="proj-hero__name">{name}</span>
+            {sub && (
+              <span class="proj-hero__sub"><span class="proj-page__sr"> · </span>{sub}</span>
+            )}
+          </h1>
+
+          <p
+            class="proj-hero__lead"
+            data-es={project.desc}
+            data-en={project.desc_en ?? project.desc}
+          >{project.desc}</p>
+
+          <dl class="proj-meta">
+            <div class="proj-meta__item">
+              <dt data-i18n="proj_client">Cliente</dt>
+              <dd>{project.client}</dd>
+            </div>
+
+            <div class="proj-meta__item">
+              <dt>Stack</dt>
+              <dd class="proj-meta__stack">
+                {project.tags.map((tag, i) => (
+                  <>
+                    {i > 0 && <i class="proj-meta__sep" aria-hidden="true">/</i>}
+                    <span>{tag}</span>
+                  </>
+                ))}
+              </dd>
+            </div>
+
+            {links.length > 0 && (
+              <div class="proj-meta__item proj-meta__item--links">
+                <dt class="proj-page__sr">Links</dt>
+                <dd class="proj-links">
+                  {links.map(({ href, label, type }) => (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener"
+                      class={type === "live" ? "proj-links__live" : "proj-links__other"}
+                    >{label}<span class="proj-page__sr"> <span data-i18n="proj_new_tab">(se abre en una pestaña nueva)</span></span></a>
+                  ))}
+                </dd>
+              </div>
+            )}
+
+            {project.demo && (
+              <div class="proj-meta__item">
+                <dt>Demo</dt>
+                <dd>
+                  {project.demo.pending || !project.demo.href ? (
+                    <span
+                      class="proj-demo proj-demo--pending"
+                      data-es={`🎥 ${project.demo.label} (próximamente)`}
+                      data-en={`🎥 ${project.demo.label_en || project.demo.label} (coming soon)`}
+                    >🎥 {project.demo.label} (próximamente)</span>
+                  ) : (
+                    <a
+                      href={project.demo.href}
+                      target="_blank"
+                      rel="noopener"
+                      class="proj-links__other"
+                      data-es={`🎥 ${project.demo.label}`}
+                      data-en={`🎥 ${project.demo.label_en || project.demo.label}`}
+                    >🎥 {project.demo.label}</a>
+                  )}
+                </dd>
+              </div>
+            )}
+          </dl>
+
+          {variant === "layers" && (
+            <div class="proj-hero__visual">
+              <ProjectLayers layers={project.layers!} />
+            </div>
+          )}
+
+          {variant === "type" && (
+            <p class="proj-hero__bignum" aria-hidden="true">{project.num}</p>
+          )}
         </div>
-        <h1 class="proj-page__title">{project.title}</h1>
-        <p class="proj-page__client">{project.client}</p>
-        <p
-          class="proj-page__lead"
-          data-es={project.desc}
-          data-en={project.desc_en ?? project.desc}
-        >{project.desc}</p>
       </div>
     </section>
 
-    <!-- Dark stage with carousel -->
+    <!-- Screenshots -->
     {hasScreenshots && (
-      <section class="proj-page__stage">
+      <section class="proj-stage">
         <div class="container">
           {multipleScreenshots ? (
             <div class="sc-carousel" id="sc-carousel">
               <div class="sc-carousel__track">
                 {project.screenshots.map((src, i) => (
                   <div class={`sc-carousel__slide${i === 0 ? " active" : ""}`} data-index={i}>
-                    <div class="browser-mock browser-mock--cover">
-                      <div class="browser-mock__bar">
-                        <div class="browser-mock__dots">
-                          <span></span><span></span><span></span>
-                        </div>
-                        {domain && <div class="browser-mock__url">{domain}</div>}
-                      </div>
-                      <div class="browser-mock__screen">
-                        <img
-                          src={src}
-                          alt={`${project.title} — captura ${i + 1}`}
-                          loading={i === 0 ? "eager" : "lazy"}
-                        />
-                      </div>
-                    </div>
+                    <figure class="proj-shot">
+                      <img
+                        src={src}
+                        alt={`${project.title} — captura ${i + 1}`}
+                        loading={i === 0 ? "eager" : "lazy"}
+                      />
+                    </figure>
                   </div>
                 ))}
               </div>
@@ -97,150 +186,106 @@ const domain = liveUrl
               </div>
             </div>
           ) : (
-            <div class="browser-mock browser-mock--cover">
-              <div class="browser-mock__bar">
-                <div class="browser-mock__dots">
-                  <span></span><span></span><span></span>
-                </div>
-                {domain && <div class="browser-mock__url">{domain}</div>}
-              </div>
-              <div class="browser-mock__screen">
-                <img
-                  src={project.screenshots[0]}
-                  alt={`${project.title} — captura principal`}
-                  loading="eager"
-                />
-              </div>
-            </div>
+            <figure class="proj-shot">
+              <img
+                src={project.screenshots[0]}
+                alt={`${project.title} — captura principal`}
+                loading="eager"
+              />
+            </figure>
           )}
         </div>
       </section>
     )}
 
-    <!-- Two-column content layout -->
-    <section class="proj-page__content">
+    <!-- Case -->
+    <section class="proj-body">
       <div class="container">
-        <div class="proj-page__layout">
 
-          <!-- Sidebar -->
-          <aside class="proj-page__sidebar">
-            <div class="proj-page__sidebar-item">
-              <div class="proj-page__sidebar-label" data-i18n="proj_client">Cliente</div>
-              <div class="proj-page__sidebar-value">{project.client}</div>
-            </div>
+        <div class="pb">
+          <div class="pb__rail">
+            <span class="pb__num" aria-hidden="true">01</span>
+            <h2 class="pb__title" data-i18n="proj_context_title">Contexto</h2>
+          </div>
+          <div class="pb__content">
+            <p
+              class="pb__text"
+              data-es={project.context}
+              data-en={project.context_en ?? project.context}
+            >{project.context}</p>
+          </div>
+        </div>
 
-            <div class="proj-page__sidebar-item">
-              <div class="proj-page__sidebar-label">Stack</div>
-              <div class="proj-tags proj-tags--wrap">
-                {project.tags.map(tag => <span class="tag">{tag}</span>)}
-              </div>
-            </div>
-
-            {!project.private && project.links.some((l) => !l.inactive) && (
-              <div class="proj-page__sidebar-item">
-                <div class="proj-page__sidebar-label">Links</div>
-                <div class="proj-page__sidebar-links">
-                  {project.links.filter((l) => !l.inactive).map(({ href, label, type }) => (
-                    <a href={href} target="_blank" rel="noopener" class={`plink plink--${type}`}>
-                      {label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {project.demo && (
-              <div class="proj-page__sidebar-item">
-                <div class="proj-page__sidebar-label">Demo</div>
-                <div class="proj-page__sidebar-links">
-                  {project.demo.pending || !project.demo.href ? (
-                    <span
-                      class="plink plink--demo plink--pending"
-                      data-es={`🎥 ${project.demo.label} (próximamente)`}
-                      data-en={`🎥 ${project.demo.label_en || project.demo.label} (coming soon)`}
-                    >🎥 {project.demo.label} (próximamente)</span>
-                  ) : (
-                    <a
-                      href={project.demo.href}
-                      target="_blank"
-                      rel="noopener"
-                      class="plink plink--demo"
-                      data-es={`🎥 ${project.demo.label}`}
-                      data-en={`🎥 ${project.demo.label_en || project.demo.label}`}
-                    >🎥 {project.demo.label}</a>
-                  )}
-                </div>
-              </div>
-            )}
-          </aside>
-
-          <!-- Body -->
-          <div class="proj-page__body">
-
-            <div class="proj-page__section">
-              <h2 class="proj-page__section-title" data-i18n="proj_context_title">Contexto</h2>
+        <div class="pb">
+          <div class="pb__rail">
+            <span class="pb__num" aria-hidden="true">02</span>
+          </div>
+          <div class="pb__content pb__duo">
+            <div class="pb__col pb__col--problem">
+              <div class="pb__label" data-i18n="proj_problem">Problema</div>
               <p
-                class="proj-page__text"
-                data-es={project.context}
-                data-en={project.context_en ?? project.context}
-              >{project.context}</p>
+                class="pb__text"
+                data-es={project.problem}
+                data-en={project.problem_en ?? project.problem}
+              >{project.problem}</p>
             </div>
-
-            <div class="proj-page__split">
-              <div class="proj-page__split-item proj-page__split-item--problem">
-                <div class="proj-page__split-label" data-i18n="proj_problem">Problema</div>
-                <p
-                  class="proj-page__text"
-                  data-es={project.problem}
-                  data-en={project.problem_en ?? project.problem}
-                >{project.problem}</p>
-              </div>
-              <div class="proj-page__split-item proj-page__split-item--solution">
-                <div class="proj-page__split-label" data-i18n="proj_solution">Solución</div>
-                <p
-                  class="proj-page__text"
-                  data-es={project.solution}
-                  data-en={project.solution_en ?? project.solution}
-                >{project.solution}</p>
-              </div>
-            </div>
-
-            <div class="proj-page__section">
-              <h2 class="proj-page__section-title" data-i18n="proj_process_title">Proceso</h2>
+            <div class="pb__col pb__col--solution">
+              <div class="pb__label" data-i18n="proj_solution">Solución</div>
               <p
-                class="proj-page__text"
-                data-es={project.process}
-                data-en={project.process_en ?? project.process}
-              >{project.process}</p>
+                class="pb__text"
+                data-es={project.solution}
+                data-en={project.solution_en ?? project.solution}
+              >{project.solution}</p>
             </div>
+          </div>
+        </div>
 
-            <div class="proj-page__section proj-page__section--result">
-              <div class="proj-page__result-label" data-i18n="proj_result_label">Resultado</div>
+        <div class="pb">
+          <div class="pb__rail">
+            <span class="pb__num" aria-hidden="true">03</span>
+            <h2 class="pb__title" data-i18n="proj_process_title">Proceso</h2>
+          </div>
+          <div class="pb__content">
+            <p
+              class="pb__text"
+              data-es={project.process}
+              data-en={project.process_en ?? project.process}
+            >{project.process}</p>
+          </div>
+        </div>
+
+        <div class="pb pb--result">
+          <div class="pb__rail">
+            <span class="pb__num" aria-hidden="true">04</span>
+          </div>
+          <div class="pb__content">
+            <div class="pb__panel">
+              <div class="pb__label pb__label--red" data-i18n="proj_result_label">Resultado</div>
               <p
-                class="proj-page__result-text"
+                class="pb__result"
                 data-es={project.result}
                 data-en={project.result_en ?? project.result}
               >{project.result}</p>
             </div>
-
           </div>
         </div>
+
       </div>
     </section>
 
-    <nav class="proj-page__nav">
+    <nav class="proj-nav">
       <div class="container">
-        <div class="proj-page__nav-inner">
+        <div class="proj-nav__inner">
           {prev ? (
-            <a href={`/proyectos/${prev.slug}`} class="proj-page__nav-link proj-page__nav-link--prev">
-              <span class="proj-page__nav-dir" data-i18n="proj_prev">← Anterior</span>
-              <span class="proj-page__nav-name">{prev.title}</span>
+            <a href={`/proyectos/${prev.slug}`} class="proj-nav__link proj-nav__link--prev">
+              <span class="proj-nav__dir" data-i18n="proj_prev">← Anterior</span>
+              <span class="proj-nav__name">{prev.title}</span>
             </a>
           ) : <div />}
           {next ? (
-            <a href={`/proyectos/${next.slug}`} class="proj-page__nav-link proj-page__nav-link--next">
-              <span class="proj-page__nav-dir" data-i18n="proj_next">Siguiente →</span>
-              <span class="proj-page__nav-name">{next.title}</span>
+            <a href={`/proyectos/${next.slug}`} class="proj-nav__link proj-nav__link--next">
+              <span class="proj-nav__dir" data-i18n="proj_next">Siguiente →</span>
+              <span class="proj-nav__name">{next.title}</span>
             </a>
           ) : <div />}
         </div>

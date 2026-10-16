@@ -1,3 +1,9 @@
+// Width from which the full desktop header (links + availability pill) is
+// used. Measured, not a Bootstrap step: with the pill, the nav needs ~1024px
+// to keep at least 16px of air on each side in both languages; below that
+// the burger menu is used (tablet portrait included).
+$header-desktop-bp: 1024px;
+
 .header {
   position: fixed;
   top: 0;
@@ -79,7 +85,7 @@
   }
 
   &__nav-wrap {
-    @include media-breakpoint-down(md) { display: none; }
+    @media (max-width: #{$header-desktop-bp - 0.02px}) { display: none; }
   }
 
   &__nav {
@@ -161,7 +167,7 @@
     color: $color-muted;
     white-space: nowrap;
 
-    @include media-breakpoint-down(md) { display: none; }
+    @media (max-width: #{$header-desktop-bp - 0.02px}) { display: none; }
   }
 
   &__available-dot {
@@ -205,7 +211,7 @@
     &.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     &.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    @include media-breakpoint-down(md) { display: flex; }
+    @media (max-width: #{$header-desktop-bp - 0.02px}) { display: flex; }
   }
 
   // ── Mobile nav drawer ──────────────────────────
@@ -223,6 +229,9 @@
     flex-direction: column;
     gap: 0;
 
+    // Closed state is visual only (fade + slight rise). Keeping it out of
+    // the tab order and the accessibility tree is done with the `inert`
+    // attribute, toggled together with .open in the header script.
     opacity: 0;
     transform: translateY(-6px);
     pointer-events: none;
@@ -234,7 +243,7 @@
       pointer-events: auto;
     }
 
-    @include media-breakpoint-up(lg) { display: none; }
+    @media (min-width: $header-desktop-bp) { display: none; }
   }
 
   &__mobile-link {

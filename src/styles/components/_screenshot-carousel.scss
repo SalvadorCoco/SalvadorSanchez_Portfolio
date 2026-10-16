@@ -6,17 +6,14 @@
   &__slide {
     display: none;
 
-    &.active {
-      display: block;
-      animation: sc-fadein 0.35s $ease-out;
-    }
+    &.active { display: block; }
   }
 
   // Controls row under the slide
   &__controls {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 1rem;
     margin-top: 1.25rem;
   }
@@ -25,45 +22,70 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid $color-border;
-    background: $color-bg-soft;
-    color: $color-muted;
-    font-size: 0.9rem;
+    width: 44px;
+    height: 44px;
+    border: 2px solid rgba(var(--color-text-rgb), 0.92);
+    background: transparent;
+    color: $color-text;
+    font-size: 1rem;
     cursor: pointer;
-    transition: all 0.2s;
     line-height: 1;
 
     &:hover {
-      background: $color-red-dim;
-      color: $color-red;
-      border-color: $color-red;
+      background: $color-text;
+      color: $color-bg;
     }
   }
 
   &__dots {
     display: flex;
-    gap: 6px;
     align-items: center;
   }
 
+  // The button is the hit area (24px tall, 24px wide; 36px for the active
+  // one); the visible indicator is its ::before, so the dots look as small
+  // as before but are comfortable to hit and never overlap.
   &__dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 3px;
-    background: $color-muted-dim;
-    border: none;
-    cursor: pointer;
+    position: relative;
+    width: 24px;
+    height: 24px;
     padding: 0;
-    transition: all 0.25s $ease-out;
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      background: $color-muted; // 6.5:1 on the page background
+      transform: translate(-50%, -50%);
+    }
 
     &.active {
-      background: $color-red;
-      width: 22px;
+      width: 36px;
+      &::before { width: 22px; background: $color-red; }
     }
   }
+
+  // A clear keyboard ring on every control (same token as the home page).
+  &__btn:focus-visible,
+  &__dot:focus-visible {
+    outline: 3px solid $color-text;
+    outline-offset: 2px;
+  }
+}
+
+// Motion only when the user hasn't asked for less: the slide fade-in and
+// the controls' hover / indicator transitions.
+@media (prefers-reduced-motion: no-preference) {
+  .sc-carousel__slide.active { animation: sc-fadein 0.35s $ease-out; }
+  .sc-carousel__btn { transition: all 0.2s; }
+  .sc-carousel__dot::before { transition: width 0.25s $ease-out, background-color 0.25s $ease-out; }
 }
 
 @keyframes sc-fadein {

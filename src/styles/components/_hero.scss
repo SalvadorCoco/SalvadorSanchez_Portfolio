@@ -12,14 +12,12 @@
 // ══════════════════════════════════════════════════════════════════
 
 $hero-gap: clamp(1rem, 2.4vw, 2rem);
-// Desktop name size, shared by the name itself and by the halftone panel
-// that is sized to run from the portrait's top down to the print plates.
+// Desktop name size.
 $hero-name-fs: clamp(5.5rem, 14.5vw, 14rem);
 
 .hero {
   --hp: #{clamp(6px, 1vw, 12px)}; // hard plate offset
   position: relative;
-  isolation: isolate; // keeps the halftone panel (z -1) behind the hero's content
   overflow: hidden;
   padding-top: calc(#{$header-h} + clamp(1.5rem, 4vw, 3rem));
   padding-bottom: clamp(2rem, 4vw, 3.5rem);
@@ -90,8 +88,6 @@ $hero-name-fs: clamp(5.5rem, 14.5vw, 14rem);
     letter-spacing: -0.012em;
     text-transform: uppercase;
     color: $color-text;
-    // Static misregistration: a red and a blue plate slipped either side.
-    text-shadow: 0.025em 0 0 var(--color-blue), -0.025em 0 0 var(--color-red);
   }
 
   // The mask the word rises through.
@@ -214,10 +210,7 @@ $hero-name-fs: clamp(5.5rem, 14.5vw, 14rem);
     letter-spacing: -0.01em;
     color: $color-text;
 
-    .hl {
-      color: $color-red;
-      text-shadow: 0.04em 0 0 var(--color-blue);
-    }
+    .hl { color: $color-red; }
   }
 
   &__desc {
@@ -300,27 +293,6 @@ $hero-name-fs: clamp(5.5rem, 14.5vw, 14rem);
       font-size: $hero-name-fs;
     }
 
-    // Halftone panel: a hard-edged printed block of blue dots that bleeds
-    // off the right edge behind the portrait. It starts just above the
-    // portrait's top and stops just below the print plates, so it frames
-    // the name/portrait pair and never reaches the tagline or the copy.
-    // The top offset mirrors the hero's own padding + folio + row gap; the
-    // height mirrors the name rows (2 lines at ~0.86em) + margin + gap +
-    // plates. If those change, adjust here.
-    &::before {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      right: 0;
-      top: calc(#{$header-h} + clamp(1.5rem, 4vw, 3rem) + 1.15rem + clamp(1rem, 2vw, 1.5rem) - 14px);
-      width: 44%;
-      height: calc(
-        #{$hero-name-fs} * 1.72 + clamp(0.5rem, 2vw, 1.25rem) + clamp(1rem, 2vw, 1.5rem) +
-          0.25rem + clamp(10px, 1.4vw, 18px) + 12px + 22px
-      );
-      pointer-events: none;
-      @include halftone(var(--color-blue-rgb));
-    }
 
     // Explicit rows: the plates deliberately overlap the portrait's
     // columns (they run behind it), which auto-placement wouldn't allow.
@@ -393,10 +365,7 @@ $hero-name-fs: clamp(5.5rem, 14.5vw, 14rem);
 }
 
 @keyframes hero-rise {
-  from {
-    transform: translateY(104%);
-    text-shadow: 0.08em 0 0 var(--color-blue), -0.08em 0 0 var(--color-red);
-  }
+  from { transform: translateY(104%); }
 }
 
 // `to` is explicit and slightly oversized: it matches the finished look

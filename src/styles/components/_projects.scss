@@ -31,23 +31,10 @@ $pf-gap: clamp(1rem, 2.4vw, 2rem);
     column-gap: $pf-gap;
     row-gap: 1.1rem;
     align-items: end;
-    padding-bottom: clamp(1.25rem, 2.5vw, 2rem);
-    margin-bottom: clamp(2.75rem, 5vw, 4.5rem);
-    border-bottom: 2px solid rgba(var(--color-text-rgb), 0.9);
+    // No rule under the header: the gap to the first project does the work.
+    margin-bottom: clamp(3.5rem, 7vw, 6.5rem);
 
     > * { grid-column: 1 / -1; min-width: 0; }
-
-    // The short red bar sitting on the rule ties the header to the first
-    // folio line below it.
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -2px;
-      width: clamp(4rem, 9vw, 8rem);
-      height: 6px;
-      background: $color-red;
-    }
 
     @include media-breakpoint-up(lg) {
       .projects__title { grid-column: 1 / span 8; }
@@ -295,10 +282,10 @@ $plate: clamp(6px, 1vw, 12px);
 
   > * { grid-column: 1 / -1; min-width: 0; }
 
-  // Folio line: number — rule — label.
+  // Folio: number, then its label right beside it (no connecting rule).
   &__folio {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: clamp(0.75rem, 1.6vw, 1.25rem);
   }
 
@@ -311,16 +298,8 @@ $plate: clamp(6px, 1vw, 12px);
     color: $color-red;
   }
 
-  &__rule {
-    flex: 1 1 1rem;
-    min-width: 1rem;
-    height: 2px;
-    background: rgba(var(--color-text-rgb), 0.85);
-  }
-
   &__kicker {
     flex: 0 1 auto;
-    text-align: right;
     font-family: $font-body;
     font-size: 0.72rem;
     font-weight: 700;
@@ -360,10 +339,9 @@ $plate: clamp(6px, 1vw, 12px);
       }
     }
 
-    // R4 Fighting: two stacked lines with a static misregistration edge.
+    // R4 Fighting: two stacked lines.
     &--poster {
       font-size: clamp(3.8rem, 15vw, 8rem);
-      text-shadow: 0.03em 0 0 var(--color-blue), -0.03em 0 0 var(--color-red);
 
       @include media-breakpoint-up(lg) {
         font-size: clamp(3.8rem, 10.5vw, 9.5rem);
@@ -388,8 +366,6 @@ $plate: clamp(6px, 1vw, 12px);
     font-weight: 800;
     letter-spacing: -0.02em;
     color: $color-red;
-    // The misprint: a hard blue plate slipped off the red one.
-    text-shadow: 0.045em 0.025em 0 var(--color-blue);
   }
 
   &__metric-label {
@@ -436,8 +412,6 @@ $plate: clamp(6px, 1vw, 12px);
     background: $color-red-dim;
     border: 1.5px solid rgba(var(--color-red-rgb), 0.55);
     border-radius: 2px;
-    transform: rotate(-1.2deg);
-    box-shadow: 2px 2px 0 rgba(var(--color-blue-rgb), 0.55);
   }
 
   &__titlebar {
@@ -509,10 +483,7 @@ $plate: clamp(6px, 1vw, 12px);
     mask-image: linear-gradient(to left, #000 0%, transparent 80%);
   }
 
-  &__actions {
-    padding-top: clamp(1rem, 2vw, 1.5rem);
-    border-top: 1px solid rgba(var(--color-text-rgb), 0.18);
-  }
+  &__actions { padding-top: clamp(0.5rem, 1.5vw, 1rem); }
 
   @include media-breakpoint-up(lg) {
     &__main   { grid-column: 1 / span 7; }
@@ -597,7 +568,7 @@ $plate: clamp(6px, 1vw, 12px);
 
 .pm-head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 1rem;
   margin-bottom: clamp(1.75rem, 3vw, 2.5rem);
 
@@ -608,12 +579,6 @@ $plate: clamp(6px, 1vw, 12px);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: $color-text;
-  }
-
-  &__rule {
-    flex: 1 1 1rem;
-    height: 2px;
-    background: rgba(var(--color-text-rgb), 0.85);
   }
 
   &__count {
@@ -704,15 +669,19 @@ $plate: clamp(6px, 1vw, 12px);
 }
 
 // Index rows: the typographic treatment for projects without a capture.
-.pi-list { border-top: 2px solid rgba(var(--color-text-rgb), 0.9); }
+// One thin rule ABOVE each row, and nothing else: it is the border between
+// one project and the next (and between these rows and the plates above), so
+// the eye can tell where a project starts. Nothing inside a row is ruled, and
+// there is no rule after the last one.
+.pi-list { display: block; }
 
 .pi {
   display: grid;
   grid-template-columns: 2.5rem minmax(0, 1fr);
   column-gap: 0.75rem;
   row-gap: 0.75rem;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid rgba(var(--color-text-rgb), 0.22);
+  padding: clamp(1.75rem, 3.2vw, 2.25rem) 0;
+  border-top: 1px solid rgba(var(--color-text-rgb), 0.32);
 
   > * { grid-column: 2; min-width: 0; }
   > .pi__num { grid-column: 1; grid-row: 1; }
@@ -759,7 +728,6 @@ $plate: clamp(6px, 1vw, 12px);
     grid-template-columns: 3.25rem minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
     column-gap: $pf-gap;
     align-items: start;
-    padding: 1.75rem 0;
 
     > *,
     > .pi__num { grid-column: auto; grid-row: auto; }
@@ -806,7 +774,7 @@ $plate: clamp(6px, 1vw, 12px);
   border-radius: $border-radius-pill;
   font-size: 0.7rem;
   font-weight: 600;
-  color: $color-red-dark;
+  color: $color-red-text;
 
   &--metric {
     background: $color-red;
@@ -824,10 +792,12 @@ $plate: clamp(6px, 1vw, 12px);
   font-weight: 600;
   transition: all 0.2s;
 
+  // Dark ink on the brand red (5.1:1), the same pairing as the Hero's
+  // primary button; white on this red is only 3.9:1.
   &--live {
     background: $color-red;
-    color: #fff;
-    &:hover { background: $color-red-dark; color: #fff; }
+    color: $color-bg;
+    &:hover { background: $color-text; color: $color-bg; }
   }
 
   &--gh {
@@ -839,12 +809,15 @@ $plate: clamp(6px, 1vw, 12px);
   &--priv { color: $color-muted-dim; }
 
   &--demo {
-    color: $color-muted-dim;
+    color: $color-muted;
     background: $color-bg-soft;
   }
 
+  // Not a link yet: readable text on a dashed outline (links are solid),
+  // no hover, default cursor.
   &--pending {
-    opacity: 0.7;
+    border: 1.5px dashed rgba(var(--color-muted-rgb), 0.55);
+    border-radius: 14px; // keeps the shape tidy when the label wraps on narrow screens
     cursor: default;
   }
 }
