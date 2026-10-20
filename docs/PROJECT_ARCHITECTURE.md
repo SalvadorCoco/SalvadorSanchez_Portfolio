@@ -112,9 +112,9 @@ Every project is one file in `src/content/projects/`; the schema is `src/content
 ## Assets
 
 - `public/images/fotito.webp` (portrait, 615KB) — becomes the large graphic object in the hero per [ANIMATION_SYSTEM.md](ANIMATION_SYSTEM.md); needs sizing/optimization before it's animated at scale.
-- `public/images/projects/{slug}/0N.{webp,png}` — 3 screenshots per project. Sizes are inconsistent (28KB–1.46MB) and formats are inconsistent (`postas-pos` is PNG, everything else is WebP). Optimization/format-normalization is a Phase 12 (performance) task, not a Phase 1 concern, but flagged here so it isn't lost.
+- `public/images/projects/{slug}/0N.{webp,png}` — 3 screenshots per project. Sizes are inconsistent (28KB–1.46MB) and every project image is now WebP (the old `postas-pos` PNGs were converted). Optimization/format-normalization is a Phase 12 (performance) task, not a Phase 1 concern, but flagged here so it isn't lost.
 - `public/SalvadorSanchezCV.pdf` / `_EN.pdf` — real CV files, swapped by the language toggle already.
-- `docs/design/hero-storyboard.png` — the hero direction reference described in [CREATIVE_DIRECTION.md](CREATIVE_DIRECTION.md) and [ANIMATION_SYSTEM.md](ANIMATION_SYSTEM.md).
+- `docs/design/hero-storyboard.webp` — the hero direction reference described in [CREATIVE_DIRECTION.md](CREATIVE_DIRECTION.md) and [ANIMATION_SYSTEM.md](ANIMATION_SYSTEM.md).
 
 ## What we are preserving vs. replacing
 

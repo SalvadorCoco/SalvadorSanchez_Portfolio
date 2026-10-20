@@ -14,7 +14,7 @@ How motion is built, and the rules that keep it from taking over. **Status: Hero
 
 ## Hero: three-state scroll story (implemented, stable-zone structure)
 
-Built in `src/components/Hero.astro` + `src/styles/components/_hero.scss`. Matches `/docs/design/hero-storyboard.png` in *direction*, not pixel-for-pixel — and reframed slightly from the original state names into the brief's IDENTITY / CRAFT / WORK framing (same three-beat shape, different labels).
+Built in `src/components/Hero.astro` + `src/styles/components/_hero.scss`. Matches `/docs/design/hero-storyboard.webp` in *direction*, not pixel-for-pixel — and reframed slightly from the original state names into the brief's IDENTITY / CRAFT / WORK framing (same three-beat shape, different labels).
 
 **Architecture**: the HTML always contains all three state blocks (`.hero__block--identity`, `--craft`, `--summary`) plus the persistent photo, stacked in normal document flow — this is the actual rendered page for mobile, reduced-motion, and no-JS. A script gated on `(min-width: 992px)` **and** `(prefers-reduced-motion: no-preference)` adds a `.hero--cinematic` class and builds the GSAP timeline; that class is the only thing that switches the three blocks from normal flow into absolutely-positioned layers crossfading in the same box. `matchMedia` `change` listeners rebuild or tear down the timeline (`ScrollTrigger.kill()` + `gsap.set(..., { clearProps: "all" })`) if the viewport crosses the breakpoint or the OS motion preference changes mid-session — no page reload needed either direction.
 
