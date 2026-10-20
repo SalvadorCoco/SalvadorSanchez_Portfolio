@@ -1,0 +1,41 @@
+---
+// A capture that opens in the page's <ImageViewer>. The whole image is the
+// button. Pass `captionId` when a visible caption already names it (its text
+// is then also the viewer's caption); otherwise `label` / `labelEn` (shown in
+// the viewer in the page's language) or, failing that, the image's `alt`.
+interface Props {
+  /** Unique on the page; used for the button's accessible name. */
+  id: string;
+  src: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+  captionId?: string;
+  label?: string;
+  labelEn?: string;
+  loading?: "eager" | "lazy";
+}
+
+const { id, src, alt = "", width, height, captionId, label, labelEn, loading = "lazy" } = Astro.props;
+---
+
+<button
+  type="button"
+  class="zoomable"
+  data-lb-open
+  data-src={src}
+  data-cap={captionId}
+  data-label-es={label}
+  data-label-en={labelEn ?? label}
+  aria-haspopup="dialog"
+  aria-labelledby={`${id}-open ${captionId ?? `${id}-img`}`}
+>
+  <span class="proj-page__sr" id={`${id}-open`} data-es="Ampliar imagen:" data-en="Enlarge image:">Ampliar imagen:</span>
+  <img id={`${id}-img`} src={src} alt={alt} width={width} height={height} loading={loading} decoding="async" />
+  <span class="zoomable__tag" aria-hidden="true">
+    <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+      <circle cx="8.5" cy="8.5" r="5.5" />
+      <path d="M12.8 12.8 18 18M8.5 6v5M6 8.5h5" />
+    </svg>
+  </span>
+</button>

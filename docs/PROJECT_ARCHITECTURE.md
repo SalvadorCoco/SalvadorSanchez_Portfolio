@@ -58,7 +58,8 @@ layout/     _header.scss      header, nav, lang toggle, mobile drawer
             _section.scss     .section spacing, comic-panel-gutter divider, .sec__eyebrow/__title,
                                panel-glitch keyframe (shared by every section heading)
 components/ _hero.scss, _projects.scss, _skills.scss, _experience.scss, _contact.scss,
-            _footer.scss, _toast.scss, _browser-mock.scss, _screenshot-carousel.scss
+            _footer.scss, _toast.scss, _browser-mock.scss, _screenshot-carousel.scss,
+            _image-viewer.scss
 pages/      _project-page.scss
 main.scss   import order: abstracts → selective Bootstrap → base → layout → components → pages
             (the Phase-1-era trailing `[data-theme="dark"]` toggle-visual block is gone)
@@ -95,6 +96,18 @@ import T from "../i18n/translations";
 While consolidating, three keys that existed only in the old inline copy (`proj_unit`, `proj_client`, `proj_year` — consumed by `Projects.astro` and `[slug].astro`) were added to `translations.ts`; a handful of accented-copy differences between the two old copies (e.g. "escribíme" vs "escribime", "Contratáme" vs "Contratame") were resolved in favor of whichever text was actually live on the site, so this change is copy-neutral — verified in-browser for both `es` and `en`, including persistence across page navigation.
 
 Both Spanish and English still need to be designed for, not just translated — Spanish strings run measurably longer throughout `projects.ts` and `translations.ts`. See [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) typography section.
+
+## Project pages: content model and shared pieces
+
+Every project is one file in `src/content/projects/`; the schema is `src/content/config.ts`. All reads go through `getVisibleProjects()` / `getProjectViews()` in `src/lib/projects.ts`.
+
+- `hidden: true` — the project is published nowhere (no card, no `/proyectos/:slug` page, no prev/next link, no technology counts). Numbering is manual and is **not** renumbered, so a hidden project leaves a gap on purpose. Currently hidden: `06-abog-penal`.
+- Legacy case (`context`/`problem`/`solution`/`process`/`result` + `screenshots`): carousel of captures followed by four text blocks.
+- Case in parts (`parts`, `role`, `integrations`): used by `03-r4fighting` — a public-site part and an admin-panel part, one plate colour each (`components/project/ProjectParts.astro`). The five legacy text fields are optional for it.
+- `tags` feed the cards and the "used in" lists of the Skills section, so they must match the real stack (checked against each repo's `package.json`: Estudio Jurídico is React + Vite + Tailwind, Canteros is Astro).
+- Captures: `<ZoomableImage>` wraps any capture in a button; `<ImageViewer>` (one per page) is the full-screen `<dialog>` with step-through, zoom and pan. Both are reusable on any page that includes the viewer once; styles in `styles/components/_image-viewer.scss`.
+- Link labels: `label_en` is optional; live links fall back to "↗ View live".
+- Verification: `npm run check` (astro check) and `npm run build`.
 
 ## Assets
 

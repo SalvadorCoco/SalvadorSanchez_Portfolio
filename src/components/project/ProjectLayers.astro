@@ -3,8 +3,10 @@
 // frontmatter (the same data and the same `.pl` styles the home page uses
 // for the R4 poster). Used on the detail page when a project has no
 // screenshot but does have layers.
+import type { ProjectLayer } from "../../lib/projects";
+
 interface Props {
-  layers: { name: string; tech: string }[];
+  layers: ProjectLayer[];
 }
 
 const { layers } = Astro.props;

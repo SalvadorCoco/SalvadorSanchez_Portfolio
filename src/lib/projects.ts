@@ -1,8 +1,11 @@
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 
 export type FeatureKind = "showcase" | "product" | "poster";
+
+// One entry of `layers` as the content schema defines it.
+export type ProjectLayer = NonNullable<CollectionEntry<"projects">["data"]["layers"]>[number];
 
 export interface ProjectView {
   slug: string;
@@ -18,7 +21,7 @@ export interface ProjectView {
   metric: { value: string; label: string } | null;
   metric_en: { value: string; label: string } | null;
   tags: string[];
-  layers: { name: string; tech: string }[];
+  layers: ProjectLayer[];
   isPrivate: boolean;
   demo: { label: string; label_en: string; pending: boolean } | null;
   caseHref: string;
@@ -45,8 +48,14 @@ function publicFileExists(urlPath: string) {
   return existsSync(join(process.cwd(), "public", urlPath));
 }
 
+// The only way the site reads projects: entries flagged `hidden` never leave
+// this function, so no page or component can publish them by accident.
+export async function getVisibleProjects() {
+  return getCollection("projects", ({ data }) => !data.hidden);
+}
+
 export async function getProjectViews(): Promise<ProjectView[]> {
-  const entries = await getCollection("projects");
+  const entries = await getVisibleProjects();
   // File name prefixes (01-, 02-, ...) in src/content/projects/ define the order.
   entries.sort((a, b) => a.id.localeCompare(b.id));
 

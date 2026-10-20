@@ -3,18 +3,51 @@ slug: "r4fighting"
 num: "03"
 title: "R4 Fighting"
 client: "R4F"
-desc: "Plataforma full stack para una organización de torneos de juegos de lucha: panel interno para administradores y sitio público que muestra torneos, eventos y ganadores en tiempo real."
-desc_en: "Full stack platform for a fighting-games tournament organization: an internal admin panel and a public site that shows tournaments, events and winners in real time."
-problem: "R4F organiza torneos online de juegos de lucha (SF6, Tekken, etc.) y tiene potencial para crecer, pero no tenía forma de que gente nueva los encontrara: dependían solo de avisar por Instagram y Twitch. Alguien buscando \"torneos SF6\" no tenía cómo dar con ellos."
-problem_en: "R4F organizes online fighting-game tournaments (SF6, Tekken, etc.) and has real growth potential, but had no way for new people to discover them: they relied only on announcing through Instagram and Twitch. Someone searching \"SF6 tournaments\" had no way to find them."
-solution: "Un sitio público en Next.js que les da presencia y posicionamiento propios, más un panel interno construido con FilamentPHP que funciona como gestor de contenido: los admins cargan torneos, eventos y ganadores sin depender de mí, y esos datos se reflejan al instante en el front."
-solution_en: "A public Next.js site that gives them their own presence and search visibility, plus an internal panel built with FilamentPHP that works as a content manager: admins load tournaments, events and winners without depending on me, and that data reflects instantly on the front."
-context: "Mi primer proyecto full stack: front en Next.js consumiendo una API propia hecha con FilamentPHP (Laravel). El objetivo de fondo no es solo tener una web, sino que R4F se haga más conocido para poder ser invitados a eventos y ferias presenciales, donde llevan sus propios setups y stands."
-context_en: "My first full stack project: a Next.js frontend consuming my own API built with FilamentPHP (Laravel). The underlying goal isn't just having a website — it's for R4F to become better known so they can get invited to in-person events and expos, where they bring their own setups and stands."
-process: "Diseñé el panel de FilamentPHP pensado para que cualquier admin de R4F pueda cargar contenido sin conocimientos técnicos: torneos, eventos y ganadores. El front en Next.js consume esa API y refleja los cambios en tiempo real, así el sitio público siempre está actualizado sin que nadie tenga que tocar código."
-process_en: "I designed the FilamentPHP panel so any R4F admin can load content without technical knowledge: tournaments, events and winners. The Next.js frontend consumes that API and reflects changes in real time, so the public site is always up to date without anyone touching code."
-result: "Un sitio público en Next.js que muestra los torneos online, los próximos eventos y los ganadores de las finales, alimentado por una API propia en Laravel con un panel FilamentPHP desde el que los admins de R4F cargan y editan ese contenido sin tocar código. Diseñé y construí las dos mitades: front y back."
-result_en: "A public Next.js site showing the online tournaments, upcoming events and final winners, fed by my own Laravel API and a FilamentPHP panel where R4F admins add and edit that content without touching code. I designed and built both halves: front and back."
+desc: "Sitio público y gestor administrativo para una organización de torneos de juegos de lucha."
+desc_en: "Public site and admin panel for a fighting-game tournament organization."
+role: "Frontend y backend"
+role_en: "Frontend and backend"
+integrations: ["Challonge", "Google Analytics 4"]
+parts:
+  - key: "public"
+    title: "Sitio público"
+    title_en: "Public site"
+    stack: ["Next.js", "TypeScript"]
+    text: "Sitio con torneos, eventos y Hall of Fame. Inscripción a torneos, contacto para locales y transmisiones de Twitch y Kick integradas."
+    text_en: "Site with tournaments, events and a Hall of Fame. Tournament sign-up, a contact form for venues and embedded Twitch and Kick streams."
+    shots:
+      - src: "/images/projects/r4fighting/01.webp"
+        label: "Inicio"
+        label_en: "Home"
+        w: 1584
+        h: 834
+      - src: "/images/projects/r4fighting/02.webp"
+        label: "Hall of Fame"
+        label_en: "Hall of Fame"
+        w: 1584
+        h: 834
+  - key: "admin"
+    title: "Gestor administrativo"
+    title_en: "Admin panel"
+    stack: ["PHP", "Laravel", "FilamentPHP"]
+    text: "Panel para que el equipo de R4F cargue torneos, eventos, jugadores y posts sin tocar código. Los torneos se sincronizan con Challonge, los pedidos de bares llegan como leads con estado y un tablero resume la actividad."
+    text_en: "Panel for the R4F team to manage tournaments, events, players and posts without touching code. Tournaments sync with Challonge, venue requests arrive as leads with a status, and a dashboard summarizes activity."
+    shots:
+      - src: "/images/projects/r4fighting/admin-torneo.webp"
+        label: "Edición de un torneo"
+        label_en: "Editing a tournament"
+        w: 1584
+        h: 1056
+      - src: "/images/projects/r4fighting/admin-dashboard.webp"
+        label: "Resumen del panel"
+        label_en: "Panel overview"
+        w: 1214
+        h: 184
+      - src: "/images/projects/r4fighting/admin-leads.webp"
+        label: "Leads de bares"
+        label_en: "Venue leads"
+        w: 1584
+        h: 834
 tags: ["Next.js", "FilamentPHP", "Laravel", "Full Stack"]
 links:
   - href: "https://r4fighting.vercel.app/"

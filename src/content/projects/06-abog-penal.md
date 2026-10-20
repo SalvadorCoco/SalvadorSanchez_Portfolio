@@ -15,6 +15,7 @@ process: "Al ser una landing individual, prioricé un diseño limpio y directo, 
 process_en: "Being an individual landing page, I prioritized a clean, direct design focused on conveying professionalism and making the contact path easy to find."
 result: "Una landing propia que Agustín puede compartir para su práctica individual en derecho penal, con una imagen elegante y orientada a captar clientes."
 result_en: "A dedicated landing page Agustín can share for his individual criminal law practice, with an elegant, client-capturing image."
+hidden: true
 tags: ["Next.js", "SCSS", "Bootstrap"]
 links:
   - href: "https://abog-penal.vercel.app/"

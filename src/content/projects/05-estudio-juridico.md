@@ -15,7 +15,7 @@ process: "Trabajé con él para entender qué quería mostrar: sus áreas de pr�
 process_en: "I worked with him to understand what he wanted to show: his practice areas, his team, and contact methods. The design is intentional: clear typography, strong visual hierarchy and multiple calls to action so anyone who arrives with a question has no excuse not to reach out."
 result: "Una web que funciona como carta de presentación profesional. Fácil de leer para cualquier persona, con su equipo visible y con contacto a un click de distancia."
 result_en: "A website that works as a professional calling card. Easy to read for anyone, with his team visible and contact one click away."
-tags: ["Next.js", "SCSS", "UI/UX"]
+tags: ["React", "Vite", "Tailwind CSS", "UI/UX"]
 links:
   - href: "https://estudiojuridico-sanchez.com.ar/"
     label: "↗ Ver en vivo"

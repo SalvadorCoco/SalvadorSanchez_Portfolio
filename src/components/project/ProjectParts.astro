@@ -1,0 +1,63 @@
+---
+// A case told in parts (public site + admin panel), one plate colour per
+// part: red for the front, blue for the back (as in the layers diagram).
+// Captures are real screenshots in their own frames; labels live in
+// <figcaption>. Every capture opens in the page's <ImageViewer>.
+import type { CollectionEntry } from "astro:content";
+import ZoomableImage from "./ZoomableImage.astro";
+
+// Same shape as `parts` in src/content/config.ts, so it can't drift from it.
+type Part = NonNullable<CollectionEntry<"projects">["data"]["parts"]>[number];
+
+interface Props {
+  parts: Part[];
+  slug: string;
+}
+
+const { parts, slug } = Astro.props;
+---
+
+<div class="proj-parts">
+  {parts.map((part, p) => (
+    <section class={`proj-part proj-part--${part.key}`} aria-labelledby={`${slug}-part-${part.key}`}>
+      <header class="proj-part__head">
+        <span class="proj-part__num" aria-hidden="true">{String(p + 1).padStart(2, "0")}</span>
+        <h2
+          class="proj-part__title"
+          id={`${slug}-part-${part.key}`}
+          data-es={part.title}
+          data-en={part.title_en ?? part.title}
+        >{part.title}</h2>
+      </header>
+
+      <p
+        class="proj-part__text"
+        data-es={part.text}
+        data-en={part.text_en ?? part.text}
+      >{part.text}</p>
+
+      {part.shots.map((shot, i) => {
+        const id = `${slug}-${part.key}-shot-${i}`;
+        return (
+          <figure class={`proj-part__fig proj-part__fig--${i + 1}`} aria-labelledby={id}>
+            <div class="proj-part__frame">
+              <ZoomableImage
+                id={`${id}-zoom`}
+                captionId={id}
+                src={shot.src}
+                width={shot.w}
+                height={shot.h}
+                loading={p === 0 && i === 0 ? "eager" : "lazy"}
+              />
+            </div>
+            <figcaption
+              id={id}
+              data-es={shot.label}
+              data-en={shot.label_en ?? shot.label}
+            >{shot.label}</figcaption>
+          </figure>
+        );
+      })}
+    </section>
+  ))}
+</div>

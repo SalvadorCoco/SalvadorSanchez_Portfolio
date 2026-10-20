@@ -1,0 +1,193 @@
+// ══════════════════════════════════════════════════════════════════
+// Image viewer: <ZoomableImage> (the button around a capture) and
+// <ImageViewer> (the full-screen dialog). Reusable on any page: the page only
+// needs `--proj-plate` / `--part-ink` for the corner tag (they default to the
+// project page's red plate).
+// ══════════════════════════════════════════════════════════════════
+
+// The whole capture is the button that opens the viewer.
+.zoomable {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: zoom-in;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $color-text;
+    outline-offset: 4px;
+  }
+
+  // Corner tag so it reads as enlargeable (also on touch, where there's no hover).
+  &__tag {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    color: var(--part-ink, #{$color-bg});
+    background: var(--proj-plate, var(--color-red));
+    border: 2px solid rgba(var(--color-text-rgb), 0.92);
+  }
+}
+
+// ── Capture viewer (native <dialog>) ────────────────────────────────
+// Full-screen, solid ink, hard-edged controls like the rest of the page. No
+// transitions: the image is moved directly by the script (zoom / pan).
+html.lb-open { overflow: hidden; }
+
+.lb {
+  width: 100%;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  color: $color-text;
+  background: $color-bg;
+  border: 0;
+
+  &::backdrop { background: $color-bg; }
+
+  &[open] {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  &__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding: 0.75rem clamp(1rem, 3vw, 1.5rem);
+    border-bottom: 2px solid rgba(var(--color-text-rgb), 0.35);
+  }
+
+  &__info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    margin: 0;
+    min-width: 0;
+  }
+
+  &__count {
+    font-family: $font-display;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: $color-red-text;
+  }
+
+  &__cap {
+    font-family: $font-body;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-text;
+  }
+
+  &__tools {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 0.8rem;
+    font-family: $font-body;
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1;
+    color: $color-text;
+    background: $color-bg-soft;
+    border: 2px solid rgba(var(--color-text-rgb), 0.92);
+    cursor: pointer;
+
+    &--text {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    &:hover {
+      color: $color-bg;
+      background: $color-text;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $color-text;
+      outline-offset: 3px;
+    }
+  }
+
+  &__body {
+    position: relative;
+    min-height: 0;
+  }
+
+  &__stage {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    touch-action: none; // the script handles pan and pinch
+
+    &.is-zoomed { cursor: grab; }
+    &.is-zoomed:active { cursor: grabbing; }
+  }
+
+  &__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    max-width: none;
+    transform-origin: 0 0;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  // Arrows sit at the bottom corners on phones (so they don't cover the
+  // capture) and centred on the sides from md up.
+  &__nav {
+    position: absolute;
+    bottom: 1rem;
+    z-index: 1;
+    width: 48px;
+    min-height: 48px;
+    padding: 0;
+
+    &--prev { left: 1rem; }
+    &--next { right: 1rem; }
+
+    @include media-breakpoint-up(md) {
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+
+      &--prev { left: clamp(0.5rem, 2vw, 1.25rem); }
+      &--next { right: clamp(0.5rem, 2vw, 1.25rem); }
+    }
+  }
+}

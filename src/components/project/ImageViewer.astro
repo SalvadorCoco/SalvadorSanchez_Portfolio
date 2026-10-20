@@ -1,0 +1,276 @@
+---
+// Full-screen viewer for captures: step through all of them, zoom and pan.
+// Include it ONCE per page, next to the images that use <ZoomableImage>; every
+// element carrying `data-lb-open` on the page becomes part of the gallery, in
+// document order. Native <dialog>: focus is trapped, Esc closes and the page
+// behind is inert. No dependencies.
+---
+
+<dialog class="lb" aria-labelledby="image-viewer-cap">
+  <div class="lb__bar">
+    <p class="lb__info">
+      <span class="lb__count" data-lb-count></span>
+      <span class="lb__cap" id="image-viewer-cap" data-lb-cap aria-live="polite"></span>
+    </p>
+    <div class="lb__tools">
+      <button type="button" class="lb__btn" data-lb="out">
+        <span aria-hidden="true">−</span>
+        <span class="proj-page__sr" data-es="Alejar" data-en="Zoom out">Alejar</span>
+      </button>
+      <button type="button" class="lb__btn" data-lb="in">
+        <span aria-hidden="true">+</span>
+        <span class="proj-page__sr" data-es="Acercar" data-en="Zoom in">Acercar</span>
+      </button>
+      <button type="button" class="lb__btn lb__btn--text" data-lb="fit" data-es="Ajustar" data-en="Fit">Ajustar</button>
+      <button type="button" class="lb__btn lb__btn--text" data-lb="close" autofocus data-es="Cerrar" data-en="Close">Cerrar</button>
+    </div>
+  </div>
+
+  <div class="lb__body">
+    <div class="lb__stage" data-lb-stage>
+      <img class="lb__img" alt="" draggable="false" data-lb-img />
+    </div>
+    <button type="button" class="lb__btn lb__nav lb__nav--prev" data-lb="prev">
+      <span aria-hidden="true">←</span>
+      <span class="proj-page__sr" data-es="Imagen anterior" data-en="Previous image">Imagen anterior</span>
+    </button>
+    <button type="button" class="lb__btn lb__nav lb__nav--next" data-lb="next">
+      <span aria-hidden="true">→</span>
+      <span class="proj-page__sr" data-es="Imagen siguiente" data-en="Next image">Imagen siguiente</span>
+    </button>
+  </div>
+</dialog>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>("dialog.lb");
+  const openers = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-lb-open]"));
+
+  if (dlg && openers.length) {
+    const stage = dlg.querySelector<HTMLElement>("[data-lb-stage]")!;
+    const img = dlg.querySelector<HTMLImageElement>("[data-lb-img]")!;
+    const capEl = dlg.querySelector<HTMLElement>("[data-lb-cap]")!;
+    const countEl = dlg.querySelector<HTMLElement>("[data-lb-count]")!;
+    const EPS = 0.001;
+
+    let index = 0;
+    let loadToken = 0; // discards stale loads when stepping quickly
+    let nw = 1; // natural size of the current image
+    let nh = 1;
+    let fit = 1; // scale at which the whole image is visible (never upscaled)
+    let max = 2;
+    let s = 1; // current scale (image px → css px)
+    let x = 0; // translation of the image's top-left corner inside the stage
+    let y = 0;
+
+    // Keep the image inside the stage; centre it on any axis where it is smaller.
+    const apply = () => {
+      const sw = stage.clientWidth;
+      const sh = stage.clientHeight;
+      const w = nw * s;
+      const h = nh * s;
+      x = w <= sw ? (sw - w) / 2 : Math.min(0, Math.max(sw - w, x));
+      y = h <= sh ? (sh - h) / 2 : Math.min(0, Math.max(sh - h, y));
+      img.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
+      stage.classList.toggle("is-zoomed", s > fit + EPS);
+    };
+
+    const measure = () => {
+      fit = Math.min(stage.clientWidth / nw, stage.clientHeight / nh, 1);
+      max = Math.max(fit * 8, 2);
+    };
+
+    const reset = () => {
+      measure();
+      s = fit;
+      apply();
+    };
+
+    // Zoom keeping the point (cx, cy), in stage coordinates, where it is.
+    const zoomTo = (target: number, cx: number, cy: number) => {
+      const next = Math.min(max, Math.max(fit, target));
+      const k = next / s;
+      x = cx - (cx - x) * k;
+      y = cy - (cy - y) * k;
+      s = next;
+      apply();
+    };
+
+    const zoomBy = (factor: number) => zoomTo(s * factor, stage.clientWidth / 2, stage.clientHeight / 2);
+
+    const show = (i: number) => {
+      index = (i + openers.length) % openers.length;
+      const o = openers[index];
+      const src = o.dataset.src ?? "";
+      const lang = document.documentElement.lang === "en" ? "en" : "es";
+      const cap =
+        (o.dataset.cap ? document.getElementById(o.dataset.cap)?.textContent?.trim() : null) ??
+        (lang === "en" ? o.dataset.labelEn : o.dataset.labelEs) ??
+        o.querySelector("img")?.alt ??
+        "";
+      capEl.textContent = cap;
+      countEl.textContent = `${index + 1} / ${openers.length}`;
+
+      // The natural size comes from the file itself, so any capture works
+      // without its dimensions being declared anywhere.
+      const token = ++loadToken;
+      const next = new Image();
+      next.src = src;
+      const ready = () => {
+        if (token !== loadToken) return; // a newer capture was requested meanwhile
+        nw = next.naturalWidth || 1;
+        nh = next.naturalHeight || 1;
+        img.width = nw;
+        img.height = nh;
+        img.src = src;
+        img.alt = cap;
+        reset();
+      };
+      next.decode().then(ready, ready);
+
+      const after = openers[(index + 1) % openers.length];
+      if (after?.dataset.src) new Image().src = after.dataset.src;
+    };
+
+    const open = (i: number) => {
+      dlg.showModal();
+      document.documentElement.classList.add("lb-open");
+      show(i);
+    };
+
+    openers.forEach((o, i) => o.addEventListener("click", () => open(i)));
+
+    dlg.addEventListener("close", () => {
+      document.documentElement.classList.remove("lb-open");
+      openers[index]?.focus();
+    });
+
+    dlg.querySelectorAll<HTMLButtonElement>("[data-lb]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        switch (btn.dataset.lb) {
+          case "close": dlg.close(); break;
+          case "prev": show(index - 1); break;
+          case "next": show(index + 1); break;
+          case "in": zoomBy(1.5); break;
+          case "out": zoomBy(1 / 1.5); break;
+          case "fit": reset(); break;
+        }
+      });
+    });
+
+    // ── Wheel / trackpad pinch ──────────────────────────────────────
+    stage.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+        const r = stage.getBoundingClientRect();
+        const speed = e.ctrlKey ? 0.01 : 0.0018;
+        zoomTo(s * Math.exp(-e.deltaY * speed), e.clientX - r.left, e.clientY - r.top);
+      },
+      { passive: false },
+    );
+
+    // ── Pointers: drag to pan, two fingers to pinch, double tap to toggle ──
+    const ptrs = new Map<number, { x: number; y: number }>();
+    let pinchDist = 0;
+    let moved = false;
+    let lastTap = { t: 0, x: 0, y: 0 };
+
+    const pinchState = () => {
+      const [a, b] = Array.from(ptrs.values());
+      return { d: Math.hypot(a.x - b.x, a.y - b.y), cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2 };
+    };
+
+    stage.addEventListener("pointerdown", (e) => {
+      stage.setPointerCapture(e.pointerId);
+      ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      moved = false;
+      if (ptrs.size === 2) pinchDist = pinchState().d;
+    });
+
+    stage.addEventListener("pointermove", (e) => {
+      const prev = ptrs.get(e.pointerId);
+      if (!prev) return;
+      const dx = e.clientX - prev.x;
+      const dy = e.clientY - prev.y;
+      ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+
+      if (ptrs.size === 1) {
+        if (s > fit + EPS) {
+          x += dx;
+          y += dy;
+          apply();
+        }
+      } else if (ptrs.size === 2 && pinchDist > 0) {
+        const { d, cx, cy } = pinchState();
+        const r = stage.getBoundingClientRect();
+        zoomTo(s * (d / pinchDist), cx - r.left, cy - r.top);
+        pinchDist = d;
+      }
+    });
+
+    const release = (e: PointerEvent) => {
+      ptrs.delete(e.pointerId);
+      pinchDist = 0;
+    };
+
+    stage.addEventListener("pointerup", (e) => {
+      const wasSingle = ptrs.size === 1;
+      release(e);
+      if (!wasSingle || moved) return;
+      const now = e.timeStamp;
+      const near = Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30;
+      if (near && now - lastTap.t < 320) {
+        if (s > fit + EPS) reset();
+        else {
+          const r = stage.getBoundingClientRect();
+          zoomTo(Math.min(max, fit * 3), e.clientX - r.left, e.clientY - r.top);
+        }
+        lastTap = { t: 0, x: 0, y: 0 };
+      } else {
+        lastTap = { t: now, x: e.clientX, y: e.clientY };
+      }
+    });
+    stage.addEventListener("pointercancel", release);
+
+    // A click on the empty area around the image closes the viewer. Pointer
+    // capture retargets the click to the stage, so test the position instead.
+    stage.addEventListener("click", (e) => {
+      if (moved) return;
+      const r = img.getBoundingClientRect();
+      const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+      if (!inside) dlg.close();
+    });
+
+    // ── Keyboard: arrows step (or pan when zoomed), + / − / 0 zoom ──
+    dlg.addEventListener("keydown", (e) => {
+      const zoomed = s > fit + EPS;
+      const pan = (dx: number, dy: number) => {
+        x += dx;
+        y += dy;
+        apply();
+      };
+      switch (e.key) {
+        case "ArrowLeft": zoomed ? pan(80, 0) : show(index - 1); break;
+        case "ArrowRight": zoomed ? pan(-80, 0) : show(index + 1); break;
+        case "ArrowUp": if (zoomed) pan(0, 80); else return; break;
+        case "ArrowDown": if (zoomed) pan(0, -80); else return; break;
+        case "+":
+        case "=": zoomBy(1.5); break;
+        case "-":
+        case "_": zoomBy(1 / 1.5); break;
+        case "0": reset(); break;
+        default: return;
+      }
+      e.preventDefault();
+    });
+
+    window.addEventListener("resize", () => {
+      if (!dlg.open) return;
+      const wasFit = s <= fit + EPS;
+      measure();
+      s = wasFit ? fit : Math.min(max, Math.max(fit, s));
+      apply();
+    });
+  }
+</script>

@@ -15,7 +15,7 @@ process: "Trabajé el diseño con un tono elegante propio de la abogacía, prior
 process_en: "I worked the design with an elegant tone fitting for a law practice, prioritizing a clear presentation of the firm that builds trust from the first moment."
 result: "Una web institucional que acompaña la reputación que Rodrigo ya tiene en su mercado y facilita que quien lo busca termine contactándolo."
 result_en: "An institutional website that backs up the reputation Rodrigo already has in his market and makes it easier for whoever looks him up to end up contacting him."
-tags: ["Next.js", "SCSS", "Bootstrap"]
+tags: ["Astro", "TypeScript", "CSS"]
 links:
   - href: "https://www.estudiocanterosyasociados.com.ar/"
     label: "↗ Ver en vivo"
@@ -25,5 +25,8 @@ links:
     type: "gh"
     inactive: true
 cover: "/images/projects/estudio-canteros/01.webp"
-screenshots: []
+screenshots:
+  - "/images/projects/estudio-canteros/01.webp"
+  - "/images/projects/estudio-canteros/02.webp"
+  - "/images/projects/estudio-canteros/03.webp"
 ---

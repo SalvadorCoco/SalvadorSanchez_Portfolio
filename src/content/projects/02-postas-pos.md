@@ -22,12 +22,13 @@ demo:
   label: "Demo del flujo de venta"
   label_en: "Sales flow demo"
   pending: true
-tags: ["React", "JavaScript", "UI/UX"]
+tags: ["Next.js", "React", "JavaScript", "UI/UX"]
 links: []
 private: true
-cover: "/images/projects/postas-pos/01.png"
+cover: "/images/projects/postas-pos/pos-venta.webp"
 screenshots:
-  - "/images/projects/postas-pos/01.png"
-  - "/images/projects/postas-pos/02.png"
-  - "/images/projects/postas-pos/03.png"
+  - "/images/projects/postas-pos/pos-venta.webp"
+  - "/images/projects/postas-pos/pos-inventario.webp"
+  - "/images/projects/postas-pos/pos-reportes.webp"
+  - "/images/projects/postas-pos/pos-historial.webp"
 ---

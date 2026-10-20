@@ -2,15 +2,18 @@
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import ProjectLayers from "../../components/project/ProjectLayers.astro";
-import { getCollection } from "astro:content";
+import ProjectParts from "../../components/project/ProjectParts.astro";
+import ZoomableImage from "../../components/project/ZoomableImage.astro";
+import ImageViewer from "../../components/project/ImageViewer.astro";
+import { getVisibleProjects } from "../../lib/projects";
 import "../../styles/main.scss";
 
-const entries = await getCollection("projects");
+const entries = await getVisibleProjects();
 entries.sort((a, b) => a.id.localeCompare(b.id));
 const projects = entries.map((entry) => ({ slug: entry.slug, ...entry.data }));
 
 export async function getStaticPaths() {
-  const entries = await getCollection("projects");
+  const entries = await getVisibleProjects();
   return entries.map((entry) => ({ params: { slug: entry.slug } }));
 }
 
@@ -20,6 +23,9 @@ const currentIndex = projects.findIndex((p) => p.slug === slug);
 const prev = projects[currentIndex - 1] ?? null;
 const next = projects[currentIndex + 1] ?? null;
 
+// Parts-based cases (public site + admin panel) replace the screenshot stage
+// and the legacy text blocks with one composition per part.
+const hasParts = (project.parts?.length ?? 0) > 0;
 const hasScreenshots = project.screenshots.length > 0;
 const multipleScreenshots = project.screenshots.length > 1;
 
@@ -35,7 +41,7 @@ const kickerEn = project.kicker_en ?? kicker;
 // The cover is chosen from data that already exists: a screenshot when there
 // is one, the real front/back layers when there are no screenshots, and a
 // purely typographic cover otherwise. No per-slug exceptions.
-const variant = hasScreenshots ? "shot" : project.layers?.length ? "layers" : "type";
+const variant = hasParts ? "parts" : hasScreenshots ? "shot" : project.layers?.length ? "layers" : "type";
 
 // Print-plate colour for the frame and the result panel: red on odd project
 // numbers, blue on even ones (as on the home page).
@@ -85,29 +91,66 @@ const links = project.private ? [] : project.links.filter((l) => !l.inactive);
               <dd>{project.client}</dd>
             </div>
 
-            <div class="proj-meta__item">
-              <dt>Stack</dt>
-              <dd class="proj-meta__stack">
-                {project.tags.map((tag, i) => (
-                  <>
-                    {i > 0 && <i class="proj-meta__sep" aria-hidden="true">/</i>}
-                    <span>{tag}</span>
-                  </>
-                ))}
-              </dd>
-            </div>
+            {project.role && (
+              <div class="proj-meta__item">
+                <dt data-es="Rol" data-en="Role">Rol</dt>
+                <dd data-es={project.role} data-en={project.role_en ?? project.role}>{project.role}</dd>
+              </div>
+            )}
+
+            {hasParts ? (
+              project.parts!.map((part) => (
+                <div class="proj-meta__item">
+                  <dt data-es={part.title} data-en={part.title_en ?? part.title}>{part.title}</dt>
+                  <dd class="proj-meta__stack">
+                    {part.stack.map((tech, i) => (
+                      <>
+                        {i > 0 && <i class="proj-meta__sep" aria-hidden="true">·</i>}
+                        <span>{tech}</span>
+                      </>
+                    ))}
+                  </dd>
+                </div>
+              ))
+            ) : (
+              <div class="proj-meta__item">
+                <dt>Stack</dt>
+                <dd class="proj-meta__stack">
+                  {project.tags.map((tag, i) => (
+                    <>
+                      {i > 0 && <i class="proj-meta__sep" aria-hidden="true">/</i>}
+                      <span>{tag}</span>
+                    </>
+                  ))}
+                </dd>
+              </div>
+            )}
+
+            {project.integrations && project.integrations.length > 0 && (
+              <div class="proj-meta__item">
+                <dt data-es="Integraciones" data-en="Integrations">Integraciones</dt>
+                <dd class="proj-meta__stack">
+                  {project.integrations.map((name, i) => (
+                    <>
+                      {i > 0 && <i class="proj-meta__sep" aria-hidden="true">·</i>}
+                      <span>{name}</span>
+                    </>
+                  ))}
+                </dd>
+              </div>
+            )}
 
             {links.length > 0 && (
               <div class="proj-meta__item proj-meta__item--links">
                 <dt class="proj-page__sr">Links</dt>
                 <dd class="proj-links">
-                  {links.map(({ href, label, type }) => (
+                  {links.map(({ href, label, label_en, type }) => (
                     <a
                       href={href}
                       target="_blank"
                       rel="noopener"
                       class={type === "live" ? "proj-links__live" : "proj-links__other"}
-                    >{label}<span class="proj-page__sr"> <span data-i18n="proj_new_tab">(se abre en una pestaña nueva)</span></span></a>
+                    ><span data-es={label} data-en={label_en ?? (type === "live" ? "↗ View live" : label)}>{label}</span><span class="proj-page__sr"> <span data-i18n="proj_new_tab">(se abre en una pestaña nueva)</span></span></a>
                   ))}
                 </dd>
               </div>
@@ -152,7 +195,15 @@ const links = project.private ? [] : project.links.filter((l) => !l.inactive);
     </section>
 
     <!-- Screenshots -->
-    {hasScreenshots && (
+    {hasParts && (
+      <section class="proj-parts-wrap">
+        <div class="container">
+          <ProjectParts parts={project.parts!} slug={project.slug} />
+        </div>
+      </section>
+    )}
+
+    {!hasParts && hasScreenshots && (
       <section class="proj-stage">
         <div class="container">
           {multipleScreenshots ? (
@@ -161,9 +212,12 @@ const links = project.private ? [] : project.links.filter((l) => !l.inactive);
                 {project.screenshots.map((src, i) => (
                   <div class={`sc-carousel__slide${i === 0 ? " active" : ""}`} data-index={i}>
                     <figure class="proj-shot">
-                      <img
+                      <ZoomableImage
+                        id={`${project.slug}-shot-${i}`}
                         src={src}
                         alt={`${project.title} — captura ${i + 1}`}
+                        label={`${project.title} — captura ${i + 1}`}
+                        labelEn={`${project.title} — screenshot ${i + 1}`}
                         loading={i === 0 ? "eager" : "lazy"}
                       />
                     </figure>
@@ -187,9 +241,12 @@ const links = project.private ? [] : project.links.filter((l) => !l.inactive);
             </div>
           ) : (
             <figure class="proj-shot">
-              <img
+              <ZoomableImage
+                id={`${project.slug}-shot-0`}
                 src={project.screenshots[0]}
                 alt={`${project.title} — captura principal`}
+                label={`${project.title} — captura principal`}
+                labelEn={`${project.title} — main screenshot`}
                 loading="eager"
               />
             </figure>
@@ -198,7 +255,10 @@ const links = project.private ? [] : project.links.filter((l) => !l.inactive);
       </section>
     )}
 
+    {(hasParts || hasScreenshots) && <ImageViewer />}
+
     <!-- Case -->
+    {!hasParts && (
     <section class="proj-body">
       <div class="container">
 
@@ -272,6 +332,7 @@ const links = project.private ? [] : project.links.filter((l) => !l.inactive);
 
       </div>
     </section>
+    )}
 
     <nav class="proj-nav">
       <div class="container">
@@ -316,6 +377,7 @@ const links = project.private ? [] : project.links.filter((l) => !l.inactive);
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
+      if (document.querySelector('dialog[open]')) return; // the image viewer owns the arrows
       if (e.key === 'ArrowLeft')  goTo(current - 1);
       if (e.key === 'ArrowRight') goTo(current + 1);
     });
