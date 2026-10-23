@@ -1,33 +1,51 @@
 // ══════════════════════════════════════════════════════════════════
-// Services — what I offer, between Selected Work and Skills.
+// Services — what I offer, between Selected Work and Skills (v2: 2 × 2).
 //
-// Same family as Skills and the project case pages: 12-col grid, poster-scale
-// condensed type, hard 2px rules, and the red / blue plate tab for the
-// numbering (as on `.proj-part__num`). Four services in a ruled list, each one
-// a row: number + scope | title | description + "may include". The last one,
-// maintenance, is an ongoing thing rather than a build type, so it closes the
-// list as a hard-edged panel with a plate (as the result panel of a case).
+// Same family as Skills and the project case pages: poster-scale condensed
+// type, hard 2px rules and the red / blue plate tab for the numbering (as on
+// `.proj-part__num`). The four services are comic panels in one ruled frame:
+// two columns by two rows from lg up (the checkerboard of the two panels in
+// the diagonal gives them a little rhythm), one column below. Every panel is
+// the same short stack: number + scope, title, one sentence, three items.
 //
-// Static: no JS, no entrance animation, no transitions. The closing button is
-// the same loud-red stamp as the Hero's primary button.
+// Static: no entrance animation, no transitions. The closing button is the
+// same loud-red stamp as the Hero's primary button.
 // ══════════════════════════════════════════════════════════════════
 
 $srv-gap: clamp(1rem, 2.4vw, 2rem);
 $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
 
+// The Selected Work section already closes with ~80px of its own trailing
+// space (48px on phones) on top of its 88px bottom padding, so with the usual
+// top padding the page showed 256px of nothing before this section (the other
+// section changes on the page measure 176px). The top padding here is cut so
+// this transition matches that rhythm; no other section is touched.
+.projects + .services { padding-top: 0.5rem; }
+
+// With that small top padding an anchor jump (#servicios) would leave the
+// eyebrow under the fixed 64px header; this puts it at the same 88px from the
+// top of the viewport that the other sections get from their padding.
+.services { scroll-margin-top: 5rem; }
+
 .services {
   position: relative;
   color: $color-text;
 
-  // ── Header: one block, like Skills ──────────────────────────────
+  // ── Header: label, then title and intro side by side from lg ────
   &__head {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: $srv-gap;
-    row-gap: 1rem;
-    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+    row-gap: 0.9rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 
     > * { grid-column: 1 / -1; min-width: 0; }
+
+    @include media-breakpoint-up(lg) {
+      align-items: end;
+      > .services__title { grid-column: 1 / span 8; }
+      > .services__desc  { grid-column: 9 / -1; padding-bottom: 0.35rem; }
+    }
   }
 
   &__label {
@@ -49,7 +67,7 @@ $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
   &__title {
     margin: 0;
     font-family: $font-display;
-    font-size: clamp(2.3rem, 5.4vw, 4.4rem);
+    font-size: clamp(2.3rem, 5vw, 4rem);
     font-weight: 800;
     line-height: 0.95;
     letter-spacing: -0.01em;
@@ -59,18 +77,23 @@ $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
 
   &__desc {
     margin: 0;
-    max-width: 44ch;
+    max-width: 38ch;
     font-size: 0.95rem;
     line-height: 1.6;
     color: $color-muted;
   }
 }
 
-// ── The list ────────────────────────────────────────────────────────
+// ── The panels ──────────────────────────────────────────────────────
 .srv-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   margin: 0;
   padding: 0;
   list-style: none;
+  border: $srv-rule;
+
+  @include media-breakpoint-up(md) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .srv {
@@ -78,32 +101,40 @@ $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
   --srv-plate: var(--color-red);
   --srv-ink: #{$color-bg};
 
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  row-gap: 1.1rem;
-  padding: clamp(1.75rem, 4vw, 2.75rem) 0;
-  border-top: $srv-rule;
-
-  > * { min-width: 0; }
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  min-width: 0;
 
   &--blue {
     --srv-plate: var(--color-blue);
     --srv-ink: #{$color-text};
   }
 
-  // Number tab + scope: one line on phones, a small column beside the title
-  // from lg up.
+  // One column: a rule between panels.
+  & + & { border-top: $srv-rule; }
+
+  // Two columns: a cross of rules, and the 02 / 03 diagonal on the soft ink.
+  @include media-breakpoint-up(md) {
+    & + & { border-top: 0; }
+    &:nth-child(even) { border-left: $srv-rule; }
+    &:nth-child(n + 3) { border-top: $srv-rule; }
+    &:nth-child(2),
+    &:nth-child(3) { background: $color-bg-soft; }
+  }
+
   &__id {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
+    gap: 0.85rem;
   }
 
   &__num {
     flex-shrink: 0;
-    padding: 0.3rem 0.6rem;
+    padding: 0.28rem 0.6rem;
     font-family: $font-display;
-    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+    font-size: clamp(1.3rem, 2vw, 1.7rem);
     font-weight: 800;
     line-height: 1;
     color: var(--srv-ink);
@@ -113,7 +144,7 @@ $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
   &__scope {
     margin: 0;
     font-family: $font-body;
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -121,45 +152,39 @@ $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
   }
 
   &__title {
-    margin: 0;
+    margin: 0.15rem 0 0;
     font-family: $font-display;
-    font-size: clamp(2.2rem, 9vw, 3.3rem);
+    font-size: clamp(2rem, 7.5vw, 2.7rem);
     font-weight: 800;
     line-height: 0.95;
     letter-spacing: -0.005em;
     text-transform: uppercase;
     color: $color-text;
     overflow-wrap: break-word;
+
+    @include media-breakpoint-up(md) { font-size: clamp(2rem, 2.9vw, 2.7rem); }
   }
 
   &__desc {
-    margin: 0 0 1.25rem;
-    max-width: 52ch;
-    font-size: clamp(1rem, 1.2vw, 1.08rem);
-    line-height: 1.65;
+    margin: 0;
+    max-width: 48ch;
+    font-size: 0.97rem;
+    line-height: 1.55;
     color: rgba(var(--color-text-rgb), 0.92);
   }
 
-  &__incl-label {
-    margin: 0 0 0.7rem;
-    font-family: $font-body;
-    font-size: 0.74rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: $color-red-text;
-  }
-
+  // Pushed to the bottom of the panel so the three items start at the same
+  // height in both panels of a row.
   &__incl {
-    margin: 0;
-    padding: 0;
+    margin: auto 0 0;
+    padding: 0.35rem 0 0;
     list-style: none;
 
     li {
       position: relative;
-      padding-left: 1.2rem;
-      font-size: 0.94rem;
-      line-height: 1.5;
+      padding-left: 1.15rem;
+      font-size: 0.9rem;
+      line-height: 1.45;
       color: rgba(var(--color-text-rgb), 0.88);
 
       // The plate-coloured square, as in Skills' category labels.
@@ -167,51 +192,35 @@ $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
         content: "";
         position: absolute;
         left: 0;
-        top: 0.5em;
+        top: 0.48em;
         width: 0.5em;
         height: 0.5em;
         background: var(--srv-plate);
       }
     }
 
-    li + li { margin-top: 0.45rem; }
+    li + li { margin-top: 0.35rem; }
   }
+}
 
-  &__note {
-    margin: 1.1rem 0 0;
-    font-size: 0.88rem;
-    line-height: 1.55;
-    color: $color-muted;
-  }
+// Two columns: the panels of a row share their row tracks (id / title /
+// description / items), so when one title takes two lines its neighbour's
+// description still starts at the same height, without reserving any empty
+// line when every title fits on one. Without subgrid support the panels
+// simply stack their own content.
+@include media-breakpoint-up(md) {
+  @supports (grid-template-rows: subgrid) {
+    .srv-list { grid-template-rows: repeat(8, auto); }
 
-  // ── Maintenance: closes the list as a panel with a plate ──────────
-  &--panel {
-    margin-top: clamp(1rem, 3vw, 2rem);
-    padding: clamp(1.25rem, 4vw, 2.25rem);
-    background: $color-bg-soft;
-    border: $srv-rule;
-    box-shadow: 6px 6px 0 var(--srv-plate);
-  }
+    .srv {
+      display: grid;
+      grid-row: span 4;
+      grid-template-rows: subgrid;
+      row-gap: 0.75rem;
+      align-content: start;
 
-  // ── lg: id | title | body ─────────────────────────────────────────
-  @include media-breakpoint-up(lg) {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: $srv-gap;
-    align-items: start;
-
-    &__id {
-      grid-column: 1 / span 3;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.8rem;
+      &__incl { align-self: end; margin: 0; }
     }
-
-    &__title {
-      grid-column: 4 / span 4;
-      font-size: clamp(2.4rem, 3.6vw, 3.4rem);
-    }
-
-    &__body { grid-column: 8 / -1; }
   }
 }
 
@@ -221,15 +230,13 @@ $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1.25rem 2rem;
-  margin-top: clamp(2.5rem, 6vw, 4.5rem);
-  padding-top: clamp(1.5rem, 3vw, 2.25rem);
-  border-top: $srv-rule;
+  gap: 1rem 2rem;
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
 
   &__text {
     margin: 0;
     font-family: $font-display;
-    font-size: clamp(1.9rem, 4vw, 3.2rem);
+    font-size: clamp(1.7rem, 3.4vw, 2.7rem);
     font-weight: 800;
     line-height: 0.95;
     letter-spacing: -0.005em;
@@ -237,10 +244,31 @@ $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
     color: $color-text;
   }
 
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+  }
+
+  // Visually hidden "(opens in a new tab)" hint, as in Contact.
+  &__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border: 0;
+    clip-path: inset(50%);
+  }
+
   // The Hero's primary button: dark text on red (4.8:1), hard light plate.
   &__btn {
     display: inline-flex;
     align-items: center;
+    gap: 0.45em;
     min-height: 44px;
     padding: 0.85rem 1.25rem;
     font-family: $font-body;
@@ -257,6 +285,30 @@ $srv-rule: 2px solid rgba(var(--color-text-rgb), 0.92);
       transform: translate(2px, 2px);
       box-shadow: 2px 2px 0 rgba(var(--color-text-rgb), 0.92);
     }
+
+    &:focus-visible {
+      outline: 3px solid $color-text;
+      outline-offset: 4px;
+    }
+  }
+
+  // The existing contact section, as a quiet text link.
+  &__alt {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-family: $font-body;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $color-text;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.4em;
+    text-decoration-color: rgba(var(--color-muted-rgb), 0.7);
+
+    &:hover { text-decoration-color: $color-text; }
 
     &:focus-visible {
       outline: 3px solid $color-text;
