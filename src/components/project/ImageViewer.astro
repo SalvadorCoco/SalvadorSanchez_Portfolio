@@ -131,7 +131,10 @@
       if (after?.dataset.src) new Image().src = after.dataset.src;
     };
 
+    let trigger: HTMLElement | null = null; // the button the viewer was opened from
+
     const open = (i: number) => {
+      trigger = openers[i];
       dlg.showModal();
       document.documentElement.classList.add("lb-open");
       show(i);
@@ -139,9 +142,15 @@
 
     openers.forEach((o, i) => o.addEventListener("click", () => open(i)));
 
+    const visible = (el: HTMLElement | null): el is HTMLElement =>
+      !!el && el.getClientRects().length > 0;
+
     dlg.addEventListener("close", () => {
       document.documentElement.classList.remove("lb-open");
-      openers[index]?.focus();
+      // Back to the capture that was being viewed; when that one is hidden
+      // (an inactive carousel slide) back to the one it was opened from.
+      const target = visible(openers[index]) ? openers[index] : trigger;
+      target?.focus();
     });
 
     dlg.querySelectorAll<HTMLButtonElement>("[data-lb]").forEach((btn) => {
