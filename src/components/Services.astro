@@ -1,0 +1,66 @@
+---
+// What I offer, in four plain categories. All copy lives in
+// src/i18n/translations.ts (srv_* keys, es + en) and is applied by the same
+// data-i18n mechanism as every other section; the Spanish text rendered here
+// comes from that same file, so the markup can't drift from it.
+//
+// Static: no JS and no entrance animation. The only interactive thing is the
+// closing link, which points at the existing #contacto section.
+import T from "../i18n/translations";
+
+const es = T.es as Record<string, string>;
+
+// How many "may include" items each service has (keys srv_N_i1 … srv_N_iK).
+// The first three sit in the ruled list; the fourth, maintenance, closes it as
+// a panel. Red / blue alternate like the project plates on the case pages.
+const services = [
+  { n: 1, items: 4, tone: "red" },
+  { n: 2, items: 4, tone: "blue" },
+  { n: 3, items: 4, tone: "red", note: true },
+  { n: 4, items: 5, tone: "blue", panel: true },
+].map((s) => ({ ...s, ids: Array.from({ length: s.items }, (_, i) => `srv_${s.n}_i${i + 1}`) }));
+
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<section class="section services" id="servicios" aria-labelledby="services-title">
+  <div class="container">
+    <header class="services__head">
+      <div class="services__label">
+        <div class="sec__eyebrow" data-i18n="srv_eyebrow">{es.srv_eyebrow}</div>
+        <span class="services__count" aria-hidden="true">( {pad(services.length)} )</span>
+      </div>
+      <h2 class="services__title" id="services-title" data-i18n-html="srv_title" set:html={es.srv_title} />
+      <p class="services__desc" data-i18n="srv_desc">{es.srv_desc}</p>
+    </header>
+
+    <ol class="srv-list" role="list">
+      {services.map((s) => (
+        <li class={`srv srv--${s.tone}${s.panel ? " srv--panel" : ""}`}>
+          <div class="srv__id">
+            <span class="srv__num" aria-hidden="true">{pad(s.n)}</span>
+            <p class="srv__scope" data-i18n={`srv_${s.n}_scope`}>{es[`srv_${s.n}_scope`]}</p>
+          </div>
+
+          <h3 class="srv__title" data-i18n={`srv_${s.n}_title`}>{es[`srv_${s.n}_title`]}</h3>
+
+          <div class="srv__body">
+            <p class="srv__desc" data-i18n={`srv_${s.n}_desc`}>{es[`srv_${s.n}_desc`]}</p>
+            <p class="srv__incl-label" data-i18n="srv_includes">{es.srv_includes}</p>
+            <ul class="srv__incl">
+              {s.ids.map((key) => (
+                <li data-i18n={key}>{es[key]}</li>
+              ))}
+            </ul>
+            {s.note && <p class="srv__note" data-i18n={`srv_${s.n}_note`}>{es[`srv_${s.n}_note`]}</p>}
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="srv-cta">
+      <p class="srv-cta__text" data-i18n="srv_cta">{es.srv_cta}</p>
+      <a class="srv-cta__btn" href="#contacto" data-i18n="srv_cta_btn">{es.srv_cta_btn}</a>
+    </div>
+  </div>
+</section>
